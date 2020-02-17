@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>确认订单_{$sys_title}</title>
+	<script type="text/javascript" src="__PUBLIC__/js/coupon.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/coummoncou.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/laydate.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/Outfiel.js"></script>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<if condition="$data['start'] !=null">
+    <div class="mb-nav">
+        当前位置：
+        <a href="/" class="jump">
+            <i>首页</i>
+        </a> >
+        <a href="/home/Rencar" class="jump">
+            <i>汽车租赁</i>
+        </a> >
+        <a href="/home/reserve?id={$list[0]['id']}" class="jump">
+            <i>预定租车</i>
+        </a> >
+        <i>订单确认</i>
+    </div>
+    <else/>
+    <div class="mb-nav">
+        当前位置：
+        <a href="/" class="jump">
+            <i>首页</i>
+        </a> >
+        <a href="/home/Rencar" class="jump">
+            <i>汽车租赁</i>
+        </a> >
+        <i>订单确认</i>
+    </div>
+</if>
+<!--确认订单-->
+<div class="Indent-box" style="margin-top: 0">
+    <div class="Indent">
+        <h3>确认订单</h3>
+        <!--<form method="post"  action="{:U('Generate/Index')}?id={$list[0]['id']}" id="renForm"  enctype="multipart/form-data">-->
+            <div class="Indent-info">
+                <if condition="$list[0]['frontimg'] !=null">
+                    <img src="__PUBLIC__/{$list[0]['frontimg']}" alt="{$list[0]['brand']}" title="{$list[0]['brand']}" width="300"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="300" height="216"/>
+                </if>
+
+                <div class="Indent-dis">
+                    <span class="brand">{$list[0]['brand']}</span>
+                    <span class="carmodelname">{$list[0]['carmodelname']}</span>
+                    <div class="reserve-input">
+                        <label>
+                            <if condition="$data['start'] !=null">
+                                <span>取车：</span><input class="reserve-date start" value="{$data['start']}" id="start"   name="start" type="text" readonly />
+                                <else/>
+                                <span>取车：</span><input class="reserve-date start start1" id="start" name="start" type="text" readonly />
+                            </if>
+                        </label>
+                        <if condition="$data['stime']">
+                            <input id="time" type="hidden" value="{$data['stime']}"/>
+                            <else/>
+                        </if>
+                        <select name="stime" class="reserve-date reserve-time startT">
+                            <option value="08:30">08:30</option>
+                            <option value="09:00">09:00</option>
+                            <option value="09:30">09:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="25:59" style="display: none">25:59</option><!--用于判断的时间，不可随意更改-->
+                        </select>
+                        <div class="clearFix" style="height: 15px;"></div>
+                        <label>
+                            <if condition="$data['end']">
+                                <span >还车：</span><input type="text" value="{$data['end']}" id="end"  name="end" class="reserve-date end"  readonly />
+                                <else/>
+                                <span >还车：</span><input type="text" name="end"  id="end" class="reserve-date end end1"  readonly />
+                            </if>
+                        </label>
+                        <select name="etime" class="reserve-date reserve-time endT">
+                            <if condition="$data['etime']">
+                                <option value="{$data['etime']}">{$data['etime']}</option>
+                                <else/>
+                                <option value="08:30">08:30</option>
+                            </if>
+                            <option value="09:00">09:00</option>
+                            <option value="09:30">09:30</option>
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                        </select>
+                    </div>
+                    <div class="clearFix" style="height: 15px;"></div>
+                    <span style="position: relative;" >租车时长：
+                    <if condition="$data['days']">
+                        <input type="text" value="{$data['datas']}" name="days" id="dayTime" style="width: 100px;background-color: #F1F1F1; border: hidden;" readonly/>
+                        <input type="hidden" id="postDay" value="{$data['days']}" class="days">
+                        <else/>
+                        <input type="text" value="" id="dayTime" name="days" style="width: 260px;background-color: #F1F1F1; border: hidden;" readonly/>
+                        <input type="hidden" id="postDay" value="1">
+                    </if>
+                        <if condition="$data['days']">
+                              <div class="zcTs" style="top: -5px; left:100%;font-size: 12px; color: #333;" id="zcTs">
+                            <else/>
+                              <div class="zcTs" style="top: -5px; left:60%;font-size: 12px; color: #333;" id="zcTs">
+                            </if>
+
+                            <b></b>
+                            <i class="showD"></i>
+                            <a href="javascript:void(0)">我知道了</a>
+                </div>
+                </span>
+                <if condition="$act.num neq 0">
+                    <a href="{:U('activity/index')}"><div style="color: red;margin-top: 10px">活动进行中,点击查看详情</div></a>
+                </if>
+
+            </div>
+            <div style="clear: both"></div>
+            <div class="Indent-title">
+                车辆信息
+            </div>
+            <div class="car-info-list">
+                <ul class="car-info-ul1">
+                    <li>品牌</li>
+                    <li>车辆类型</li>
+                    <li>年代款</li>
+                    <li>车型</li>
+                    <li>变速箱</li>
+                    <li>座位数</li>
+                </ul>
+                <div style="clear: both"></div>
+                <ul class="car-info-ul2">
+                    <li>{$list[0]['brand']}</li>
+                    <li>
+                        <if condition="$list[0]['carmodeltype'] eq 1">商务车
+                            <elseif condition="$list[0]['carmodeltype'] eq 2"/>越野车
+                            <elseif condition="$list[0]['carmodeltype'] eq 3"/>面包车
+                            <elseif condition="$list[0]['carmodeltype'] eq 4"/>轿车
+                            <elseif condition="$list[0]['carmodeltype'] eq 5"/>客车
+                            <else/>轿车
+                        </if>
+                    </li>
+                    <li>{$list[0]['agestyle']}</li>
+                    <li>{$list[0]['carmodelname']}</li>
+                    <li>{$list[0]['bearboxtype']}</li>
+                    <li>{$list[0]['sitecount']}座</li>
+                </ul>
+            </div>
+            <div style="clear: both"></div>
+            <div class="choose-fw">
+                <p><span><input type="checkbox" id="dj" name="drivers" value="200" />是否代驾</span><span style="color:#f90; ">(￥200/天)</span>代驾费 * 租车天数 = 代驾费用:<b style="color:#f90; ">￥<b id="djf">0</b></b></p>
+                <p><span><input type="checkbox"  id="sc" name="givecar" value="0"/>是否送车
+                     <i class="sc-address">送车地址：<input type="text" name="address" id="address"/></i>
+                    </span>
+                    送车服务:<b>免费送车</b>
+                </p>
+
+            </div>
+            <div class="Indent-fav">
+                <?php
+    if(cookie('usertype')==0){
+    ?>
+                <select style="float: left;"name="couponInfoId" class="couponInfoId" id="couponInfoId">
+                    <if condition="$couponInfo[0]['id'] == ''">
+                        <option value="-1">您目前没有优惠券</option>
+                        <else/>
+                        <option selected="selected" value="0">可选择优惠券</option>
+                        <volist name="couponInfo" id="couponInfo">
+                            <if condition="$couponInfo['coupon_type'] == '1'">
+                                <option value="{$couponInfo['id']}" use_limit="{$couponInfo['use_limit']}" use_condition="{$couponInfo['use_condition']}" discount="{$couponInfo['discount']}" atype="{$couponInfo['coupon_type']}">{$couponInfo['discount']}*10折-折扣劵({$couponInfo['coupon_name']})</option>
+                                <else/>
+                                <option value="{$couponInfo['id']}" use_limit="{$couponInfo['use_limit']}" use_condition="{$couponInfo['use_condition']}" discount="{$couponInfo['money']}" atype="{$couponInfo['coupon_type']}">{$couponInfo['money']}元-现金劵({$couponInfo['coupon_name']})</option>
+                            </if>
+                        </volist>
+                    </if>
+                </select>
+
+                <?php
+    }
+?>
+                <!--特惠价：<b style="margin-right: 20px;text-decoration:line-through">￥<span id="tehui">0</span></b>-->
+
+                <input type="hidden" value="{$list[0]['shortdayprice']}" id = "shortdayprice"/>
+                <input type="hidden" value="{$list[0]['weekdayprice']}" id = "weekdayprice"/>
+                <input type="hidden" value="{$list[0]['monthdayprice']}" id = "monthdayprice"/>
+                <input type="hidden" value="{$active}" id = "active"/>
+                <span id="prize" style="margin-left: 150px;">租车单价:
+                        <!--<span>(租价)</span>：-->
+                        <i  style="color: #ff8800;">
+                            <if condition="$jiage">
+                                {$jiage}
+                                <else/>
+                                ￥{$list[0]['shortdayprice']}
+                            </if>
+                        </i>
+                    </span>
+            </div>
+            <div style="color: grey;padding-left: 10px;margin-top: 5px ">注:优惠劵和优惠活动只能选择一种进行减免,默认选择优惠活动</div>
+
+            <div class="Indent-buttons">
+                <a href="{:U('/home/Rencar')}" class="close-pay" ><input type="button" value="重新选车" class="close-pay" /></a>
+                <input type="submit" value="下载APP" class="shopping" id="shopping">
+
+                <b style="width: 512px;font-size: 12px;font-weight: normal;" id="" class="bmon">(代驾费 * 租车天数) + (租价 * 租车天数) = 订单总价：<span>￥<i id="all" >0</i></span></b>
+                <?php
+    if(cookie('usertype')==0){
+    ?>
+                <if condition="$time !='20170428' && $time !='20170429' && $time !='20170430' && $time !='20170501' ">
+                    <div class="clearFix" id="clearFix" style="width: 100%;height: 20px;"><span id="coupon_price" style="margin-left: 220px;line-height: 20px;font-size: 12px;color: #606060;font-weight: normal;">活动价格：</span><span class="min-order" style="color: #606060;font-size: 18px;"></span></div>
+                </if>
+                <?php
+    }
+?>
+            </div>
+            <div class="Indent-wx" id="tishi"><b>温馨提示：</b>免费送车服务仅限贵阳市两城区（南明区、云岩区），如有疑问请致电：<?php echo cookie('phone'); ?></div>
+    </div>
+    <!--</form>-->
+    <span class="servertime" style="display: none">{$time}</span>
+</div>
+<div class="Indent-jifei">
+    <include file="./Public/jifei.html"/>
+</div>
+<div style="clear: both;"></div>
+</div>
+<style>
+    .footer-content{background:#ffffff;}
+</style>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+
+<script runat="server" type="text/javascript">
+
+    var date = new Date($.ajax({async: false}).getResponseHeader("Date"));
+    var bombay = date + (3600000 * 8);
+    var now = new Date(bombay);
+    var Y = now.getFullYear();
+    var M = now.getMonth() + 1;
+    var D = now.getDate();
+    var h= now.getHours();
+    var m= now.getMinutes();
+    if (M < 10) {
+        M = "0" + M;
+    }
+    if (D < 10) {
+        D = "0" + D;
+    }
+    var nowtime=Y+"-"+M+"-"+D;
+    var startNum;
+    //计算时间
+    function  showDate(formID){
+        var startNum=$(formID).find(".start").val();//开始日期
+        var endNum=$(formID).find(".end").val();//结束日期
+        var startTNum=$(formID).find(".startT").val();//开始时间
+        var endTNum=$(formID).find(".endT").val();//结束时间
+        var timeD=Math.floor(diffDate(startNum+" "+startTNum,endNum+" "+endTNum,"h")/24);//天数
+        var timeH=diffDate(startNum+" "+startTNum,endNum+" "+endTNum,"h")%24;//多出来的小时
+        var timeX =(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "m") / 60) % 24;//多出来的分钟
+        if(timeX>0 && timeX<=2){
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("小于两小时不收费！");
+            $(".zcTs").fadeIn(1000);
+
+        }
+        else if(timeX>2 && timeX<=6){
+            $("#postDay").val(timeD+0.5);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于两小时小于六小时按半天计算！");
+            $(".zcTs").fadeIn(1000);
+
+        }else if(timeX>6){
+            $("#postDay").val(timeD+1);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于六小时按一天计算！");
+            $(".zcTs").fadeIn(1000);
+        }else{
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+        }
+    }
+
+    function showTime() {
+        var startNum = $("#start").val();
+        var endNum =$("#end").val();
+        var endTNum =$(".endT").val();
+        var startTNum = $(".startT").val();
+        var timeD = Math.floor(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "h") / 24);//天数
+        var timeH = diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "h") % 24//多出来的小时
+        var days=$('#postDay').val();
+        var shortdayprice = $('#shortdayprice').val();
+        var weekdayprice = $('#weekdayprice').val();
+        var monthdayPrice = $('#monthdayprice').val();
+        if(days>0 && days<5){
+            $("#prize span").html("（租价）");
+            $("#prize i").html('￥'+shortdayprice);
+        }
+        if(days>4 && days<21){
+            $("#prize span").html("（租价）");
+            $("#prize i").html('￥'+weekdayprice);
+        }
+        if(days>20){
+            $("#prize span").html("（租价）");
+            $("#prize i").html('￥'+monthdayPrice);
+        }
+        var timeX =(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "m") / 60) % 24;//多出来的分钟
+        if(timeX>0 && timeX<=2){
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("小于两小时不收费！");
+            $(".zcTs").fadeIn(1000);
+
+        }
+        else if(timeX>2 && timeX<=6){
+            $("#postDay").val(timeD+0.5);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于两小时小于六小时按半天计算！");
+            $(".zcTs").fadeIn(1000);
+
+        }else if(timeX>6){
+            $("#postDay").val(timeD+1);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于六小时按一天计算！");
+            $(".zcTs").fadeIn(1000);
+        }else{
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+        }
+        var days=$("#postDay").val();//租车天数
+        var tehui=parseFloat($("#tehui").text());//特惠价
+        var prize=parseFloat($("#prize i").text().replace("￥",00));//价格
+
+        $("#all").html(Math.round(days*prize));
+
+//优惠活动满300减50，满500减100
+//
+//       var sums =Math.round(days*prize);
+////        var moneys = cou(sums);
+//        $("#all").html(sums);
+
+//        gsdf();
+        //var str=Math.round(days*prize);无活动算法
+                   var str = Math.round(days*prize);
+            var strDj=0;
+            $(".choose-fw input[type='checkbox']").each(function(){
+                if($(this).is(':checked')) {
+
+                    str += parseFloat(($(this).val()) * days);
+
+                    strDj += parseFloat(($(this).val()) * days);
+                }
+
+        });
+
+
+//        $("#all").html(Math.round(str)+Math.round(strDj));
+
+        $(".bmon").attr("id",Math.round(days*prize)+Math.round(strDj));
+
+//        gsdf();
+
+        $("#djf").html(Math.round(strDj));
+        var sums = Math.round(str);
+
+        $("#all").html(sums);
+        if ({$active}){
+            commoncou(sum,{$active});
+
+        }
+
+    }
+
+
+    $(".startT").change(function () {
+        showTime();
+//        hourser();//日历时间改变判断复选框状态
+    });
+    $(".endT").change(function () {
+        showTime();
+//        hourser();//日历时间改变判断复选框状态
+    });
+    $(".startT option").each(function (){
+        var time=$("#time").val();
+        if($("#start").val()!="") {
+            var times = time.split(":");
+            var thisT = $(this).val();
+            var thisTime = thisT.split(":");
+            if (times[0] == thisTime[0] && times[1] == thisTime[1]) {
+                $(this).attr("selected", "selected");
+            }
+            var timem = (diffDate($("#start").val() + " " + h + ":" + m, $("#start").val() + " " + $(this).val(), "m"));//多出来的分钟
+            if (timem <= 120) {
+                $(this).attr('disabled', true).css({color: "#f00"});
+                var time = $(this).next().val();
+                $(".startT").val(time);
+            }
+        }else {
+            var timem =(diffDate(Y+"-"+M+"-"+D + " " +h+":"+m,Y+"-"+M+"-"+D + " " + $(this).val(), "m"));//多出来的分钟
+            if(timem<=120){
+                $(this).attr('disabled',true).css({color:"#f00"});
+                var time = $(this).next().val();
+                $(".startT").val(time);
+            }else {
+                $(this).attr("selected","selected");
+                return false;
+            }
+        }
+    });
+    $(".zcTs a").click(function () {
+        $(".zcTs").fadeOut();
+    });
+    !function () {
+        laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+    }();
+    var start = {
+        elem: '#start',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(), //设定最小日期为当前日期
+        max: '2099-06-16', //最大日期
+        istoday: false,
+        isclear: false,
+        issure: false,
+        festival: true,
+        choose: function (datas) {
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+            showDate("#renForm");
+            $(".startT option").each(function () {
+                var timem =(diffDate(Y+"-"+M+"-"+D + " " +h+":"+m,datas + " " + $(this).val(), "m"));//多出来的分钟
+                if(timem<=120){
+                    $(this).attr('disabled',true).css({color:"#f00"});
+                    var time = $(this).next().val();
+                    $(".startT").val(time);
+                }else {
+                    $(this).attr('disabled',false).css({color:"#333"});
+                }
+            });
+            showTime();
+            var days=$('#postDay').val();
+            var shortdayprice = $('#shortdayprice').val();
+            var weekdayprice = $('#weekdayprice').val();
+            var monthdayPrice = $('#monthdayprice').val();
+            if(days>0 && days<5){
+                $("#prize span").html("（租价）");
+                $("#prize i").html('￥'+shortdayprice);
+            }
+            if(days>4 && days<21){
+                $("#prize span").html("（租价）");
+                $("#prize span").html("（租价）");特惠价
+                $("#prize i").html('￥'+weekdayprice);
+            }
+            if(days>20){
+                $("#prize span").html("（租价）");
+                $("#prize i").html('￥'+monthdayPrice);
+            }
+
+            var days=$("#postDay").val();//租车天数
+            var daij=parseFloat($("#dj").val());//代驾
+//            var songc=parseFloat($("#sc").val());//送车
+            var tehui=parseFloat($("#tehui").text());//特惠价
+            var prize=parseFloat($("#prize i").text().replace("￥",00));//价格
+
+//            $("#all").html(Math.round(days*prize))
+            $(".bmon").attr("id",Math.round(days*prize));
+
+
+//            hhese();
+            var str=Math.round(days*prize);
+            var strDj=0;
+            $(".choose-fw input[type='checkbox']").each(function(){
+                if($(this).is(':checked')) {
+
+                str += parseFloat(($(this).val()) * days);
+
+               strDj += parseFloat(($(this).val()) * days);
+                }
+
+            });
+
+
+//            $("#all").html(Math.round(str)+Math.round(strDj));
+
+            $(".bmon").attr("id",Math.round(days*prize)+Math.round(strDj));
+
+//            gsdf();
+
+            $("#djf").html(Math.round(strDj));
+//            hourser();//日历时间改变判断复选框状态
+            var sum = Math.round(str);
+            $("#all").html(sum);
+            if ({$active}){
+                commoncou(sum,{$active});
+
+            }
+
+        }
+
+    };
+    var end = {
+        elem: '#end',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(+1),
+        max: '2099-06-16',
+        istoday: false,
+        isclear: false,
+        issure: false,
+        choose: function (datas) {
+            start.max = datas; //结束日选好后，充值开始日的最大日期
+            showDate("#renForm");
+            var days=$('#postDay').val();
+            var shortdayprice = $('#shortdayprice').val();
+            var weekdayprice = $('#weekdayprice').val();
+            var monthdayPrice = $('#monthdayprice').val();
+            if(days>0 && days<5){
+                $("#prize span").html("（租价）");
+                $("#prize i").html('￥'+shortdayprice);
+            }
+            if(days>4 && days<21){
+                $("#prize span").html("（租价）");
+                $("#prize i").html('￥'+weekdayprice);
+            }
+            if(days>20){
+                $("#prize span").html("（租价）");
+                $("#prize i").html('￥'+monthdayPrice);
+            }
+
+            var days=$("#postDay").val();//租车天数
+            var tehui=parseFloat($("#tehui").text());//特惠价
+            var prize=parseFloat($("#prize i").text().replace("￥",00));//价格
+            var prize=parseFloat($("#prize i").text().replace("￥",00));//价格
+//            $("#all").html(Math.round(days*prize));
+
+            $(".bmon").attr("id",Math.round(days*prize));
+            var str=(days*prize);
+            var strDj=0;
+            $(".choose-fw input[type='checkbox']").each(function(){
+                if($(this).is(':checked')) {
+
+                str += parseFloat(($(this).val()) * days);
+
+                strDj += parseFloat(($(this).val()) * days);
+                }
+
+            });
+
+
+
+//            $("#all").html(Math.round(str)+Math.round(strDj));
+
+            $(".bmon").attr("id",Math.round(days*prize)+Math.round(strDj));
+//            gsdf();
+            $("#djf").html(Math.round(strDj));
+//            hourser();//日历时间改变判断复选框状态
+
+            var sum = Math.round(str);
+
+            $("#all").html(sum);
+
+            if ({$active}){
+                commoncou(sum,{$active});
+
+            }
+        }
+    };
+
+    var days = $(".days").val();
+    var t = $(".startT").val();
+    if (days === undefined){
+        if (t == '25:59'){
+            $('.startT option').attr('disabled',false).css({color:"#000"});
+            $(".startT").val('08:30');
+            $("#start").val(DateAdd(nowtime,1));
+            $("#end").val(DateAdd(nowtime,2));
+            start.min = laydate.now(+1);
+            end.min = laydate.now(+2);
+        }else{
+            $("#start").val(DateAdd(nowtime,0));
+            $("#end").val(DateAdd(nowtime,1));
+        }
+    } else {
+        if (t == '25:59'){
+            $('.startT option').attr('disabled',false).css({color:"#000"});
+            $(".startT").val('08:30');
+//        $("#start").val(DateAdd(nowtime,1));
+//        $("#end").val(DateAdd(nowtime,2));
+            start.min = laydate.now(+1);
+            end.min = laydate.now(+2);
+        }else{
+//        $("#start").val(DateAdd(nowtime,0));
+//        $("#end").val(DateAdd(nowtime,1));
+        }
+    }
+
+    laydate(start);
+    laydate(end);
+
+    showTime();
+
+    var days=$("#postDay").val();//租车天数
+    var tehui=parseFloat($("#tehui").text());//特惠价
+    var prize=parseFloat($("#prize i").text().replace("￥",""));//价格
+
+    //    $("#all").html(Math.round((days*prize)));
+    $(".choose-fw input:checkbox").click(function () {
+        var days=$("#postDay").val();//租车天数
+        var tehui=parseFloat($("#tehui").text());//特惠价
+        var prize=parseFloat($("#prize i").text().replace("￥",""));//价格
+        var str=(days*prize);
+        var strDj=0;
+        $(".choose-fw input:checkbox:checked").each(function () {
+            if($(this).is(":checked")){
+                str+=parseFloat(($(this).val())*days);
+                strDj+=parseFloat(($(this).val())*days);
+            }else{
+                str-=parseFloat(($(this).val())*days);
+                strDj-=parseFloat(($(this).val())*days);
+
+            }
+        });
+
+//        $("#all").html(Math.round(str));
+
+        $(".bmon").attr("id",Math.round(str));
+//        hhese();
+//        gsdf();
+        $("#djf").html(Math.round(strDj));
+        var sum = Math.round(str);
+        $("#all").html(sum);
+        if ({$active}){
+            commoncou(sum,{$active});
+        }
+    });
+    //        优惠活动计算
+    function cou(v) {
+        var time = $(".start").text();
+        if (time == '20170428' || time == '20170429' || time == '20170430' || time == '20170501'){
+            if (v >= 300 && v < 500){
+                v = parseInt(v - 50);
+            } else if (v >= 500){
+                v = parseInt(v - 100);
+            }
+            if (v >= 250){
+                v =  v+"(五一活动价)";
+            } else {
+                v =  v;
+            }
+        }
+
+        return v;
+
+
+    }
+
+
+
+</script>
+<script runat="server" type="text/javascript">
+    $(function () {
+
+        $(".shopping").click(function () {
+            var url = "{:U('Down/index')}";
+            window.location.href=url;
+//            if (($.trim($("#address").val()) == "" || $.trim($("#address").val()) == null) && ($(".sc-address").is(":visible"))){
+//                alert("送车地址不能为空！");
+//                return false;
+//            }
+        });
+        //送车地址
+        $("#sc").click(function () {
+            if($(this).is(":checked")){
+                $(".sc-address").css({display:"block"});
+            }
+            else {
+                $(".sc-address").css({display:"none"});
+            }
+        });
+    });
+
+    //    var nowtime=Y+"-"+M+"-"+D;
+    //    $(".start1").val(nowtime);
+    //    $(".end1").val(DateAdd(nowtime,1));
+    //    if($(".startT option").attr('disabled',true)){
+    //        $(".start1").val(DateAdd(nowtime,1));
+    //        $(".startT option").attr('disabled',false).css({color:'#333'});
+    //        $(".end1").val(DateAdd(nowtime,2));
+    //    }
+    //    else{
+    //        $(".start1").val(nowtime);
+    //        $(".end1").val(DateAdd(nowtime,1));
+    //    }
+</script>
+
+
+<script type="text/javascript">
+    $(function () {
+
+        $(".couponInfoId").bind("change",function () {      //选择优惠劵,并进行订单金额计算
+            couponUse(this,{$active});
+        });
+
+    });
+
+
+
+
+    //判断优惠劵类型,返回优惠后的价格
+    function couponprice(all,type,discount) {
+        switch (type){
+            case '0':
+                return all- discount;
+                break;
+            case '1':
+                return all * discount;
+                break;
+        }
+    }
+
+
+</script>
+
+
+
+
+
+
+
+

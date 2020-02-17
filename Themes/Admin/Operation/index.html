@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>统计报表管理</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+
+    <style>
+        /*.all {background-color: lightskyblue}*/
+        #form-section {text-align: center;padding-top: 0.5em}
+        .body-box {margin-left: 0%;width: 100%;height: 60em;padding-top: 0.5em;background-color: #f9fbe7}
+        .count-group {float: left;margin-left: 5%;border: 1px solid lightgrey;padding: 5px}
+        .table {background-color: lightskyblue;width: 60em;}
+        .table li {float: left;width: 14.2857%;height: 40px;border-bottom: 1px solid #f7b500}
+        .table-ft {line-height: 40px}
+        .table:nth-of-type(odd) li{background:lightgrey;}
+
+        .group-title {text-align: center;height: 50px;line-height: 50px;font-size: 20px}
+        .query-box {height: 3em;width: 100%;padding-top:1em;padding-left:5%}
+        .query-box select {height: 26px}
+        .query-li {float: left;margin-left: 1em}
+        .query-inp {border: 1px solid lightgrey;border-radius: 2px}
+        .query-sub {background-color: #00a0e9;height: 26px;width: 80px;padding: 0 5px;text-align: center;color: white;border-radius: 5px;letter-spacing:2px}
+        .query-sub:hover {opacity: 0.2;background-color: #0a0a0a}
+    </style>
+
+</head>
+
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        统计报表管理页面
+    </h3>
+</div>
+<div class="all">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: auto;height: 20px;font-size: 30px" >
+        运营情况信息统计
+    </div>
+    <br>
+    <div class="body-box">
+        <div class="query-box">
+            <form action="{:U('index')}" method="get">
+                <span class="query-li">分组标准:</span>
+                <select class="query-li query-inp" name="group">
+                    <option value="0" <if condition ="$data.group eq 0">selected</if>>按时间段</option>
+                    <option value="1" <if condition ="$data.group eq 1">selected</if>>按行政区</option>
+                </select>
+                <span class="query-li">时间段划分:</span>
+                <input class="input_normal query-li query-inp" type="text"   name="start" style="width: 150px;" value="{$data['start']}"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <span class="query-li">至</span>
+                <input class="input_normal query-li query-inp" type="text"   name="stop" style="width: 150px;" value="{$data['stop']}"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="query-li query-sub" type="submit" value="进行统计">
+            </form>
+        </div>
+        <div class="count-group">
+            <li class="group-title">基本情况统计</li>
+            <ul class="table">
+                <li class="table-ft">分组</li>
+                <li class="table-ft">驾驶员数</li>
+                <li class="table-ft">车辆统计</li>
+                <li class="table-ft">订单统计</li>
+                <li class="table-ft">完结订单</li>
+                <li class="table-ft">订单平均里程(km)</li>
+                <li class="table-ft">订单平均耗时(min)</li>
+            </ul>
+            <volist name="list" id="temp">
+                <ul class="table">
+                    <li>{$temp.group_title}</li>
+                    <li class="table-ft">{$temp['content']['driver_num']}</li>
+                    <li class="table-ft">{$temp['content']['car_num']}</li>
+                    <li class="table-ft">{$temp['content']['order_num']}</li>
+                    <li class="table-ft">{$temp['content']['end_num']}</li>
+                    <li class="table-ft">{$temp['content']['order_mile']}</li>
+                    <li class="table-ft">{$temp['content']['order_time']}</li>
+                </ul>
+            </volist>
+        </div>
+        <div class="count-group">
+            <li class="group-title">车辆运行情况</li>
+            <ul class="table">
+                <li class="table-ft">分组</li>
+                <li class="table-ft">载客时间(min)</li>
+                <li class="table-ft">载客里程(km)</li>
+                <li class="table-ft">收益金额(元)</li>
+                <li class="table-ft">违章次数</li>
+                <li class="table-ft">投诉次数</li>
+                <li class="table-ft">服务质量</li>
+            </ul>
+            <volist name="list" id="temp">
+                <ul class="table">
+                    <li>{$temp.group_title}</li>
+                    <li class="table-ft">{$temp['content']['carry_time']}</li>
+                    <li class="table-ft">{$temp['content']['carry_mile']}</li>
+                    <li class="table-ft">{$temp['content']['profit']}</li>
+                    <li class="table-ft">{$temp['content']['peccancy_num']}</li>
+                    <li class="table-ft">{$temp['content']['complaint_num']}</li>
+                    <li class="table-ft">{$temp['content']['server_quality']}</li>
+                </ul>
+            </volist>
+        </div>
+        <!--<div class="count-group">
+            <li>车辆违规经营情况</li>
+            <ul class="table">
+                <li>超经营区域车辆数</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+            </ul>
+            <ul class="table">
+                <li>未报备驾驶员数</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+            </ul>
+            <ul class="table">
+                <li>未报备车辆数</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+                <li>fdsaf</li>
+            </ul>
+        </div>-->
+    </div>
+
+
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+    });
+
+</script>

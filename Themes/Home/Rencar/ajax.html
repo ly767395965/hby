@@ -1,0 +1,70 @@
+<!--列表开始-->
+<if condition ="$list[0]['id'] == ''">
+    <div style="width: 930px;height: 631px;line-height: 631px; text-align: center;color: #ff8800; font-size: 38px;">暂无相关数据</div>
+    <else/>
+    <volist name="list" id="vo">
+        <if condition="$vo['id'] !=null ">
+            <div class="rental-list-box">
+                <div class="rental-list-pic">
+                    <!--<img src="__PUBLIC__/{$vo['frontimg']}" width="100%" alt="{$vo['carmodelname']}"/>-->
+                    <a href="{:U('Reserve/Index')}?id={$vo['id']}" class="reserve" >
+                        <if condition="$vo['frontimg'] != null">
+                            <img src="__PUBLIC__{$vo['frontimg']}" width="100%" alt="{$vo['carmodelname']}" title="{$vo['carmodelname']}"/>
+                            <else/>
+                            <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                        </if>
+                    </a>
+                </div>
+                <div class="rental-list-dis">
+                    <h3>{$vo['brand']} <i style="font-size: 16px;color: #989898;">{$vo['carmodelname']}</i></h3>
+                    <div class="car-dis list-car-dis">
+                        <span style="margin-right: 3px;">
+                            <i class="bearboxtype nd"></i>
+                            {$vo['agestyle']}
+                        </span>
+                        <span>
+                            <i class="bearboxtype bsx"></i>
+                            {$vo['bearboxtype']}
+                        </span>
+                        <span>
+                            <i class="sitecount zws"></i>
+                            {$vo['sitecount']}座
+                        </span>
+                        <span>
+                            <i class="pl"></i>
+                            {$vo['displacement']}(ml)
+                        </span>
+                    </div>
+                    <span class="rental-list-prize">
+                        	<i>短租<span style="font-size:12px;">(1-4天)</span>:</i>
+                        	<b class="shortdayprice" style="font-size:12px;">￥{$vo['shortdayprice']}</b>
+                        	<i>/天</i> <span style="position: relative;top: -2px;">|</span>
+                        </span>
+                    <span class="rental-list-prize">
+                        	<i>周租<span style="font-size:12px;">(5-20天)</span>:</i>
+                        	<b class="weekdayprice" style="font-size:12px;">￥{$vo['weekdayprice']}</b>
+                        	<i>/天</i> <span style="position: relative;top: -2px;">|</span>
+                        </span>
+                    <span class="rental-list-prize">
+                        	<i>月租<span style="font-size:12px;">(20天以上)</span>:</i>
+                        	<b class="monthdayprice" style="font-size:12px;">￥{$vo['monthdayprice']}</b>
+                        	<i>/天</i>
+                        </span>
+                </div>
+                <div class="rental-list-btn">
+                    <a href="{:U('Indent/Index')}?id={$vo['id']}">我要预定</a>
+                </div>
+            </div>
+        </if>
+    </volist>
+    <div class="curr-page" style="width: 500px; position: absolute;right:0;bottom: 0px;margin-bottom: 20px">
+        {$page}
+    </div>
+    <!--列表结束-->
+</if>
+
+<script>
+    $(function () {
+        $(".rental-list-box:last").css({marginBottom:80+"px"});
+    });
+</script>

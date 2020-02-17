@@ -1,0 +1,20 @@
+<h3>我的租车</h3>
+<a href="{:U('UserManage/index')}"><img src="__PUBLIC__/images/icn_profile.png"/>个人信息</a>
+<a href="{:U('UserManage/carorder')}"><img src="__PUBLIC__/images/calendar.png" style="margin-right: 6px;top: 3px;"/>订单记录</a>
+
+<?php
+    if(cookie('usertype')==0){
+    ?>
+<a href="{:U('UserManage/coupon')}"><img src="__PUBLIC__/images/yhq.png" width="23" height="23" style="margin-right: 6px;top: 6px;"/>优惠券</a>
+<?php
+    }else{
+?>
+<a href="{:U('UserManage/cartMonitor')}"><img src="__PUBLIC__/images/monitor.png" width="20" height="20" style="margin-right: 6px;top: 3px;"/>车辆监控</a>
+<?php
+}
+?>
+
+
+
+<a href="{:U('UserManage/editpass')}"><img src="__PUBLIC__/images/icn_edit_article.png" style="margin-right: 6px;"/>修改密码</a>
+

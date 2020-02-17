@@ -1,0 +1,17 @@
+User-agent: *
+
+Disallow: /Application/
+Disallow: /cacert/
+Disallow: /data/
+Disallow: /HbyPHP/
+Disallow: /logs/
+Disallow: /ueditor/
+Disallow: /Themes/Admin/
+Disallow: /Themes/App/
+Disallow: /Themes/home/login.htm
+Disallow: /Themes/home/reg.htm
+Disallow: /home/Login/
+Disallow: /home/Reg/
+
+Allow: /home/
+Sitemap:http://www.hbzc777.com/sitemap.txt

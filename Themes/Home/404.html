@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>抱歉,没有找到您要访问的页面!</title>
+    <META http-equiv=refresh content="1; url=http://www.hbzc777.com/"><!--默认返回的页面-->
+<style type="text/css">
+body{ margin:0 auto; padding:0;}
+	#error{ width:800px; height:600px; margin:0 auto;}
+	#errorpage{ text-align:center;}
+	#pagetitle{margin-left:160px; font-size:20px;}
+	#page_ul{ width:450px; height:40px; margin:0 auto;}
+	#page_ul li{ line-height:40px;}
+    #img{width: 450px; height: 200px; margin: 0 auto;margin-top: 50px;border: none;}
+    #time{font-style: normal;color: #0000cc;}
+</style>
+    <script type="text/javascript">
+        var i=1;
+        function showtime() {
+                var time = document.getElementById("time");
+                i--;
+                if(i==0){
+                clearInterval(t);
+                }
+                time.innerHTML=i;
+        }
+        var t=setInterval("showtime()",1000);
+    </script>
+</head>
+
+<body>
+    <div id="error">
+    	<h1 id="errorpage">抱歉,没有找到您要访问的页面!</h1>
+        <br/>
+        <span id="pagetitle">建议您：</span>
+        <ul id="page_ul">
+        	<li>请检查您输入的网址是否正确，或者 <a>后退</a> 返回上一个页面；</li>
+            <li>否则 <i id="time"></i> 秒之后我们会安排司机将您送达<a href="/">首页</a></li>
+        </ul>
+        <br/>
+        <div id="img">
+           <a href="/">
+               <img src="../../../Public/images/errors.png"/>
+           </a>
+        </div>
+
+    </div>
+</body>
+</html>

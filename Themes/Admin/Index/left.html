@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="__PUBLIC__/js/jquery.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            //导航切换
+            $(".menuson li").click(function(){
+                $(".menuson li.active").removeClass("active");
+                $(this).addClass("active");
+            });
+
+            $('.title').click(function(){
+                var $ul = $(this).next('ul');
+                $('dd').find('ul').slideUp();
+                if($ul.is(':visible')){
+                    $(this).next('ul').slideUp();
+                }else{
+                    $(this).next('ul').slideDown();
+                }
+            });
+        })
+    </script>
+
+
+</head>
+
+<body style="background:#f0f9fd;">
+<div class="lefttop"><span></span>管理模板</div>
+
+<dl class="leftmenu">
+
+    <dd>
+        <if condition="checkAuth('system/*')">
+            <div class="title">
+                <span><img src="__PUBLIC__/images/leftico01.png" /></span>系统管理
+            </div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('SiteWeb/index')">
+                <li class="active"><cite></cite><a href="{:U('SiteWeb/index')}" target="rightFrame">站点设置</a><i></i></li>
+            </if>
+            <if condition="checkAuth('AdClass/index')">
+                <li><cite></cite><a href="{:U('AdClass/index')}" target="rightFrame">广告分类</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Academy/index')">
+                <li><cite></cite><a href="{:U('Academy/index')}" target="rightFrame">院校列表</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Train/index')">
+                <li><cite></cite><a href="{:U('Train/index')}" target="rightFrame">交通车班次列表</a><i></i></li>
+            </if>
+            <if condition="checkAuth('AdManage/index')">
+                <li><cite></cite><a href="{:U('AdManage/index')}" target="rightFrame">广告管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Links/index')">
+                <li><cite></cite><a href="{:U('Links/index')}" target="rightFrame">友情链接</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('SystemLog/index')">
+                <li><cite></cite><a href="{:U('SystemLog/index')}" target="rightFrame">网站日志</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+
+    <dd>
+        <if condition="checkAuth('MemberManage/*')">
+            <div class="title">
+                <span><img src="__PUBLIC__/images/leftico02.png" /></span>会员管理
+            </div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Member/index')">
+                <li><cite></cite><a href="{:U('Member/index')}" target="rightFrame">会员列表</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+
+    <dd>
+        <if condition="checkAuth('Manage News/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>新闻管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Newclass/index')">
+                <li><cite></cite><a href="{:U('Newclass/index')}" target="rightFrame">文章分类</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Article/index')">
+                <li><cite></cite><a href="{:U('Article/index')}" target="rightFrame">文章管理</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('ActivityManage/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>活动管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('PublishEvent/index')">
+                <li><cite></cite><a href="{:U('PublishEvent/index')}" target="rightFrame">活动列表</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('CarManage/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>车辆管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('CarBrand/index')">
+                <li><cite></cite><a href="{:U('CarBrand/index')}" target="rightFrame">品牌管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('CarModel/index')">
+                <li><cite></cite><a href="{:U('CarModel/index')}" target="rightFrame">车型管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('CarinfoManage/index')">
+                <li><cite></cite><a href="{:U('CarinfoManage/index')}" target="rightFrame">车辆信息</a><i></i>
+                </li></if>
+            <if condition="checkAuth('Driverinfo/index')">
+                <li><cite></cite><a href="{:U('Driverinfo/index')}" target="rightFrame">司机管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Driverinfo/index')">
+                <li><cite></cite><a href="{:U('DriverPosition/index')}" target="rightFrame">司机位置</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Driverinfo/index')">
+                <li><cite></cite><a href="{:U('CarPosition/index')}" target="rightFrame">车辆位置</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+
+    <dd>
+        <if condition="checkAuth('Order/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>订单管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Order/index')">
+                <li><cite></cite><a href="{:U('Order/index')}" target="rightFrame">车辆占用查询</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Order/supervise')">
+                <li><cite></cite><a href="{:U('Order/supervise?act=send')}" target="rightFrame">订单管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Order/returnCar')">
+                <li><cite></cite><a href="{:U('Order/returnCar')}" target="rightFrame">还车管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Order/orderEnd')">
+                <li><cite></cite><a href="{:U('Order/orderEnd')}" target="rightFrame">违章管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Order/add')">
+                <li><cite></cite><a href="{:U('Order/add')}" target="rightFrame">手动录单</a><i></i></li>
+            </if>
+
+            <li><cite></cite><a href="{:U('Order/all')}" target="rightFrame">所有订单</a><i></i></li>
+        </ul>
+    </dd>
+    <dd>
+        <if condition="checkAuth('Order/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>网约车管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('NetCar/index')">
+                <li><cite></cite><a href="{:U('NetCar/index')}" target="rightFrame">订单管理</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('NetCarCompany/index')">
+                <li><cite></cite><a href="{:U('NetCarCompany/index')}" target="rightFrame">公司基本信息</a><i></i></li>
+            </if>
+            <if condition="checkAuth('NetCarInstitution/index')">
+                <li><cite></cite><a href="{:U('NetCarInstitution/index')}" target="rightFrame">网约车平台服务机构信息</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('CompanyPay/index')">
+                <li><cite></cite><a href="{:U('CompanyPay/index')}" target="rightFrame">公司支付信息</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('TrainingTopic/index')">
+                <li><cite></cite><a href="{:U('TrainingTopic/index')}" target="rightFrame">驾驶员培训课题</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('DriverTrain/index')">
+                <li><cite></cite><a href="{:U('DriverTrain/index')}" target="rightFrame">驾驶员培训记录</a><i></i></li>
+            </if>
+            
+            <if condition="checkAuth('NetCarEndOrder/index')">
+                <li><cite></cite><a href="{:U('NetCarEndOrder/index')}" target="rightFrame">网约车订单记录</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('EvaluateInfo/index')">
+                <li><cite></cite><a href="{:U('EvaluateInfo/index')}" target="rightFrame">评价/投诉信息</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('ViolationInfo/index')">
+                <li><cite></cite><a href="{:U('ViolationInfo/index')}" target="rightFrame">违章/处罚信息</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('NetCarInfo/index')">
+                <li><cite></cite><a href="{:U('NetCarInfo/index')}" target="rightFrame">网约车车辆管理</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('NetCarFreight/index')">
+                <li><cite></cite><a href="{:U('NetCarFreight/index')}" target="rightFrame"> 网约车运价信息</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('OverRegion/index')">
+                <li><cite></cite><a href="{:U('OverRegion/index')}" target="rightFrame"> 超经营区域车辆记录</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('Report/car_index')">
+                <li><cite></cite><a href="{:U('Report/car_index')}" target="rightFrame"> 报备信息预警记录</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('DriverService/index')">
+                <li><cite></cite><a href="{:U('DriverService/index')}" target="rightFrame">服务质量统计</a><i></i></li>
+            </if>
+
+            <if condition="checkAuth('Operation/index')">
+                <li><cite></cite><a href="{:U('Operation/index')}" target="rightFrame">运营情况统计</a><i></i></li>
+            </if>
+
+        </ul>
+    </dd>
+    <dd>
+        <if condition="checkAuth('Order/customerBig')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>特殊订单管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Order/customerBig')">
+                <li><cite></cite><a style="color: blue;" href="{:U('Order/customerBig')}" target="rightFrame">大客户订单管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Limousine/index')">
+                <li><cite></cite><a style="color: blue;" href="{:U('Limousine/index')}" target="rightFrame">院校交通车管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Order/order_meeting')">
+                <li><cite></cite><a style="color: blue;" href="{:U('Order/order_meeting')}" target="rightFrame">会议订单管理</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+    <dd>
+        <if condition="checkAuth('Finance/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico03.png" /></span>财务管理</div>
+        </if>
+        <ul class="menuson">
+            <!--<li><cite></cite><a href="{:U('Order/Index')}" target="rightFrame">所有订单</a><i></i></li>-->
+                <li><cite></cite><a href="{:U('Finance/financecost?act=charge')}" target="rightFrame">订单收费</a><i></i></li>
+                <li><cite></cite><a href="{:U('Finance/financecost?act=refund')}" target="rightFrame">退款处理</a><i></i></li>
+            <if condition="checkAuth('Finance/financeBig')">
+                <li><cite></cite><a style="color:blue" href="{:U('Finance/financeBig')}" target="rightFrame">大客户账目</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Finance/financeMeeting')">
+                <li><cite></cite><a style="color:blue" href="{:U('Finance/financeMeeting')}" target="rightFrame">会议订单账目</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Finance/financecost')">
+                <li><cite></cite><a href="{:U('Finance/financecost?act=charge_q')}" target="rightFrame">收费查询</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Finance/financecost')">
+                <li><cite></cite><a href="{:U('CarAgent/check_info')}" target="rightFrame">代理商结算</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Finance/count')">
+                <li><cite></cite><a href="{:U('Finance/count')}" target="rightFrame">统计报表</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('CarAgent/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico04.png" /></span>代理商板块</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('CarAgent/carinfo')">
+                <li><cite></cite><a href="{:U('CarAgent/carinfo')}" target="rightFrame">车辆信息</a><i></i></li>
+            </if>
+            <if condition="checkAuth('CarAgent/orderinfo')">
+                <li><cite></cite><a href="{:U('CarAgent/orderinfo')}" target="rightFrame">订单信息</a><i></i></li>
+            </if>
+            <if condition="checkAuth('CarAgent/auserinfo')">
+                <li><cite></cite><a href="{:U('CarAgent/auserinfo')}" target="rightFrame">代理账号管理</a><i></i></li>
+            </if>
+            <if condition="checkAuth('CarAgent/check_info')">
+                <li><cite></cite><a href="{:U('CarAgent/check_info')}" target="rightFrame">申请结账</a><i></i></li>
+            </if>
+        </ul>
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('Operator/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico04.png" /></span>操作员管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('User/index')">
+                <li><cite></cite><a href="{:U('User/index')}" target="rightFrame">操作员</a><i></i></li>
+            </if>
+            <if condition="checkAuth('User/agent')">
+                <li><cite></cite><a href="{:U('User/agent')}" target="rightFrame">代理商管理</a><i></i></li>
+            </if>
+        </ul>
+
+    </dd>
+
+
+    <dd>
+        <if condition="checkAuth('Coupon/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico04.png" /></span>优惠活动管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Couponbollar/index')">
+                <li><cite></cite><a href="{:U('Couponbollar/index')}" target="rightFrame">优惠方式列表</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Coupontype/index')">
+                <li><cite></cite><a href="{:U('Coupontype/index')}" target="rightFrame">优惠活动管理</a><i></i></li>
+            </if>
+        </ul>
+
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('Distributionauthority/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico04.png" /></span>角色管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('Company/index')">
+                <li><cite></cite><a href="{:U('Company/index')}" target="rightFrame">角色列表</a><i></i></li>
+            </if>
+            <if condition="checkAuth('Authrule/index')">
+                <li><cite></cite><a href="{:U('Authrule/index')}" target="rightFrame">权限节点</a><i></i></li>
+            </if>
+        </ul>
+
+    </dd>
+
+    <dd>
+        <if condition="checkAuth('OrderOld/*')">
+            <div class="title"><span><img src="__PUBLIC__/images/leftico04.png" /></span>老订单管理</div>
+        </if>
+        <ul class="menuson">
+            <if condition="checkAuth('OrderOld/index')">
+                <li><cite></cite><a href="{:U('OrderOld/index')}" target="rightFrame">老订单列表</a><i></i></li>
+            </if>
+            <if condition="checkAuth('OrderOld/count')">
+                <li><cite></cite><a href="{:U('OrderOld/count')}" target="rightFrame">老订单统计</a><i></i></li>
+            </if>
+        </ul>
+
+    </dd>
+
+
+</dl>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>驾驶员信誉定级</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+
+<div class="tit-all">
+    <h3><i></i>驾驶员信誉定级</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('DriverService/driverGrade')}"  method="post">
+                <div class="busi_input clearfix">
+                    <label>信誉等级：{$list[0]['id']}</label>
+                    <input class="input_normal" type="text" value="{$list[0]['servicegrade']}"  name="grade" placeholder="" title="驾驶员信誉定级" >
+                    <input type="hidden" value="{$id}" name="driverid"/>
+                    <input type="hidden" <if condition ="$illegalno eq ''">value="0"<else/>value="{$illegalno}"</if> name="illegalno"/>
+                    <input type="hidden" <if condition ="$punishno eq ''">value="0"<else/>value="{$punishno}"</if> name="punishno"/>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>信誉考核机构：</label>
+                    <input class="input_normal" type="text" value="{$list[0]['servicecheckcompany']}"  name="name" placeholder="" title="信誉考核机构" >
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>服务考核日期：</label>
+                    <input class="input_normal" type="text" value="{$list[0]['servicecheckdate']}"  name="ServiceCheckDate" id="ServiceCheckDate"  placeholder="请输入服务质量信誉考核日期 ： YYYY-MM-DD HH:mm:ss" title="日期格式 ： YYYY-MM-DD"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+                </div>
+
+                <div class="busi_input clearfix" style="margin-top: 5px;position: relative">
+                    <label>是否专职驾驶员：</label>
+                   <select name="ismajor">
+                       <option value="0" <if condition ="$list[0]['fulltimedriver'] eq 0">selected</if>>否</option>
+                       <option value="1" <if condition ="$list[0]['fulltimedriver'] eq 1">selected</if>>是</option>
+                   </select>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>是否在黑名单：</label>
+                    <select name="blacklist">
+                        <option value="0" <if condition ="$list[0]['indriverblacklist'] eq 0">selected</if>>否</option>
+                        <option value="1" <if condition ="$list[0]['indriverblacklist'] eq 1">selected</if>>是</option>
+                    </select>
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+
+</html>

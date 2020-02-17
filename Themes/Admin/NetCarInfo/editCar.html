@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆信息修改页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <!--<script type="text/javascript" src="__PUBLIC__/Uploadpictures/diyUpload/js/webuploader.html5only.min.js"></script>-->
+    <!--<script type="text/javascript" src="__PUBLIC__/Uploadpictures/diyUpload/js/diyUpload.js"></script>-->
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .box_fl{float:left;margin-left: 0%}
+        label{width: 150px !important;}
+        .sub_box {width:200px;clear:both;height: 100%;position: relative;margin: 0 auto;}
+    </style>
+    <script type="text/javascript">
+
+        $(function(){
+            var model_id = $('#brand').val();
+            carmodel(model_id);
+            //通过change事件，当元素失去焦点时，记录该元素的value值
+            $('#brand').change(function () {
+                //获取当前的value值
+                var id = ($(this).val());
+                //通过ajax传递到处理程序
+                carmodel(id)
+            })
+        });
+        function carmodel(id){
+            $.ajax({
+                //处理程序url
+                url:"{:U('NetCarInfo/ajax')}",
+                //传值方式
+                type:'post',
+                //数据类型
+                dataType:'json',
+                data:{
+                    id:id,
+                },
+                //接受处理程序返回的数据data
+                success:function(data){
+                    //清空元素
+                    $('#carmodel option[value!=""]').remove();
+                    //通过ecsh来遍历返回的数据data
+                    $.each(data,function (i) {
+                        //将遍历的值添加到页面元素
+                        $('#carmodel').append("<option value='"+data[i]['id']+"'>"+data[i]['carmodelname']+"</option>");
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+<body style="height: 100%;">
+<div class="tit-all">
+    <h3><i></i>车辆信息修改页面</h3>
+</div>
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 135%;background: black;display: none;opacity: 0.6"></div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('NetCarInfo/editCar')}" method="post" enctype="multipart/form-data" style="height: auto">
+                <input type="hidden"  value="{$list['id']}" name="id" id="id">
+                <div class="box_fl">
+                    <div class="busi_input clearfix">
+                        <label>品牌：</label>
+                        <select class="input_normal" name="BrandId" id="brand" >
+                            <option selected="selected" value="{$list['brandid']}">{$list['brandname']}</option>
+                            <volist name="brand" id="temp">
+                                <option value="{$temp['id']}">{$temp['brand']}</option>
+                            </volist>
+                        </select>
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车型：</label>
+                        <select class="input_normal" name="ModelId" id="carmodel">
+                            <option selected="selected" value="{$list['modelid']}">{$list['modelname']}</option>
+                        </select>
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车牌号：</label>
+                        <input class="input_normal" type="text"  value="{$list['vehicleno']}" name="VehicleNo" id="VehicleNo"  placeholder="请输入车牌号" title="请输入车牌号" ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车牌颜色：</label>
+                        <select name="PlateColor" class="input_normal" id="PlateColor">
+                            <option <if condition ="$list.platecolor eq 1">selected</if> value="1">蓝牌</option>
+                            <option <if condition ="$list.platecolor eq 2">selected</if> value="2">黄牌</option>
+                            <option <if condition ="$list.platecolor eq 3">selected</if> value="3">黑牌</option>
+                            <option <if condition ="$list.platecolor eq 4">selected</if> value="4">白牌</option>
+                            <option <if condition ="$list.platecolor eq 5">selected</if> value="5">绿牌</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车身颜色：</label>
+                        <input class="input_normal" type="text" value="{$list['vehiclecolor']}"  name="VehicleColor" id="VehicleColor"  placeholder="请输入车身颜色" title="请输入车身颜色" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>核定载客位：</label>
+                        <input class="input_normal" type="text" value="{$list['seats']}"  name="Seats" id="Seats"  placeholder="请输入车辆载定载客位" title="请输入车辆载定载客位" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆照片：</label>
+                        <input class="input_normal" type="file" value=""  name="PhotoId" id="PhotoId" >
+                        <!--<input class="input_normal" type="button" value="查看原图" style="width: 9%;height: 36px">-->
+                        <!--<div style="position: absolute;left: 601px">-->
+                            <!--<img src="__PUBLIC__{$list['photoid']}" width="20%" height="20%" style="border: 1px solid lightgrey">-->
+                        <!--</div>-->
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>运价类型：</label>
+                        <!--<input class="input_normal" type="text"   name="FareType" id="FareType"  placeholder="请选择运价类型" title="请选择运价类型" >-->
+                        <input style="width: 230px;" class="input_normal " type="text" value="{$list['faretypename']}(运价号:{$list['faretype']})"  id="fare_show"  disabled="disabled"  placeholder="请先运价类型"  >
+                        <input type="hidden" id="FareType" name="FareType" value="{$list['faretype']}">
+                        <input style="width: 70px;" class="input_normal" type="button" value="选择"  id="fare_query"  >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                        <div class="query_box" id="query_fare" style="display: none;overflow-y: auto;padding-top:50px;">
+                            <span style="margin-left:20px">选择车辆使用的运价类型:</span>
+                            <input style="width: 250px;"  type="text" id="query_info" value=""   placeholder="可以输入运价名称进行查询"  >
+                            <input style="height: 29px" type="button" class="fareinfo_query" value="查询"><br/><br/>
+                            <div>
+                                <table  border="1" id="carinfo_tab" style="width: 391px;margin-left: 69px;">
+                                    <tr><th>运价号</th><th>运价名称</th><th>起步里程</th><th>起步价</th><th>里程价</th><th>分钟价</th></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>服务类型：</label>
+                        <select class="input_normal" name="CommercialType" id="CommercialType">
+                            <option value="1" <if condition ="$list.commercialtype eq 1">selected</if>>网络预约出租汽车</option>
+                            <option value="2" <if condition ="$list.commercialtype eq 2">selected</if>>巡游出租汽车</option>
+                            <option value="3" <if condition ="$list.commercialtype eq 3">selected</if>>私人小客车合乘</option>
+                        </select>
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆状态：</label>
+                        <select class="input_normal" name="CarState" id="CarState">
+                            <option value="2" <if condition ="$list.carstate eq 2">selected</if>>未审核</option>
+                            <option value="1" <if condition ="$list.carstate eq 1">selected</if>>已审核</option>
+                            <option value="0" <if condition ="$list.carstate eq 0">selected</if>>不可用</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>运营状态：</label>
+                        <select class="input_normal" name="BizStatus" id="BizStatus">
+                            <option value="4" <if condition ="$list.bizstatus eq 4">selected</if>>停运</option>
+                            <option value="3" <if condition ="$list.bizstatus eq 3">selected</if>>空驶</option>
+                            <option value="2" <if condition ="$list.bizstatus eq 2">selected</if>>接单</option>
+                            <option value="1" <if condition ="$list.bizstatus eq 1">selected</if>>载客</option>
+                            <option value="0" <if condition ="$list.bizstatus eq 0">selected</if>>空闲</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>行驶里程：</label>
+                        <input class="input_normal" type="text" value="{$list.mileage}"  name="Mileage" id="Mileage"  placeholder="请输入车辆行驶里程" title="请输入车辆行驶里程" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆类型：</label>
+                        <input class="input_normal" type="text" value="{$list.vehicletype}"  name="VehicleType" id="VehicleType"  placeholder="请输入车辆类型" title="请输入车辆类型" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                        <i>注:以机动车行驶证为准</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆所有人：</label>
+                        <input class="input_normal" type="text" value="{$list.ownername}"  name="OwnerName" id="OwnerName"  value="" title="请输入车辆所有人" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>发动机号：</label>
+                        <input class="input_normal" type="text" value="{$list.engineid}"  name="EngineId" id="EngineId"  value="" title="请输入发动机号" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆型号：</label>
+                        <input class="input_normal" type="text" value="{$list.model}"  name="Model" id="Model"  value="" title="请输入车辆型号" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆VIN码：</label>
+                        <input class="input_normal" type="text" value="{$list.vin}"  name="VIN" id="VIN"  value="" title="请输入17位车辆VIN码" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆注册日期：</label>
+                        <input class="input_normal" type="text" value="{$list.certifydatea}"  name="CertifyDateA" id="CertifyDateA"  placeholder="请输入车辆注册日期 ： YYYY-MM-DD" title="请输入车辆注册日期 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆燃料类型：</label>
+                        <select name="FuelType" class="input_normal" id="FuelType">
+                            <option <if condition ="$list.fueltype eq 'A'">selected</if> value="A">汽油</option>
+                            <option <if condition ="$list.fueltype eq 'B'">selected</if> value="B">柴油</option>
+                            <option <if condition ="$list.fueltype eq 'C'">selected</if> value="C">电</option>
+                            <option <if condition ="$list.fueltype eq 'D'">selected</if> value="D">混合油</option>
+                            <option <if condition ="$list.fueltype eq 'E'">selected</if> value="E">天然气</option>
+                            <option <if condition ="$list.fueltype eq 'F'">selected</if> value="F">液化石油气</option>
+                            <option <if condition ="$list.fueltype eq 'L'">selected</if> value="L">甲醇</option>
+                            <option <if condition ="$list.fueltype eq 'M'">selected</if> value="M">乙醇</option>
+                            <option <if condition ="$list.fueltype eq 'N'">selected</if> value="N">太阳能</option>
+                            <option <if condition ="$list.fueltype eq 'O'">selected</if> value="O">混合动力</option>
+                        </select>
+                    </div>
+                    
+                    <div class="busi_input clearfix">
+                        <label>发动机排量：</label>
+                        <input class="input_normal" type="text"   name="EngineDisplace" id="EngineDisplace"  value="{$list.enginedisplace}" title="请输入发动机排量" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                        <i>注:单位:毫升</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>运输证字号：</label>
+                        <input class="input_normal" type="text"   name="Certificate" id="Certificate"  value="{$list.certificate}" title="请输入运输证字号" >
+                    </div>
+                </div>
+
+                <div class="box_fl">
+                    <div class="busi_input clearfix">
+                        <label>车辆运输证发证机构：</label>
+                        <input class="input_normal" type="text"   name="TransAgency" id="TransAgency"  value="{$list.transagency}" title="请输入车辆运输证发证机构" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label >车辆经营区域：</label>
+                        <input class="input_normal" type="text"   name="TransArea" id="TransArea"  value="{$list.transarea}" title="请输入车辆经营区域" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆运输证有效期起：</label>
+                        <input class="input_normal" type="text" value="{$list.transdatestart}"  name="TransDateStart" id="transdatestart"  placeholder="请输入车辆运输证有效期起 ： YYYY-MM-DD" title="请输入车辆运输证有效期起 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆运输证有效期止：</label>
+                        <input class="input_normal" type="text" value="{$list.transdatestop}"  name="TransDateStop" id="transdatestop"  placeholder="请输入车辆运输证有效期止 ： YYYY-MM-DD" title="请输入车辆运输证有效期止 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆初次登记日期：</label>
+                        <input class="input_normal" type="text"  value="{$list.certifydateb}" name="CertifyDateB" id="certifydateb"  placeholder="请输入车辆初次登记日期 ： YYYY-MM-DD" title="请输入车辆初次登记日期格式 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆检修状态：</label>
+                        <select class="input_normal" name="FixState" id="FixState">
+                            <option value="0" <if condition ="$list.fixstate eq 0">selected</if>>未检修</option>
+                            <option value="1" <if condition ="$list.fixstate eq 1">selected</if>>已检修</option>
+                            <option value="2" <if condition ="$list.fixstate eq 2">selected</if>>未知</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆下次年检时间：</label>
+                        <input class="input_normal" type="text" value="{$list.nextfixdate}"  name="NextFixDate" id="nextfixdate"  placeholder="请输入车辆下次年检时间 ： YYYY-MM-DD" title="请输入车辆下次年检时间 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>车辆年度审验状态：</label>
+                        <select class="input_normal" name="CheckState" id="CheckState">
+                            <option value="0" <if condition ="$list.checkstate eq 0">selected</if>>未审验</option>
+                            <option value="1" <if condition ="$list.checkstate eq 1">selected</if>>年审合格</option>
+                            <option value="2" <if condition ="$list.checkstate eq 2">selected</if>>年审不合格</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>发票打印设备序列号：</label>
+                        <input class="input_normal" type="text"   name="FeePrintId" id="FeePrintId"  value="{$list.feeprintid}" title="请输入发票打印设备序列号" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>卫星定位装置品牌：</label>
+                        <input class="input_normal" type="text"   name="GPSBrand" id="GPSBrand"  value="{$list.gpsbrand}" title="请输入卫星定位装置品牌" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>卫星定位装置型号：</label>
+                        <input class="input_normal" type="text"   name="GPSModel" id="GPSModel"  value="{$list.gpsmodel}" title="请输入卫星定位装置型号" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>卫星定位装置IMEI：</label>
+                        <input class="input_normal" type="text"   name="GPSIMEI" id="GPSIMEI"  value="{$list.gpsimei}" title="请输入卫星定位装置IMEI" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>定位设备安装日期：</label>
+                        <input class="input_normal" type="text" value="{$list.gpsinstalldate}"  name="GPSInstallDate" id="GPSInstallDate"  placeholder="请输入卫星定位设备安装日期 ： YYYY-MM-DD" title="请输入卫星定位设备安装日期 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>报备日期：</label>
+                        <input class="input_normal" type="text" value="{$list.registerdate}"  name="RegisterDate" id="RegisterDate"  placeholder="请输入报备日期 ： YYYY-MM-DD" title="请输入报备日期 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险公司名称：</label>
+                        <input class="input_normal" type="text"   name="Insurance" id="Insurance"  value="{$list.insurance}" title="请输入保险公司名称" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险号：</label>
+                        <input class="input_normal" type="text"   name="InsuranceId" id="InsuranceId"  value="{$list.insuranceid}" title="请输入保险号" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险类型：</label>
+                        <input class="input_normal" type="text"   name="InsuranceType" id="InsuranceType"  value="{$list.insurancetype}" title="请输入保险类型" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险金额：</label>
+                        <input class="input_normal" type="text"   name="InsurancePeice" id="InsurancePeice"  value="{$list.insurancepeice}" title="请输入保险金额" >
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                        <i>注:单位:元</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险生效时间：</label>
+                        <input class="input_normal" type="text" value="{$list.insurancestart}"  name="InsuranceStart" id="InsuranceStart"  placeholder="请输入保险生效时间 ： YYYY-MM-DD" title="请输入保险生效时间 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>保险到期时间：</label>
+                        <input class="input_normal" type="text" value="{$list.insurancestop}"  name="InsuranceStop" id="InsuranceStop"  placeholder="请输入保险到期时间 ： YYYY-MM-DD" title="请输入保险到期时间 ： YYYY-MM-DD"  onClick="WdatePicker()">
+                        <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                    </div>
+                </div>
+
+                <div class="clearfix sub_box">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">
+                        保存
+                    </button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+</body>
+</html>
+<script>
+    $(function () {
+        $('#VIN').blur(function () {
+            var str = $(this).val();
+            if (str.length != 17){
+                alert('请输入17位车辆VIN码');
+                return false;
+            }
+
+        });
+        //查询条件改变时,判断是否弹出审核下拉框
+        $("#isdiscount").change(function () {
+            if($(this).val()==1){
+                $("#busi_input").slideDown();
+            }else {
+                $("#busi_input").slideUp();
+            }
+        });
+
+        //点击遮蔽层，恢复页面
+        $('#query_l').click(function () {
+            $('#query_l').css('display','none');
+            $('#query_fare').css('display','none');
+        });
+
+        //运价选择框弹出
+        $('#fare_query').click(function () {
+            $('#query_l').css('display','block');
+            $('#query_fare').css('display','block');
+            fareQuery();
+        });
+
+        //运价查询
+        $('.fareinfo_query').on('click',function () {
+            var query_info = $('#query_info').val();
+            fareQuery({key:query_info});
+        });
+
+        //选择运价并写入
+        $(document).on('click','.fare_info',function () {
+            var id = $(this).find('th:eq(0)').text();
+            var name = $(this).find('th:eq(1)').text();
+            $('#fare_show').val(name+'(运价号:'+id+')');
+            $('#FareType').val(id);
+            $('#query_l').css('display','none');
+            $('#query_fare').css('display','none');
+        });
+
+    });
+
+    //查询运价信息
+    function fareQuery(param) {
+        $('#carinfo_tab').html('<tr><th>运价号</th><th>运价名称</th><th>起步里程</th><th>起步价</th><th>里程价</th><th>分钟价</th></tr>');
+        if (param == null){
+            param = {};
+        }
+        $.get('{:U(fareAjax)}',param,function(data){
+            data = JSON.parse(data);
+            if(data['error'] == '0'){
+                var list = data['list'];
+                var ary;
+                for (var i=0;i<list.length;i++){
+                    ary = list[i];
+                    $('#carinfo_tab').append('<tr class="fare_info"><th>'+ary["id"]+'</th><th>'+ary["faretypenote"]+'</th><th>'+ary["startmile"]+'</th><th>'+ary['startfare']+'</th><th>'+ary['unitpricepermile']+'</th><th>'+ary['unitpriceperminute']+'</th></tr>');
+                }
+            }else{
+                alert('未查询到运价信息');
+            }
+        })
+    }
+</script>

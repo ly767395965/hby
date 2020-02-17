@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>预定租车_{$sys_title}</title>
+    <script type="text/javascript" src="__PUBLIC__/js/laydate.js"></script>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="mb-nav">
+    当前位置：
+    <a href="/" class="jump">
+        <i>首页</i>
+    </a> >
+    <a href="/home/Rencar" class="jump">
+        <i>汽车租赁</i>
+    </a> >
+    <i>预定租车</i>
+</div>
+<div class="reserve" style="margin-top: 0">
+    <form action="{:U('Indent/index')}?id={$list[0]['id']}" method="post" id="renForm">
+        <div class="reserve-gm">
+            <div class="car-img">
+                <if condition="$list[0]['frontimg'] != null">
+                    <img src="__PUBLIC__{$list[0]['frontimg']}" width="100%" alt="{$list[0]['carmodelname']}"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                </if>
+
+            </div>
+            <div class="reserve-gm-dis">
+                <span class="brand">{$list[0]['brand']}</span>
+                <span class="carmodelname">{$list[0]['carmodelname']}</span>
+                <p style="margin-bottom: 10px;">{$list[0]['agestyle']} | {$list[0]['configstyle']} | {$list[0]['bearboxtype']}</p>
+                <div class="reserve-input">
+                    <label>
+                        <span>取车：</span><input class="reserve-date start" id="start" name="start" type="text" readonly />
+                    </label>
+                    <!--<input type="text" value="09:00" name="stime" class="reserve-date reserve-time" id="stime" readonly/>-->
+                    <select name="stime" class="reserve-date reserve-time startT">
+                        <option value="08:30">08:30</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                        <option value="25:59" style="display: none">25:59</option><!--用于判断的时间，不可随意更改-->
+
+                    </select>
+                    <label>
+                        <span style="margin-left: 20px;">还车：</span><input type="text" id="end" name="end" class="reserve-date end"  readonly />
+                    </label>
+                    <!--<input type="text" value="09:00" name="etime" class="reserve-date reserve-time" id="etime" readonly/>-->
+                    <select name="etime" class="reserve-date reserve-time endT">
+                        <option value="08:30">08:30</option>
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="12:00">12:00</option>
+                        <option value="12:30">12:30</option>
+                        <option value="13:00">13:00</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                        <option value="16:00">16:00</option>
+                        <option value="16:30">16:30</option>
+                        <option value="17:00">17:00</option>
+                        <option value="17:30">17:30</option>
+                        <option value="18:00">18:00</option>
+                        <option value="18:30">18:30</option>
+                        <option value="19:00">19:00</option>
+                        <option value="19:30">19:30</option>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                    </select>
+                </div>
+                <div class="clearFix"></div>
+                <div class="reserve-num">
+                    <input type="hidden">
+                    <span style="position: relative">租车时长：
+                        <input type="hidden" id="postDay" value="1" name="days">
+                        <input type="text" value="1天0小时" id="dayTime" name="datas"  style="border:none;width: 100px;" readonly/>
+                        <div class="zcTs" style="top: 40px; left:80%;font-size: 12px; color: #333;" id="zcTs">
+                            <b></b>
+                            <i class="showD"></i>
+                            <a href="javascript:void(0)">我知道了</a>
+                        </div>
+                    </span>
+                    <input type="hidden" value="{$list[0]['shortdayprice']}" id = "shortdayprice"/>
+                    <input type="hidden" value="{$list[0]['weekdayprice']}" id = "weekdayprice"/>
+                    <input type="hidden" value="{$list[0]['monthdayprice']}" id = "monthdayprice"/>
+                    <span id="prize" style="margin-left: 100px;">租车价格
+                        <span>(短租价)</span>：
+                        <!--<i>{$list[0]['shortdayprice']}</i>-->
+                        <input type="text" value="￥{$list[0]['shortdayprice']}" id="jiage" name="jiage" readonly style="border: none;">
+                    </span>
+                </div>
+                <div class="reserve-btnDiv">
+                    <input type="submit" value="立即预约"/>
+                    <!--<div class="share reserve-share">-->
+                        <!--<span>分享到：</span>-->
+                        <!--<a href="#" style="background:url('__PUBLIC__/images/icons-share.png')"></a>-->
+                        <!--<a href="#" style="background:url('__PUBLIC__/images/icons-share.png') 0 -33px"></a>-->
+                        <!--<a href="#" style="background:url('__PUBLIC__/images/icons-share.png')0 -66px"></a>-->
+                        <!--<a href="#" style="background:url('__PUBLIC__/images/icons-share.png')0 -423px"></a>-->
+                        <!--<a href="#" style="background:url('__PUBLIC__/images/icons-share.png')0 -1009px"></a>-->
+                    <!--</div>-->
+                </div>
+                <div class="reserve-wx" style="color: red;">温馨提示：至少提前两个小时预约下单！</div>
+            </div>
+        </div>
+    </form>
+    <div class="reserve-info">
+        <h3>汽车信息</h3>
+        <ul>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png')"></i>品牌：{$list[0]['brand']}</li>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -114px"></i>变速箱：{$list[0]['bearboxtype']}</li>
+            <!--<li><i style="background: url('__PUBLIC__/images/car-xc.png');left: -2px;"></i>行驶里程：{$list['usedmileage']}</li>-->
+            <!--<li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -30px"></i>年检日期：{$list['checkdate']}</li>-->
+        </ul>
+        <ul>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -14px;"></i>车型：{$list[0]['carmodelname']}</li>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -30px"></i>年代款：{$list[0]['agestyle']}款</li>
+            <!--<li><i style="background: url('__PUBLIC__/images/car-ys.png');"></i>车身颜色：{$list['color']}</li>-->
+            <!--<li><i style="background: url('__PUBLIC__/images/car-xc.png');left: -2px;"></i>保养里程：{$list['maintainmileage']}</li>-->
+        </ul>
+        <ul>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -14px;"></i>车辆类型：
+                <if condition="$list[0]['carmodeltype'] eq 1">商务车
+                    <elseif condition="$list[0]['carmodeltype'] eq 2"/>越野车
+                    <elseif condition="$list[0]['carmodeltype'] eq 3"/>面包车
+                    <elseif condition="$list[0]['carmodeltype'] eq 4"/>轿车
+                    <elseif condition="$list[0]['carmodeltype'] eq 5"/>客车
+                    <else/>轿车
+                </if>
+            </li>
+            <li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -98px;"></i>配置款：{$list[0]['configstyle']}</li>
+            <!--<li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -62px;"></i>发动机编号：{$list['motorno']}</li>-->
+            <!--<li><i style="background: url('__PUBLIC__/images/car-dis-icon.png') 0 -30px"></i>购买日期：{$list['checkdate']}</li>-->
+        </ul>
+        <div style="clear: both"></div>
+    </div>
+    <div class="reserve-img">
+        <h3>汽车图库</h3>
+        <ul>
+            <li>
+                <if condition="$list[0]['leftanterior'] != null">
+                    <img src="__PUBLIC__/{$list[0]['leftanterior']}" width="100%"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                </if>
+            </li>
+            <li>
+                <if condition="$list[0]['rightfront'] != null">
+                    <img src="__PUBLIC__/{$list[0]['rightfront']}" width="100%"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                </if>
+            </li>
+            <li>
+                <if condition="$list[0]['rightimg'] != null">
+                    <img src="__PUBLIC__/{$list[0]['rightimg']}" width="100%"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                </if>
+            </li>
+            <li style="margin-right: 0">
+                <if condition="$list[0]['behindimg'] != null">
+                <img src="__PUBLIC__/{$list[0]['behindimg']}" width="100%"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                </if>
+            </li>
+        </ul>
+        <div style="clear: both"></div>
+    </div>
+</div>
+<style>
+    .footer-content{background:#ffffff;}
+</style>
+<include file="./Public/foot.html"/>
+</body>
+<script>
+    var date = new Date($.ajax({async: false}).getResponseHeader("Date"));
+    var bombay = date + (3600000 * 8);
+    var now = new Date(bombay);
+    var Y = now.getFullYear();
+    var M = now.getMonth() + 1;
+    var D = now.getDate();
+    var h= now.getHours();
+    var m= now.getMinutes();
+    if (M < 10) {
+        M = "0" + M;
+    }
+    if (D < 10) {
+        D= "0" + D;
+    }
+
+    var nowtime=Y+"-"+M+"-"+D;
+//    alert(nowtime+' '+h+':'+m);
+    $("#start").val(nowtime);
+    $("#end").val(DateAdd(nowtime,1));
+    //计算时间
+    function  showDate(formID){
+        var startNum=$(formID).find(".start").val();//开始日期
+        var endNum=$(formID).find(".end").val();//结束日期
+        var startTNum=$(formID).find(".startT").val();//开始时间
+        var endTNum=$(formID).find(".endT").val();//结束时间
+        var timeD=Math.floor(diffDate(startNum+" "+startTNum,endNum+" "+endTNum,"h")/24);//天数
+        var timeH=diffDate(startNum+" "+startTNum,endNum+" "+endTNum,"h")%24;//多出来的小时
+        var timeX =(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "m") / 60) % 24;//多出来的分钟
+//        $(".startT option").each(function () {
+//            var timem =(diffDate($("#start").val() + " " +h+":"+m,$("#start").val() + " " + $(this).val(), "m"));//多出来的分钟
+//            if(timem<120){
+//                $(this).attr('disabled',true).css({color:"#f00"});
+//            }else{
+//                $(this).attr('disabled',false).css({color:"#333"});
+//            }
+//
+//        });
+        if(timeX>0 && timeX<=2){
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("小于两小时不收费！");
+            $(".zcTs").fadeIn(1000);
+
+        }
+        else if(timeX>2 && timeX<=6){
+            $("#postDay").val(timeD+0.5);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于两小时小于六小时按半天计算！");
+            $(".zcTs").fadeIn(1000);
+
+        }else if(timeX>6){
+            $("#postDay").val(timeD+1);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于六小时按一天计算！11");
+            $(".zcTs").fadeIn(1000);
+        }else{
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+        }
+    }
+    function showTime() {
+        var startNum = $("#start").val();
+        var endNum =$("#end").val();
+        var endTNum =$(".endT").val();
+        var startTNum = $(".startT").val();
+        var timeD = Math.floor(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "h") / 24);//天数
+        var timeH=diffDate(startNum+" "+startTNum,endNum+" "+endTNum,"h")%24;//多出来的小时
+        var timeX =(diffDate(startNum + " " + startTNum, endNum + " " + endTNum, "m") / 60) % 24;//多出来的分钟
+        if(timeX>0 && timeX<=2){
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("小于两小时不收费！");
+            $(".zcTs").fadeIn(1000);
+        }
+        else if(timeX>2 && timeX<=6){
+            $("#postDay").val(timeD+0.5);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于两小时小于六小时按半天计算！");
+            $(".zcTs").fadeIn(1000);
+
+        }else if(timeX>6){
+            $("#postDay").val(timeD+1);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+            $(".zcTs .showD").html("大于六小时按一天计算！");
+            $(".zcTs").fadeIn(1000);
+        }else{
+            $("#postDay").val(timeD);
+            $("#dayTime").val(timeD+"天"+timeX+"小时");
+        }
+    }
+    $(".startT").change(function () {
+        showTime();
+    });
+    $(".endT").change(function () {
+        showTime();
+    });
+    $(".zcTs a").click(function () {
+        $(".zcTs").fadeOut();
+    });
+
+    $(".startT option").each(function () {
+        var timem =(diffDate($("#start").val() + " " +h+":"+m,$("#start").val() + " " + $(this).val(), "m"));//多出来的分钟
+        if(timem<=120){
+            $(this).attr('disabled',true).css({color:"#f00"});
+            var time = $(this).next().val();
+            $(".startT").val(time);
+        }else {
+            $(this).attr("selected","selected");
+            return false;
+        }
+    });
+
+
+    !function () {
+        laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+    }();
+    var start = {
+        elem: '#start',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(), //设定最小日期为当前日期
+        max: '2099-06-16', //最大日期
+        istoday: false,
+        isclear: false,
+        issure: false,
+        festival: true,
+        choose: function (datas) {
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas //将结束日的初始值设定为开始日
+            showDate("#renForm");
+            $(".startT option").each(function () {
+                var timem =(diffDate(Y+"-"+M+"-"+D + " " +h+":"+m,datas + " " + $(this).val(), "m"));//多出来的分钟
+                if(timem<=120){
+                    $(this).attr('disabled',true).css({color:"#f00"});
+                    var time = $(this).next().val();
+                    $(".startT").val(time);
+                }else {
+                    $(this).attr('disabled',false).css({color:"#333"});
+                }
+            });
+            showTime();
+        }
+    };
+    var end = {
+        elem: '#end',
+        format: 'YYYY-MM-DD',
+        min: laydate.now(+1),
+        max: '2099-06-16',
+        istoday: false,
+        isclear: false,
+        issure: false,
+        choose: function (datas) {
+            start.max = datas; //结束日选好后，充值开始日的最大日期
+            showDate("#renForm");
+            var days=$('#postDay').val();
+            var shortdayprice = $('#shortdayprice').val();
+            var weekdayprice = $('#weekdayprice').val();
+            var monthdayPrice = $('#monthdayprice').val();
+
+            if(days>0 && days<5){
+                $("#prize span").html("（短租价）");
+                $("#prize i").html('￥'+shortdayprice);
+                $("#prize input").val('￥'+shortdayprice)
+
+            }
+            if(days>4 && days<21){
+                $("#prize span").html("（周租价）");
+                $("#prize i").html('￥'+weekdayprice);
+                $("#prize input").val('￥'+weekdayprice)
+
+            }
+            if(days>20){
+                $("#prize span").html("（长租价）");
+                $("#prize i").html('￥'+monthdayPrice);
+                $("#prize input").val('￥'+monthdayPrice)
+            }
+        }
+    };
+    var t = $(".startT").val();
+    if (t == '25:59'){
+        $('.startT option').attr('disabled',false).css({color:"#000"});
+        $(".startT").val('08:30');
+        $("#start").val(DateAdd(nowtime,1));
+        $("#end").val(DateAdd(nowtime,2));
+        start.min = laydate.now(+1)
+        end.min = laydate.now(+2)
+    }
+    laydate(start);
+    laydate(end);
+    showTime();
+</script>
+</html>

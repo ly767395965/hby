@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+
+<div class="tit-all">
+    <h3><i></i>节点信息</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('Authrule/edit',array('id'=>$list['id']))}" method="post" enctype="multipart/form-data">
+
+                <div class="busi_input clearfix">
+                    <label>上级权限节点：</label>
+                    <select class="input_normal" name="pid" id="pid">
+                        <option value="0">一级节点 默认为父级节点</option>
+                        <volist name="lisa" id='vo'>
+                            <option value="{$vo['id']}"  <eq name="vo.id" value="$list['pid']">selected</eq>>{$vo['title']}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>节点值：</label>
+                    <input class="input_normal" type="text"  value="{$list['name']}"  name="name" id="name"  placeholder="列如：Index/index" title="请输入节点值" >
+                </div>
+                <div class="busi_input clearfix">
+                    <label>节点名称：</label>
+                    <input class="input_normal" type="text" value="{$list['title']}"  name="title" id="title"  placeholder="请输入节点名称" title="请输入节点名称" >
+                </div>
+                <div class="busi_input clearfix">
+                    <label>规则表达式：</label>
+                    <input class="input_normal" type="text"  value="{$list['condition']}"  name="condition" id="condition"  placeholder="为空表示存在就验证，不为空表示按照条件验证" title="请输入节点名称" >
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>是否禁用：</label>
+                    <select class="input_normal" name="status" id="status">
+                        <option value="0" <eq name="list['status']" value="0">selected</eq>>禁用</option>
+                        <option value="1" <eq name="list['status']" value="1">selected</eq>>正常</option>
+
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+                    <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重置</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#CarModelForm").submit(function(){
+            if ($("#ID").val() == "")
+            {
+                $("#ID").focus();
+                alert("标识码不能为空");
+                return false;
+            }
+            if ($("#Brand").val() == "")
+            {
+                $("#Brand").focus();
+                alert("品牌不能为空");
+                return false;
+            }
+        })
+    });
+</script>
+
+</html>

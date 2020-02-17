@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>联系我们_{$sys_title}</title>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=67jMQ5DmYTe1TLMBKFUTcZAR"></script>
+</head>
+<body>
+<!--导航-->
+<include file="./Public/header.html"/>
+<!--联系我们-->
+<div class="contanct">
+    <div class="contanct-map">
+        <div id="map"></div>
+    </div>
+    <div class="caradress">
+        <h4>接送车点：</h4>
+        <span>贵阳市南明区大理石路83号</span>
+        <span>花果园（双子塔）</span>
+        <span>未来方舟</span>
+        <span>贵州饭店</span>
+        <span>黔灵公园</span>
+        <span>喜来登贵航酒店</span>
+        <span>贵阳北站</span>
+        <span>贵阳机场</span>
+        <span>金阳客站</span>
+        <span>贵阳东客站</span>
+        <span>贵阳火车站</span>
+        <span>中天凯悦（会展城）</span>
+        <span>小河万科广场点</span>
+        <span>白云公园</span>
+        <span>花溪公园</span>
+        <span>凯宾斯基酒店</span>
+        <span>铂尔曼酒店</span>
+        <span>贵安新区行政中心</span>
+        <span>贵安高铁站</span>
+        <span>贵安大学城豪升大酒店</span>
+        <span>贵安泰豪E时代</span>
+        <span>贵安北斗湾开元酒店</span>
+    </div>
+</div>
+<div style="clear: both"></div>
+</div>
+
+<style>
+    .footer-content {
+        background: transparent !important;
+    }
+</style>
+<include file="./Public/foot.html"/>
+<script type="text/javascript">
+    $(function () {
+        $(".nav-right li a").eq(9).addClass("current-page");
+    })
+</script>
+</body>
+<script type="text/javascript">
+    $(function () {
+        var markers = [
+            {content: "贵阳市南明区大理石路83号",position: {lat: 26.5566170000, lng: 106.7161870000}},
+            {content: "花果园（双子塔）",position: {lat: 26.569275, lng: 106.689598}},
+            {content: "未来方舟",position: {lat: 26.5960340000, lng: 106.7588880000}},
+            {content: "贵州饭店",position: {lat: 26.6011160000, lng: 106.7129110000}},
+            {content: "黔灵公园",position: {lat: 26.5941240000, lng: 106.7033390000}},
+            {content: "喜来登贵航酒店",position: {lat: 26.5771180000, lng: 106.7210660000}},
+            {content: "贵阳北站",position: {lat: 26.6263100000, lng: 106.6821340000}},
+            {content: "贵阳机场",position: {lat: 26.5524060000, lng: 106.8054800000}},
+            {content: "金阳客站",position: {lat: 26.6005710000, lng: 106.5882610000}},
+            {content: "贵阳东客站",position: {lat: 26.5271870000, lng: 106.7831760000}},
+            {content: "贵阳火车站",position: {lat: 26.5628300000, lng: 106.7098420000}},
+            {content: "中天凯悦（会展城）",position: {lat: 26.6468290000, lng: 106.6491710000}},
+            {content: "小河万科广场",position: {lat: 26.5283540000, lng: 106.7180890000}},
+            {content: "白云公园",position: {lat: 26.6768100000, lng: 106.6483730000}},
+            {content: "花溪公园",position: {lat: 26.4394220000, lng: 106.6790260000}},
+            {content: "凯宾斯基酒店",position: {lat: 26.5811070000, lng: 106.7248160000}},
+            {content: "铂尔曼酒店",position: {lat: 26.5647450000, lng: 106.7164570000}},
+            {content: "贵安新区行政中心",position: {lat: 26.4423210000, lng: 106.5010580000}},
+            {content: "贵安高铁站",position: {lat: 26.4721200000, lng: 106.4914080000}},
+            {content: "贵安大学城豪升大酒店",position: {lat: 26.4068480000, lng: 106.6344200000}},
+            {content: "贵安泰豪E时代",position: {lat: 26.3563280000, lng: 106.5163300000}},
+            {content: "贵安北斗湾开元酒店",position: {lat: 26.3510250000, lng: 106.4563930000}}
+        ];
+        function createMap(lat, lng,sf) {
+            map = new BMap.Map("map");
+            map.centerAndZoom(new BMap.Point(lng, lat), sf);//显示位置
+        }
+
+        function setMapEvent() {
+            map.enableScrollWheelZoom();
+            map.enableKeyboard();
+            map.enableDragging();
+            map.enableDoubleClickZoom()
+        }
+
+        function addClickHandler(target, window) {
+            target.addEventListener("click", function () {
+                target.openInfoWindow(window);
+            });
+        }
+
+        function addMapOverlay(markers,l) {
+            for (var index = 0; index < markers.length; index++) {
+                var point = new BMap.Point(markers[index].position.lng, markers[index].position.lat);
+                var marker = new BMap.Marker(point, {
+                    icon: new BMap.Icon("__PUBLIC__/images/location.png", new BMap.Size(30, 40))
+                });
+                var infoWindow = new BMap.InfoWindow(markers[index].content);
+                addClickHandler(marker, infoWindow);
+                map.addOverlay(marker);
+            }
+            ;
+        }
+
+//向地图添加控件
+        function addMapControl() {
+            var scaleControl = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+            scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+            map.addControl(scaleControl);
+            var navControl = new BMap.NavigationControl({
+                anchor: BMAP_ANCHOR_TOP_LEFT,
+                type: BMAP_NAVIGATION_CONTROL_LARGE
+            });
+            map.addControl(navControl);
+            var overviewControl = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: true});
+            map.addControl(overviewControl);
+        }
+
+        var adress = $(".caradress span");
+        var lng = 106.716591;
+        var lat = 26.556891;
+        createMap(lat, lng,12);
+        adress.click(function (){
+            $(this).css({color:"#ff8800"}).siblings("span").css({color:"#000"});
+            var index=$(this).index()-1;
+            var lat = markers[index].position.lat;
+            var lng = markers[index].position.lng;
+            var con = markers[index].content;
+            createMap(lat, lng,18);
+            setMapEvent();//设置地图事件
+            addMapOverlay(markers);
+        });
+        var map;
+//创建和初始化地图函数：
+        function initMap() {
+            createMap(lat, lng,12);//创建地图
+            setMapEvent();//设置地图事件
+            addMapControl();//向地图添加控件
+            addMapOverlay(markers);//向地图添加覆盖物
+        }
+
+        initMap();
+ });
+
+</script>
+</html>

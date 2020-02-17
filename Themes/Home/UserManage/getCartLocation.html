@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>车辆位置_{$sys_title}</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=67jMQ5DmYTe1TLMBKFUTcZAR"></script>
+    <style type="text/css">
+        #content{
+            width: 100%;
+            height: 630px;
+            margin: auto;
+        }
+        #left{
+            width: 19%;
+            height: 630px;
+            float: left;
+            border-right: 4px solid #9c9e9f;
+        }
+        #left ul{
+            margin-left: 30px;
+            width: 80%;
+            height: 500px;
+            overflow: scroll;
+        }
+        #left ul li{
+            margin-top: 10px;
+            height: 30px;
+         
+            line-height: 30px;
+        }
+        #left ul li:hover{
+            border: 1px solid #a4d4f5;
+        }
+        #left h3{
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #right{
+            width: 80%;
+            height: 600px;
+            margin-left: 20%;
+            background-color: #0b3a58;
+            position: absolute;
+        }
+        .playback{
+            float: right;
+            cursor: pointer;
+        }
+        .noiemi{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="mb-nav">
+    当前位置：
+    <a href="/" class="jump">
+        <i>首页</i>
+    </a> >
+    <a href="/home/UserManage/cartMonitor" class="jump">
+        <i>车辆监控</i>
+    </a> >
+    <i>车辆位置</i>
+</div>
+<hr>
+<!--内容部分begin-->
+<div id="content">
+    <div id="left">
+        <h3>我的车辆</h3>
+        <ul>
+
+
+        </ul>
+    </div>
+    <div id="right">
+
+    </div>
+</div>
+
+<!--内容部分end-->
+
+<include file="./Public/foot.html"/>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        //回放轨迹
+        $(document).on('click','#left ul li .playback',function () {
+            var orderid = $(this).attr('orderid');
+            var cartid = $(this).attr('cartid');
+            var carno = $(this).attr('carno');
+            var imei = $(this).attr('imei');
+            if (imei == 0){
+                alert('当前车辆没有定位设备!');
+                return false;
+            } else {
+                window.location.href="{:U('UserManage/markPlayback')}?orderid="+orderid+'&'+'cartid='+cartid+'&'+'carno='+carno;
+            }
+
+        });
+    })
+</script>
+<script type="text/javascript">
+    var myGeo = new BMap.Geocoder();
+    $(function () {
+        var map = new BMap.Map("right");
+        var localhost = '';
+        var markers = [];
+        var one=[];
+        var two =[];
+        var three =[];
+        var four = [];
+        var five = [];
+        var six =[];
+        var seven = [];
+        var locv = [];
+        var lenths =0;
+        jQuery.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+        //获取pageID
+        var id = $.getUrlParam('id');
+        $.ajax({
+            type: "post",
+            url: "{:U('UserManage/getCartLocation')}",
+            data: {
+                id : id
+            },
+            success: function(data){
+                console.log(data.carinfo);
+                if(data.cartStsteData){
+                    var li = '';
+                    // 创建地址解析器实例
+                    var myGeo = new BMap.Geocoder();
+
+                    // 将地址解析结果显示在地图上,并调整地图视野
+                    myGeo.getPoint(new BMap.Point(data.cartStsteData[0].lng,data.cartStsteData[0].lat), function(point){
+                        if (point) {
+                            map.centerAndZoom(point, 18);
+                            map.addOverlay(new BMap.Marker(point));
+                        }
+                    }, "贵阳市");
+                    lenths = data.cartStsteData.length;
+                    for (var i = 0;i < data.cartStsteData.length;i++) {
+                        var cartacc = '';
+                        if (data.cartStsteData[i].acc == 0){
+                            cartacc = '熄火';
+                        } else if (data.cartStsteData[i].acc == 1){
+                            cartacc = '启动';
+                        }else if (data.cartStsteData[i].acc == -1){
+                            cartacc = '异常';
+                        }
+                        one.push(data.cartStsteData[i].carno);
+                        two.push(cartacc);
+                        three.push(data.cartStsteData[i].gps_time);
+                        four.push(data.cartStsteData[i].sys_time);
+                        five.push(data.cartStsteData[i].server_time);
+                        six.push(data.cartStsteData[i].lat);
+                        seven.push(data.cartStsteData[i].lng);
+
+
+                        // 创建地理编码实例
+                        myGeo.getLocation(new BMap.Point(data.cartStsteData[i].lng,data.cartStsteData[i].lat), function(result){
+                            var addComp = result.addressComponents;
+                            localhost = addComp.province+addComp.city+addComp.district+addComp.street+addComp.streetNumber;
+                            locv.push(localhost);
+                            for(var k =0;k<locv.length;k++){
+                                markers.push({
+                                    content: '<div>'+one[k]+'</div>'+'<div>ACC:'+two[k]+'</div>'+'<div>定位时间:'+three[k]+'</div>'+'<div>系统时间:'+four[k]+'</div>'+'<div>服务时间:'+five[k]+'</div>'+'<div>当前位置:'+locv[k]+'</div>',
+                                    position: {lat: six[k], lng: seven[k]}
+                                });
+                            }
+                            initMap();
+                        });
+
+
+                    }
+                    for (var j = 0;j < data.carinfo.length;j++){
+                        if (data.carinfo[j].imei == 0){
+                            li += '<li>' + data.carinfo[j].carno + '<span orderid='+data.carinfo[j].orderid+' cartid='+data.carinfo[j].cartid+' carno='+ data.carinfo[j].carno +' imei='+data.carinfo[j].imei+'  class="playback noiemi">'+data.carinfo[j].prompt+'</span>'+'</li>';
+                        } else{
+                            li += '<li>' + data.carinfo[j].carno + '<span orderid='+data.carinfo[j].orderid+' cartid='+data.carinfo[j].cartid+' carno='+ data.carinfo[j].carno +' imei='+data.carinfo[j].imei+'  class="playback">'+data.carinfo[j].prompt+'</span>'+'</li>';
+                        }
+
+
+
+                    }
+
+                    $("#left ul").append(li);
+
+
+                }
+
+            }
+        });
+
+        function createMap(lat, lng,sf) {
+            map = new BMap.Map("right");
+            map.centerAndZoom(new BMap.Point(lng, lat), sf);//显示位置
+        }
+
+        function setMapEvent() {
+            map.enableScrollWheelZoom();
+            map.enableKeyboard();
+            map.enableDragging();
+            map.enableDoubleClickZoom()
+        }
+
+        function addClickHandler(target, window) {
+            target.addEventListener("click", function () {
+                target.openInfoWindow(window);
+            });
+        }
+
+        function addMapOverlay(markers,l) {
+            for (var index = 0; index < markers.length; index++) {
+                var point = new BMap.Point(markers[index].position.lng, markers[index].position.lat);
+                var marker = new BMap.Marker(point, {
+                    icon: new BMap.Icon("__PUBLIC__/images/location.png", new BMap.Size(30, 40))
+                });
+                var infoWindow = new BMap.InfoWindow(markers[index].content);
+                addClickHandler(marker, infoWindow);
+                map.addOverlay(marker);
+            }
+            ;
+        }
+
+//向地图添加控件
+        function addMapControl() {
+            var scaleControl = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+            scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+            map.addControl(scaleControl);
+            var navControl = new BMap.NavigationControl({
+                anchor: BMAP_ANCHOR_TOP_LEFT,
+                type: BMAP_NAVIGATION_CONTROL_LARGE
+            });
+            map.addControl(navControl);
+            var overviewControl = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: true});
+            map.addControl(overviewControl);
+        }
+
+        var adress = $(".caradress span");
+        var lng = 106.716591;
+        var lat = 26.556891;
+        createMap(lat, lng,12);
+        adress.click(function (){
+            $(this).css({color:"#ff8800"}).siblings("span").css({color:"#000"});
+            var index=$(this).index()-1;
+            var lat = markers[index].position.lat;
+            var lng = markers[index].position.lng;
+            var con = markers[index].content;
+            createMap(lat, lng,18);
+            setMapEvent();//设置地图事件
+            addMapOverlay(markers);
+        });
+        var map;
+//创建和初始化地图函数：
+        function initMap() {
+            createMap(lat, lng,12);//创建地图
+            setMapEvent();//设置地图事件
+            addMapControl();//向地图添加控件
+            addMapOverlay(markers);//向地图添加覆盖物
+        }
+
+    });
+
+</script>

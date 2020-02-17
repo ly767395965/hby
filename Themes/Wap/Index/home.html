@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/api.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/css/lamp.css"/>
+    <style>
+        .empty {
+            background: #f1f1f1;
+            text-align: center;
+            height: auto;
+        }
+
+    </style>
+    <style type="text/css">
+        body{background:#f8f8f8; margin:0;}
+        img{border:0; vertical-align:middle;}
+        .focus{width:100%; margin:0 auto; position:relative; overflow:hidden;}
+        .images{height:140px; overflow:hidden; position:relative;}
+        .images .item{position:absolute; top:0; left:0; height:400px; overflow:hidden; opacity:0; transition:opacity 0.8s linear; -webkit-transition:opacity 0.8s linear;}
+        .images .item img{width:100%;height: 140px;}
+        .images .active{opacity:1;}
+        .controls{position:absolute; bottom:5px; width:100%; text-align:center;}
+        .controls span{display:inline-block; cursor:pointer; background:#5fbab1; color:#fff; width:25px; height:25px; text-align:center; line-height:25px; border-radius:25px; margin:0 8px;}
+        .controls span.active{background:#e77918;}
+
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+        $(function(){
+            $('.images .item:first, .controls span:first, .title p:first').addClass('active');
+            var index = 0,
+                    len = $('.images .item').length;
+            autoPlay = function(){
+                $('.images .item').eq(index++).addClass('active').siblings('.item').removeClass('active');
+                $('.title p').eq(index-1).addClass('active').siblings('p').removeClass('active');
+                $('.controls span').eq(index-1).addClass('active').siblings('span').removeClass('active');
+                if(index == len){index = 0;}
+            },
+                    loop = setInterval(autoPlay,3000);
+            $('.controls span').hover(function(){
+                index = $(this).index();
+                autoPlay();
+                clearInterval(loop);
+            },function(){
+                loop = setInterval(autoPlay,3000);
+            })
+        });
+        var gd = document.body.clientHeight;
+//        alert(gd);
+    </script>
+</head>
+<body class="body">
+
+<div class="empty">
+    <!--banner-->
+    <div id="banner" style="width: 100%;height: 140px;">
+        <div class="focus">
+            <div class="images">
+                <volist name="adlist" id="adinfo">
+                    <div class="item">
+                        <a href="{$adinfo['ad_url']}">
+                            <img src="__PUBLIC__{$adinfo['imgurl']}" alt="{$adinfo['imgtitle']}"/>
+                        </a>
+                    </div>
+
+                </volist>
+
+            </div>
+            <div class="controls">
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+            </div>
+
+        </div>
+    </div>
+
+
+    </div>
+    <!--图标按钮-->
+    <div class="home-btn">
+        <div class="home-btn-box" tapmode="hover" onclick="api.openWin({
+	            name: 'win_news',
+	            url: '__PUBLIC__/html/news.html'
+            });">
+            <span>新闻</span>
+            <div class="home-btn-dis">新闻中心</div>
+            <img src="__PUBLIC__/wapimages/news.png" width="34" height="33"/>
+            <div class="home-btn-line"></div>
+        </div>
+        <div class="home-btn-box" tapmode="hover" onclick="api.openWin({
+	            name: 'win_notice',
+	            url: '__PUBLIC__/html/notice.html'
+            });">
+            <span>须知</span>
+            <div class="home-btn-dis">租车须知</div>
+            <img src="__PUBLIC__/wapimages/book.png" width="35" style="bottom: 5px"/>
+            <div class="home-btn-line"></div>
+        </div>
+        <div class="home-btn-box" tapmode="hover" onclick="api.openWin({
+	            name: 'win_oddCar',
+	            url: '__PUBLIC__/html/oddCar.html'
+            });">
+            <span>特惠</span>
+            <div class="home-btn-dis">特惠车辆</div>
+            <img src="__PUBLIC__/wapimages/icon-favo.png" width="36" height="34"/>
+            <div class="home-btn-line"></div>
+        </div>
+        <div class="home-btn-box" tapmode="hover" onclick="api.openWin({
+	            name: 'win_rencar',
+	            url: '__PUBLIC__/html/renCar.html'
+            });">
+            <span>租车</span>
+            <div class="home-btn-dis">立即选车</div>
+            <img src="__PUBLIC__/wapimages/car.png" width="35" height="32"/>
+        </div>
+    </div>
+    <!--优惠活动-->
+    <div class="list-title-line">
+        <div class="list-title">优惠活动</div>
+    </div>
+    <div class="swiper-container swiper-container-horizontal swiper-container-free-mode" id="youhui">
+        <div class="swiper-wrapper" id="youhuiCon" style="transition-duration: 300ms; transform: translate3d(0px, 0px, 0px);">
+            <div class="roll-wrap roll_row" id="b">
+                <ul class="roll__list" style="position: absolute;">
+                    <volist name="listActivity" id="temp">
+                        <li>
+                            <a href="{:U('Activity/ActivityInside')}?id={$temp['id']}">
+                                <if condition="$temp['cover'] !=null">
+                                    <img src="__PUBLIC__{$temp['cover']}" alt="{$temp['theme']}" width="100%"/>
+
+                                    <else/>
+                                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="290" height="120"/>
+                                </if>
+
+                            </a>
+                            <p style="width: 200px;height: 28px;margin-top: 4px;">{$temp['theme']}</p>
+                        </li>
+                    </volist>
+
+                </ul>
+                <a class="control pre" href="javascript:;">&lt;</a>
+                <a class="control next" href="javascript:;">&gt;</a>
+            </div>
+        </div>
+        <div class="youhui-more">
+            <span>精彩活动，抢先围观</span>
+        </div>
+    </div>
+    <!--推荐车型列表-->
+    <div class="list-title-line">
+        <div class="list-title">推荐车型</div>
+    </div>
+    <ul class="home-list">
+    </ul>
+    <div id="dbNum"></div>
+</div>
+</body>
+</html>
+<!--<script type="text/javascript" src="__PUBLIC__/script/api.js"></script>-->
+<!--<script type="text/javascript" src="__PUBLIC__/script/jquery.js"></script>-->
+<!--<script type="text/javascript" src="__PUBLIC__/script/swiper-3.4.0.min.js"></script>-->
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="__PUBLIC__/script/rollSlide.js"></script>
+<script>
+    $('#a').rollSlide({
+        orientation: 'left',
+        num: 1,
+        v: 1000,
+        space: 3000,
+        isRoll: false
+    });
+    $('#b').rollSlide({
+        orientation: 'right',
+        num: 2,
+        v: 1500,
+        space: 3000,
+        isRoll: true
+    });
+    $('#c').rollSlide({
+        orientation: 'top',
+        num: 1,
+        v: 1500,
+        //space: 500,
+        isRoll: true
+    });
+    $('#d').rollSlide({
+        orientation: 'bottom',
+        num: 3,
+        v: 1500,
+        space: 1000,
+        isRoll: true
+    });
+    $('#e').rollNoInterval().left();
+    $('#f').rollNoInterval().right();
+    $('#g').rollNoInterval().top();
+    $('#h').rollNoInterval().bottom();
+</script>

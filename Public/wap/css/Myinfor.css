@@ -1,0 +1,79 @@
+/*我得*/
+.me-top{position:relative;overflow:hidden;width: 100%;height: 90px;color:#f1f1f1;background: -webkit-linear-gradient(top,#00a2e1,#0472b4);text-align: center; background-size: cover;}
+.me-header{box-shadow:none!important;background-size:cover;overflow:hidden;width: 70px;height: 70px;-webkit-transform:scale(1);transform:scale(1);-webkit-transition:transform 0.5s;transition:transform 0.5s;background:#ffffff;text-align:center;line-height:70px;color:#fff;font-size:16px;font-weight:bold;border-radius: 50%;float:left; margin-left:20px;margin-top: 5px;}
+.me-header.hover{-webkit-transform:scale(1.3);transform:scale(1.3);}
+.userInfo i{font-style:normal;text-align:left;display:block; height:35px;line-height:35px;font-size: 16px;color: #ffffff;margin-top: 10px;}
+.me-top span{text-align:left;display:block; line-height:30px;font-size: 16px;color: #ffffff;}
+.userInfo{float: left; margin-left:20px;position: relative;}
+.me-list{margin:0;padding:0;width: 100%;background: #ffffff;margin-top: 10px;color: #333333;position: relative;}
+.me-list li{height: 45px;position: relative;line-height:48px;text-indent:38px;font-size: 1.6em;}
+.me-list li img{position: absolute;width: 18px;height: 18px;left:15px;top: 50%;margin-top: -9px; }
+.icon-arrowright{display:block;height:45px;width:20px;background:url("../images/arrow-right.png") center center no-repeat;position: absolute;right: 4%;background-size: 8px;top: 50%;margin-top: -24px;}
+.me-list li .me-list-line{width: 100%;height: 1px;background:#dcdcdc;-webkit-transform: scaleY(0.5);transform: scaleY(0.5);position: absolute;left: 5%; bottom: 0;}
+.tuichu{display:none;width: 90%;height: 40px; border-radius: 5px;margin: 15px auto; background: #f02f08; color: #ffffff;font-size: 16px;line-height: 40px;text-align: center;}
+.tuichu.hover{background:#ba2608}
+.me-list li.hover{background: rgba(0,127,204,0.05); -webkit-tap-highlight-color: rgba(255,0,0,0);}
+.telpho{
+	float: right;
+	margin-right: 10%;
+}
+.msg{
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	z-index: 99;
+	background-color: rgba(24, 27, 1,0.4);
+}
+.kuang{
+	position: relative;
+	width: 80%;
+	height: 100px;
+	margin: 50% auto;
+	border-radius: 7px;
+	background-color:rgba(255,255,255,0.9);
+}
+.msg-text{
+	position: relative;
+	width:100%;
+	height: 40px;
+	margin: 5% auto;
+	
+	color: #000000;
+	letter-spacing: 1px;
+	font-size: 1.1em;
+	text-align: center;
+	line-height: 40px;
+	
+}
+.yn-sen{
+	position: relative;
+	width: 100%;
+	height: 35px;
+	background-color: #F1F1F1;
+}
+.yes-btn{
+	width: 49%;
+	height: 35px;
+	float: left;
+	text-align: center;
+	font-size: 1.2em;
+	line-height: 35px;
+	color: #000000;
+	letter-spacing: 1px;
+	border-top:  1px solid rgba(26, 30, 4,0.1);
+	border-right: 1px solid rgba(26, 30, 4,0.1);
+}
+.no-btn{
+	width: 50%;
+	height: 35px;
+	float: left;
+	text-align: center;
+	font-size: 1.2em;
+	line-height: 35px;
+	letter-spacing: 1px;
+	border-top:  1px solid rgba(26, 30, 4,0.1);
+	color: #000000;
+}

@@ -1,0 +1,54 @@
+<div class="perInfo-top">
+    <div class="perInfo-top-box">
+        <div class="perInfo-header">
+            <div class="perInfo-header-img">
+                <!--<img src="__PUBLIC__/images/headered.png" width="80" height="80"/>-->
+            </div>
+            <div class="header-info" >
+                <div class="header-info-num" style="height: 100px;">
+
+                    <div  style=" margin-top: -10px;line-height:100px;color: #747474;font-size: 18px;">欢迎您,<i id="user" style="color: #333;"></i></div>
+                    <!--<span>普通卡</span>-->
+                </div>
+                <!--<div class="header-info-line">-->
+                    <!--<div class="num">-->
+                        <!--<i>0</i>/<span style="display: inline-block;">50</span>-->
+                    <!--</div>-->
+                    <!--<div class="vip-cz"></div>-->
+                <!--</div>-->
+                <!--<p>我的积分：<i>0</i>，<span style="display: inline-block;">+50</span>就能成为会员</p>-->
+            </div>
+        </div>
+        <!--<ul>-->
+            <!--<li>-->
+                <!--<i id="balance"></i>-->
+                <!--<span>我的余额</span>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<i id="score"></i>-->
+                <!--<span>可用积分</span>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<i style="display: block; height: 14px;"></i>-->
+                <!--<span style="color: #747474;">敬请期待..</span>-->
+            <!--</li>-->
+        <!--</ul>-->
+    </div>
+</div>
+<script>
+    $(function () {
+        $.ajax({
+            type: "get",
+            url: "{:U('UserManage/header')}",
+            data: {
+
+            },
+            success: function(data) {
+                $('#score').html(data.score);
+                $('#balance').html(data.balance);
+                $('#phone').html(data.phone);
+                $('#user').html(data.user+" "+data.greetings);
+            }
+        });
+    })
+</script>

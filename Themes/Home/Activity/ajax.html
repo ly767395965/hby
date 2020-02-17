@@ -1,0 +1,34 @@
+<volist name="list" id="temp">
+    <div class="favList">
+        <a href="{:U('Activity/ActivityInside')}?id={$temp['id']}">
+            <div class="favList-img">
+                <if condition="$temp['cover'] !=null">
+                    <img src="__PUBLIC__{$temp['cover']}" alt="{$temp['theme']}" width="100%"/>
+                    <else/>
+                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="600" height="280"/>
+                </if>
+                <input type="hidden" name="endtime" value="{$temp['end_time']}"/>
+                <if condition="$temp['newdate'] gt $temp['end_time']">
+                    <div class="favList-state" style="background-color: #a7b5bc;">
+                        <p>活动</p>
+                        <p>已结束</p>
+                    </div>
+                    <else/>
+                    <div class="favList-state">
+                        <p>活动</p>
+                        <p>进行中</p>
+                    </div>
+                </if>
+            </div>
+            <div class="favList-dis">
+                <h2>{$temp['theme']}</h2>
+                <p>{$temp['describetxt']}</p>
+                <b class="view-activity">查看活动</b>
+                <span>贵阳</span>
+            </div>
+        </a>
+    </div>
+</volist>
+<div class="curr-page">
+    {$page}
+</div>

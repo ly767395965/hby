@@ -1,0 +1,702 @@
+<!-- 重点参数：renderOptions -->
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- 原始地址：//webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/navigators.html -->
+    <!--<base href="//webapi.amap.com/ui/1.0/ui/misc/PathSimplifier/examples/" />-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>轨迹巡航控制</title>
+    <link type="text/css" href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/qdStyle.css"/>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <style>
+        #container,
+        /*body {font-size: 0.75em;font: 62.5%/1;}*/
+        /*html {font-size: 1em}*/
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+
+        }
+
+        #loadingTip,
+        #panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        body,
+        html {
+            margin: 0;
+            font-size: 12px
+        }
+
+        #outer-box {
+            height: 94.5%;
+            /*padding-right: 300px;*/
+        }
+
+        #panel {
+            right: 0;
+            width: 100%;
+            z-index: 999;
+            /*height: calc(10% - 5px);*/
+            height: 10%;
+            overflow: hidden;
+            display: none;
+            /*overflow-y: auto*/
+			background-color:#D4E7F0
+        }
+
+        #routes-container {
+            height: 1200px;
+            margin-left: 10px;
+			
+        }
+
+        #loadingTip {
+            z-index: 9999;
+            left: 90%;
+            top:44px;
+            padding: 3px 10px;
+            background: lightgrey;
+            color: #fff;
+            font-size: 13px;
+            height: 20px;
+            width: 150px;
+        }
+
+        .route-item {
+            margin-bottom: 10px;
+            float: left;
+        }
+
+        .route-item pre {
+            margin: 0
+        }
+
+        .route-item h3 {
+            margin: 5px 0;
+            margin-top: 15px;
+            font-size: 14px;
+            cursor: pointer
+        }
+        .route-item button {width: 50px;margin-left: 3px}
+
+        .hide {
+            display: none
+        }
+
+        .speedBox {
+            margin-left: 50px;
+            /*margin-top: -10px;*/
+            float: right;
+        }
+        .speedBox span {display: block;float: left}
+
+        .msg {
+            position: absolute;
+            left: 649px;
+			top:15px
+            }
+		.msg div {margin-bottom:4px}
+
+        /*input[type=range]::-webkit-slider-runnable-track {
+			height: 15px;
+			border-radius: 10px; !*将轨道设为圆角的*!
+			box-shadow: 0 1px 1px #def3f8, inset 0 .125em .125em #0d1112; !*轨道内置阴影效果*!
+		}*/
+
+        .markerInfo {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2px 5px;
+            border: 1px solid #ccc;
+            white-space: nowrap;
+        }
+
+        /*车辆筛选*/
+        .screen-box { line-height: 38px}
+        .screen-key, .screen-query, .screen-click {height: 23px}
+        .screen-query {width: 150px}
+        #functionarea { padding-left: 5px;padding-right: 20px}
+        .screen-click {border: none; background: #00a2e6;border-radius: 2px;width: 73px;color: white}
+        .screen-click:hover {opacity: 0.7}
+
+        .caradress { overflow-y:scroll;height: 74%}
+        .fl {float: left}
+        .fr {float: right}
+
+        .query_inp {height: 23px}
+		.time-title {margin-left:10px}
+    </style>
+</head>
+
+<body>
+<div id="listtitle" class="tit-all clearfix" style="">
+    <h3 class="fl" id='test'>
+        <i></i>
+        车辆定位展示
+    </h3>
+    <div class="screen-box fr">
+        轨迹筛选:
+        <select class="screen-key">
+            <option value="0">车辆轨迹</option>
+            <option value="1">订单轨迹</option>
+        </select>
+        <input class="key query_inp" type="text" value="{$vehicleno}" placeholder="请输入车牌号或者为空">
+        <span class="time-title">时间限制:</span>
+        <input class="input_normal query_inp" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d 00:00:00 ',$_SERVER['REQUEST_TIME'] - 86400);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+        至
+        <input class="input_normal query_inp" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+        <span id="functionarea" class="add-car ">
+            <if condition="checkAuth('CarinfoManage/addCarinfoManage')">
+                <input class="screen-click" type="button" value="进行筛选"/>
+            </if>
+        </span>
+    </div>
+</div>
+<div id="outer-box">
+    <div id="container">
+    </div>
+    <div id="panel">
+        <div id="routes-container">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src='//webapi.amap.com/maps?v=1.3&key=92c385c575d309ec338005523bd4834c'></script>
+<!-- UI组件库 1.0 -->
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.10"></script>
+
+<script type="text/javascript">
+    //创建地图
+    var map = new AMap.Map('container', {
+        zoom: 4
+    });
+    var speed_num = 1000; //领航器速度
+    var lun = 0; //当前运行轨道
+	var old_show = 0;//历史距离记录
+	var car_ary;//存储数组
+	var setlun; //存储下一轮的定时触发
+	var next = 0;//用于判断是否进入下一轨道
+
+    AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function(PathSimplifier, $) {
+
+        if (!PathSimplifier.supportCanvas) {
+            alert('当前环境不支持 Canvas！');
+            return;
+        }
+
+        var defaultRenderOptions = {
+            renderAllPointsIfNumberBelow: -1,
+            pathTolerance: 2,
+            keyPointTolerance: 0,
+            pathLineStyle: {
+                lineWidth: 3,
+                strokeStyle: '#F7B538',
+                borderWidth: 1,
+                borderStyle: '#eeeeee',
+                dirArrowStyle: false
+            },
+            pathLineHoverStyle: {
+                lineWidth: 3,
+                strokeStyle: 'rgba(204, 63, 88,1)',
+                borderWidth: 1,
+                borderStyle: '#cccccc',
+                dirArrowStyle: false
+            },
+            pathLineSelectedStyle: {
+                lineWidth: 6,
+                strokeStyle: '#C11534',
+                borderWidth: 1,
+                borderStyle: '#cccccc',
+                dirArrowStyle: true
+            },
+            dirArrowStyle: {
+                stepSpace: 35,
+                strokeStyle: '#ffffff',
+                lineWidth: 2
+            },
+            startPointStyle: {
+                radius: 20,
+                fillStyle: '#109618',
+                lineWidth: 1,
+                strokeStyle: '#eeeeee'
+            },
+            endPointStyle: {
+                radius: 4,
+                fillStyle: '#dc3912',
+                lineWidth: 1,
+                strokeStyle: '#eeeeee'
+            },
+            keyPointStyle: {
+                radius: 3,
+                fillStyle: 'rgba(8, 126, 196, 1)',
+                lineWidth: 1,
+                strokeStyle: '#eeeeee'
+            },
+            keyPointHoverStyle: {
+                radius: 4,
+                fillStyle: 'rgba(0, 0, 0, 0)',
+                lineWidth: 2,
+                strokeStyle: '#ffa500'
+            },
+            keyPointOnSelectedPathLineStyle: {
+                radius: 4,
+                fillStyle: 'rgba(8, 126, 196, 1)',
+                lineWidth: 2,
+                strokeStyle: '#eeeeee'
+            }
+        };
+
+        //just some colors
+        var colors = [
+            "#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00",
+            "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707",
+            "#651067", "#329262", "#5574a6", "#3b3eac"
+        ];
+
+        var pathSimplifierIns = new PathSimplifier({
+            zIndex: 100,
+            //autoSetFitView:false,
+            map: map, //所属的地图实例
+
+            getPath: function(pathData, pathIndex) {
+
+                return pathData.path;
+            },
+            getHoverTitle: function(pathData, pathIndex, pointIndex) {
+                if (pointIndex >= 0) {
+                    //point
+                    return pathData.name + '，点:' + pointIndex + '/' + pathData.path.length;
+                }
+
+                return pathData.name + '，点数量' + pathData.path.length;
+            },
+            renderOptions: {                //样式设置对象
+                pathLineStyle: {
+                    dirArrowStyle: true
+                },
+                getPathStyle: function(pathItem, zoom) {
+
+                    var color = colors[pathItem.pathIndex],
+                            lineWidth = Math.round(4 * Math.pow(1.1, zoom - 3));
+                    return {
+                        pathLineStyle: {
+                            strokeStyle: '#D98026',         //轨迹颜色
+                            lineWidth: lineWidth        //轨迹宽度
+                        },
+                        pathLineSelectedStyle: {
+                            strokeStyle: '#3366cc',         //轨迹颜色
+                            lineWidth: lineWidth + 2   //选中的轨迹宽度
+                        },
+                        pathNavigatorStyle: {
+                            fillStyle: color        //领航图标颜色
+                        }
+                    }
+                },
+                startPointStyle: {          //起始点样式
+                    radius: 4,
+                    fillStyle: '#109618',
+                    lineWidth: 1,
+                    strokeStyle: '#eeeeee'
+                },
+                endPointStyle: {        //结束点样式
+                    radius: 4,
+                    fillStyle: '#dc3912',
+                    lineWidth: 1,
+                    strokeStyle: '#eeeeee'
+                }
+            }
+        });
+
+        var pathNavigs = [];
+
+        function getNavg(pathIndex) {
+
+            if (!pathNavigs[pathIndex]) {
+                //创建一个轨迹巡航器
+                var navgtr = pathSimplifierIns.createPathNavigator(pathIndex, {
+                    loop: false,    //设置巡航器是否反复播放,true为循环播放
+                    speed: speed_num,      //设置导航器的初始速度
+                    pathNavigatorStyle: {     //设置巡航器的样式
+                        width: 40,
+                        height: 30,
+                        content: PathSimplifier.Render.Canvas.getImageContent('__PUBLIC__/images/car_t.png', onload,onerror),
+                        strokeStyle: null,
+                        fillStyle: null
+                    }
+                });
+
+                var $markerContent = $('<div class="markerInfo"></div>');
+
+                $markerContent.html(pathSimplifierIns.getPathData(pathIndex).name);
+
+                navgtr.marker = new AMap.Marker({
+                    offset: new AMap.Pixel(12, -10),
+                    content: $markerContent.get(0),
+                    map: map
+                });
+
+                var $msg = $('#routes-container').find('div.route-item[data-idx="' +
+                        pathIndex + '"]').find('.msg');
+
+                navgtr.on('move', function() {
+                    navgtr.marker.setPosition(navgtr.getPosition());
+                });
+
+                navgtr.onDestroy(function() {
+                    pathNavigs[pathIndex] = null;
+                    navgtr.marker.setMap(null);
+                    $msg.html('');
+                });
+
+                navgtr.on('start resume', function() {
+                    navgtr._startTime = Date.now();
+                    navgtr._startDist = this.getMovedDistance();    //获取巡航器的当前位置
+                });
+
+                navgtr.on('stop pause', function() {
+                    navgtr._movedTime = Date.now() - navgtr._startTime;
+                    navgtr._movedDist = this.getMovedDistance() - navgtr._startDist;
+
+                    navgtr._realSpeed = (navgtr._movedDist / navgtr._movedTime * 3600);
+
+//                    var msgInfo = {
+//                        '状态': this.getNaviStatus(),
+//                        '设定速度': this.getSpeed() + ' km/h',
+//                        '总行进距离': Math.round(this.getMovedDistance()) + ' m',
+////                        '本段行进距离': Math.round(navgtr._movedDist / 1000) + ' km',
+////                        '本段耗时': (navgtr._movedTime / 1000) + ' s',
+////                        '本段实际速度': Math.round(navgtr._realSpeed) + ' km/h'
+//                    };
+                    if (car_ary[lun]["time"] != null && car_ary[lun]['all_distance'] != 0){
+                        var time_num = Math.round((Math.round(this.getMovedDistance())/car_ary[lun]['all_distance'])*Object.keys(car_ary[lun]['time']).length);
+                        $msg.html('<div>实际时间:'+car_ary[lun]["time"][time_num]+'</div><div>设定速度:'+this.getSpeed() + ' km/h</div><div>行进距离:'+Math.round(this.getMovedDistance()) + ' m</div>');
+                    }else{
+                        $msg.html('<div>状态:'+this.getNaviStatus()+'</div><div>设定速度:'+this.getSpeed() + ' km/h</div><div>行进距离:'+Math.round(this.getMovedDistance()) + ' m</div>');
+                    }
+
+                    refreshNavgButtons();
+                });
+
+                navgtr.on('move', function() {
+                    if (this.getMovedDistance() >= old_show-1000 && speed_num <= 1000000){      //判断是否走完一段路程,准备开始下一段路程
+                        if (next == 0){
+                            if (lun < car_ary.length - 1){
+                                next = 1;
+                                var spee = this.getSpeed(); //获取速度
+                                setlun = setTimeout(function () {
+                                    lun++;
+
+                                    $('.route-item').remove();//以上上一个控制器
+
+                                    var navg = getNavg(lun-1);  //销毁上一个领航器
+
+                                    navg['destroy']();
+
+                                    initRouteItem(car_ary[lun], lun);
+                                    $('.route-item').find('[data-act="start"]').prop('disabled',true);
+                                    $('.route-item').find('[data-act="resume"]').prop('disabled',true);
+                                    getNavg(lun).start();
+
+
+                                    $('.speedBox span').html('时速控制：'+spee+' km/h');
+                                    pathNavigs[lun].setSpeed(spee);
+
+                                    old_show = car_ary[lun]['all_distance'];
+                                    next = 0;
+                                    clearInterval(setlun);
+                                },1000);
+                            }
+                        }
+                    }
+
+                    var msgInfo = {
+                        '状态': this.getNaviStatus(),
+                        '设定速度': this.getSpeed() + ' km/h',
+                        '总行进距离': Math.round(this.getMovedDistance()) + ' m'
+                    };
+
+                    if (car_ary[lun]["time"] != null && car_ary[lun]['all_distance'] != 0){
+                        var time_num = Math.round((Math.round(this.getMovedDistance())/car_ary[lun]['all_distance'])*Object.keys(car_ary[lun]['time']).length);
+                        $msg.html('<div>实际时间:'+car_ary[lun]["time"][time_num]+'</div><div>设定速度:'+this.getSpeed() + ' km/h</div><div>行进距离:'+Math.round(this.getMovedDistance()) + ' m</div>');
+                    }else{
+                        $msg.html('<div>状态:'+this.getNaviStatus()+'</div><div>设定速度:'+this.getSpeed() + ' km/h</div><div>行进距离:'+Math.round(this.getMovedDistance()) + ' m</div>');
+                    }
+                });
+
+                pathNavigs[pathIndex] = navgtr;
+            }
+
+            return pathNavigs[pathIndex];
+        }
+
+        var navigBtnsConf = [{
+            name: '回放',
+            action: 'start',
+            enableExp: 'navgStatus === "stop" || navgStatus === "pause"'
+        }, {
+            name: '暂停',
+            action: 'pause',
+            enableExp: 'navgStatus === "moving"'
+        }, {
+            name: '恢复',
+            action: 'resume',
+            enableExp: 'navgStatus === "pause"'
+        }, {
+            name: '停止',
+            action: 'stop',
+            enableExp: 'navgStatus === "moving"'
+        }, {
+            name: '销毁',
+            action: 'destroy',
+            enableExp: 'navgExists'
+        }, {
+            name: '重开',
+            action: 'rest',
+            enableExp: 'navgExists'
+        }];
+
+        function refreshNavgButtons() {
+
+            $('#routes-container').find('div.route-item').each(function() {
+
+                var pathIndex = parseInt($(this).attr('data-idx'), 0);
+
+                if (pathIndex < 0) {
+                    return;
+                }
+
+                var navgStatus = 'stop',
+                        navgExists = !!pathNavigs[pathIndex];
+
+                if (navgExists) {
+                    navgStatus = pathNavigs[pathIndex].getNaviStatus();
+                }
+
+                $(this).find('.navigBtn').each(function() {
+
+                    var btnIdx = parseInt($(this).attr('data-btnIdx'));
+
+                    $(this).prop('disabled', !eval(navigBtnsConf[btnIdx].enableExp));
+
+                });
+
+            });
+        }
+
+        function initRoutesContainer(data) {
+
+            $('#routes-container').on('click', '.navigBtn', function() {        //开始巡航
+
+                var pathIndex = parseInt($(this).closest('.route-item').attr('data-idx'), 0);
+                var data_act = $(this).attr('data-act');
+
+                switch (data_act){
+                    case 'rest':
+                        $('.route-item').remove();//以上上一个控制器
+
+                        var navg = getNavg(lun);  //销毁当前领航器
+                        navg['destroy']();
+
+                        initRouteItem(car_ary[0], 0);
+                        getNavg(0).start();
+                        old_show = car_ary[0]['all_distance'];  //初始话轨道距离
+                        $('.speedBox span').html('时速控制：'+500+' km/h');
+
+                        lun = 0;
+                        next = 0;
+                        if (setlun){
+                            clearInterval(setlun);//如果设置了定时器则清楚
+                        }
+                        $('.route-item').find('[data-act="start"]').prop('disabled',true);
+                        $('.route-item').find('[data-act="resume"]').prop('disabled',true);
+                        break;
+                    case 'destroy':
+                        $('.route-item').remove();//以上上一个控制器
+                        initRouteItem(data[0], 0);      //绘制控制栏
+                        old_show = car_ary[0]['all_distance'];  //初始化轨道距离
+                        $('.speedBox span').html('时速控制：'+500+' km/h');
+                        lun = 0;
+                        next = 0;
+                        if (setlun){
+                            clearInterval(setlun);//如果设置了定时器则清楚
+                        }
+                        var navg = getNavg(pathIndex);
+                        navg[$(this).attr('data-act')]();       //巡航控制
+                        break;
+                    default:
+                        var navg = getNavg(pathIndex);
+                        navg[$(this).attr('data-act')]();       //巡航控制
+
+                }
+                
+                refreshNavgButtons();           //按键控制
+
+            });
+            $('.route-item').remove();//以上上一个控制器
+            initRouteItem(data[0], 0);      //绘制控制栏
+//            for (var i = 0, len = data.length; i < len; i++) {
+//                initRouteItem(data[i], i);      //绘制控制栏
+//            }
+
+            refreshNavgButtons();
+        }
+
+        function initRouteItem(pathData, idx) {
+
+            var $routeItem = $('<div class="route-item"></div>');
+
+            $routeItem.attr('data-idx', idx);
+
+            $('<h3/>').css({
+                color: colors[idx]
+            }).html(pathData.name + '(点数： ' + pathData.path.length + ')').appendTo($routeItem).on('click', function() {
+                pathSimplifierIns.setSelectedPathIndex(idx);
+            });
+
+            for (var i = 0, len = navigBtnsConf.length; i < len; i++) {
+                $('<button class="navigBtn" data-btnIdx="' + i + '" data-act="' + navigBtnsConf[i].action + '"></button>').html(navigBtnsConf[i].name).appendTo($routeItem);
+            }
+            $speedBox = $('<div class="speedBox"></div>').appendTo($routeItem);
+
+            var speedTxt = $('<span><span>').appendTo($speedBox);
+
+            var speedRangeInput = $('<input id="speedInp_' + idx +
+                    '" class="speedRange" type="range" min="100" max="100000" step="100" value="500" />').appendTo($speedBox);
+
+            //添加时间控制
+
+
+            function updateSpeedTxt() {
+                speed_num = parseInt(speedRangeInput.val(), 10);
+                speedTxt.html('时速控制：' + speed_num + ' km/h');
+
+                if (pathNavigs[idx]) {
+                    pathNavigs[idx].setSpeed(speed_num);        //动态改变续航器速度
+                }
+            }
+
+            speedRangeInput.on('change', updateSpeedTxt);
+
+
+            updateSpeedTxt();
+
+            $speedBox.appendTo($routeItem);
+
+            $('<div class="msg"></div>').appendTo($routeItem);
+
+            $routeItem.appendTo('#routes-container');
+        }
+
+        window.pathSimplifierIns = pathSimplifierIns;
+
+        $('<div id="loadingTip">轨迹绘制中，请稍候...</div>').appendTo(document.body);
+
+        function carAjax(select,key,start,stop) {
+            var url = "{:U(trajectoryInfo)}";
+            var param = {'select':select,'key':key,'start':start,'stop':stop};
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType:'json',
+                data: param,
+                success: function(list){
+                    if(list['error'] == 0){
+                        $('#loadingTip').text('轨迹绘制中，请稍候...');
+
+                        $('#loadingTip').remove();
+
+                        var flyRoutes = [];
+                        var data = [];
+                        data.push({name:'test',path:[[106.6830396652,26.5730122813],[106.6873311996,26.5734632688],[106.6878569126, 26.5752480101],[106.5878569126, 26.4752480101],[106.4878569126, 26.3752480101],[106.2278569126, 26.1152480101]],all_distance:69395});
+                        data.push({name:'test',path:[[106.9830396652,26.5730122813],[105.5873311996,26.4734632688],[106.0878569126, 26.5752480101],[106.2878569126, 26.6752480101]],all_distance:213387});
+                        var d = list['data'];
+//                        var d = data;
+                        console.log(d);
+                        car_ary = d;
+                        old_show = d[0]['all_distance'];
+//                        var d = data;
+//                        car_ary = data;
+//                        old_show = data[0]['all_distance'];
+
+                        if (list['all_car'] == 1){  //根据轨迹需求,更改页面样式
+                            speed_num = 500;
+                            $('#panel').show();
+                            $('#outer-box').css('height','85%');
+                        }else{
+                            $('#panel').hide();
+                            $('#outer-box').css('height','95%');
+                            speed_num = 10000000;
+                            for (var i = 0, len = d.length; i < len; i++) {      //循环创建巡航器
+
+                                (function(i) {
+
+                                    setTimeout(function() {
+
+                                        getNavg(i).start();
+
+                                        refreshNavgButtons();
+
+                                    }, 1000 * (i + 1));
+
+                                })(i);
+                            }
+                        }
+
+                        d.push.apply(d, flyRoutes);
+
+                        pathSimplifierIns.setData(d);   //绘制轨迹图
+
+                        initRoutesContainer(d);         //绘制控制栏
+
+                    }else{
+                        $('#loadingTip').text('暂无轨迹,请重试!');
+                        alert('未查询到车辆轨迹信息,请更改条件后重试!');
+                    }
+                }
+            });
+        }
+
+        var vehicleno = $('.key').val();
+        if (vehicleno != ''){
+            var select = $('.screen-key').val();
+            var start = $('input[name=start]').val();
+            var stop = $('input[name=stop]').val();
+            carAjax(select,vehicleno,start,stop);
+        }else{
+            carAjax();
+        }
+
+
+        $('.screen-click').on('click',function () {
+            var select = $('.screen-key').val();
+            var key = $('.key').val();
+            var start = $('input[name=start]').val();
+            var stop = $('input[name=stop]').val();
+            carAjax(select,key,start,stop);
+        });
+
+        pathSimplifierIns.on('selectedPathIndexChanged', function(e, info) {
+
+        });
+
+        pathSimplifierIns.on('pointClick pointMouseover pointMouseout', function(e, record) {
+            //console.log(e.type, record);
+        });
+
+        pathSimplifierIns.on('pathClick pathMouseover pathMouseout', function(e, record) {
+            //console.log(e.type, record);
+        });
+    });
+
+</script>
+</body>
+
+</html>

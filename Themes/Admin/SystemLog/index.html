@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网站后台系统操作日志</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+<body marginwidth="0" marginheight="0">
+
+    <div id="listtitle" class="tit-all clearfix">
+        <h3 class="fl">
+            <i></i>
+            系统操作列表
+        </h3>
+
+    </div>
+    <br/>
+    <div class="formbody">
+        <div class="business_info">
+            <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1050px;height: 20px; " >
+                <form action="{:U('SystemLog/index')}" method="get" style="position: absolute;">
+                    <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+                    <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                        <select class="input_normal" name="select"  style="width: 200px;">
+                            <option selected="selected" value="0">请选择分类查询</option>
+                            <option value="1">操作员</option>
+                            <option value="2">操作方式</option>
+                            <option value="3">表名</option>
+                        </select>
+                    </div>
+                    <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                        <input class="input_normal" type="text"  style="width: 200px;"   name="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+
+                        <input class="input_normal" type="text"   name="start" style="width: 240px;" value="<?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-86400);?>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                        <input class="input_normal" type="text"   name="stop" style="width: 240px;" value="<?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                        <input type="submit" value="查询" name="submit" class="btn-submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    <table  class="tablelist">
+        <thead>
+            <tr style="align: center; font-size: 16px;">
+                <th >序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i></th>
+                <th >操作表名</th>
+                <th >数据编号</th>
+                <th >操作方式</th>
+                <th >操作时间</th>
+                <th >操作员</th>
+                <!--<th >操&nbsp;作</th>-->
+            </tr>
+        </thead>
+        <volist name="list" id="temp">
+            <tr>
+                <td>{$temp['id']}</td>
+                <td>{$temp['tablename']}</td>
+                <td>{$temp['dataid']}</td>
+                <td>{$temp['operate']}</td>
+                <td>{$temp['disposedate']}</td>
+                <td>{$temp['adminname']}</td>
+            </tr>
+
+        </volist>
+    </table>
+    </div>
+    <BR/>
+    <br/>
+    <div class="digg">{$page}</div>
+</body>
+</html>

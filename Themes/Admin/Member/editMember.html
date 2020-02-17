@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会员信息编辑3</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<div class="tit-all">
+    <h3><i></i>会员信息编辑</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('Member/editMember')}" onsubmit="return check()" method="post" enctype="multipart/form-data">
+                <div class="busi_input clearfix">
+                    <label>真实姓名：</label>
+                    <input class="input_normal" type="text" name="user" value="{$list[0]['username']}" id="drivername"  placeholder="真实姓名必须为2-5位中文字符" title="真实姓名必须为2-5位中文字符"  easyform="char-chinese;real-time;" message="用户名必须为2-5位中文字符" easytip="disappear:lost-focus;theme:blue;"><span class="font" id="drivernameinfo"></span>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>性别：</label>
+                    <select name="sex" class="input_normal">
+                        <option selected="selected" value="{$list[0]['sex']}"><if condition="$list[0]['sex']==1">男<else/>女</if></option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>用户类型：</label>
+                    <select name="usertype" class="input_normal">
+                        <option selected="selected" value="{$list[0]['usertype']}"><if condition="$list[0]['usertype']==0">普通用户<else/>大客户</if></option>
+                        <option value="0">普通用户</option>
+                        <option value="1">大客户</option>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix" id="check_box">
+                    <label>结账周期：</label>
+                    <select name="check_cycle" class="input_normal">
+                        <option selected value="{$list[0]['check_cycle']}"><?php isCheckCycle($list[0]['check_cycle']) ?></option>
+                        <option  value="1" selected="selected">1个月</option>
+                        <option  value="2">2个月</option>
+                        <option  value="3">3个月</option>
+                        <option  value="4">4个月</option>
+                        <option  value="5">5个月</option>
+                        <option  value="6">6个月</option>
+                        <option  value="7">7个月</option>
+                        <option  value="8">8个月</option>
+                        <option  value="9">9个月</option>
+                        <option  value="10">10个月</option>
+                        <option  value="11">11个月</option>
+                        <option  value="12">12个月</option>
+                    </select>
+                    <!--<input class="input_normal" type="text"  value="{$list[0]['check_cycle']}"   name="check_cycle"  id="check_cycle" easyform="char-check;real-time;" maxlength="11" message="注意结账周期的单位为月" easytip="disappear:lost-focus;theme:blue;" placeholder="结账周期单位为月" title="请输入该客户的结账周期" ><span  class="font" id="check_cycleinfo"></span>-->
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>用户账户：</label>
+                    <input class="input_normal" type="text"   name="phone" value="{$list[0]['phone']}" maxlength="11" id="phone" easyform="char-mobile;real-time;" message="请输入手机号码" easytip="disappear:lost-focus;theme:blue;" placeholder="请输11位有效电话号码" title="请输11位有效电话号码" ><span  class="font" id="phoneinfo"></span>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>身份证号：</label>
+                    <input class="input_normal" type="text" value="{$list[0]['identitys']}"maxlength="18" onkeyup="this.value=this.value.toLocaleUpperCase()" name="cost" id="cost"  placeholder="请输入有效身份证号" title="请输入有效身份证号" easyform="char-idCard;real-time;" message="请输入正确的身份号" easytip="disappear:lost-focus;theme:blue;" ><span class="font" id="costinfo"></span>
+                </div>
+
+                <div class="reg-box">
+
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+                    <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/easyform.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        var usertype= $("select[name='usertype']").val();
+        id_judge(usertype);
+        $("select[name='usertype']").change(function () {
+            id_judge($(this).val());
+        })
+    });
+    function id_judge(val) {
+        if (val == 0){
+            $('#cost').attr('message','请输入正确的身份号');
+            $('#check_box').hide()
+        }else{
+            $('#cost').attr('message','大客户对身份证号无严格要求');
+            $('#check_box').show()
+        }
+        $("#CarModelForm").easyform();
+    }
+</script>
+<script type="text/javascript" >
+
+</script>
+</html>
+<?php
+  //大客户结账周期
+    function isCheckCycle($list) {
+        switch ($list){
+            case 1 :
+                echo '1个月';
+                break;
+            case 2 :
+                echo '2个月';
+                break;
+            case 3 :
+                echo '3个月';
+                break;
+            case 4 :
+                echo '4个月';
+                break;
+            case 5 :
+                echo '5个月';
+                break;
+            case 6 :
+                echo '6个月';
+                break;
+            case 7 :
+                echo '7个月';
+                break;
+            case 8 :
+                echo '8个月';
+                break;
+            case 9 :
+                echo '9个月';
+                break;
+            case 10 :
+                echo '10个月';
+                break;
+            case 11 :
+                echo '11个月';
+                break;
+            case 12 :
+                echo '12个月';
+                break;
+            default :
+                break;
+
+        }
+    }
+        ?>

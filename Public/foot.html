@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>华邦出行</title>
+</head>
+<body>
+<!--底部版权-->
+<div class="footer">
+    <div class="footer-bg">
+        <div class="footer-box">
+            <div class="footer-contanct">
+                <ul>
+                    <li>
+                        <img src="__PUBLIC__/images/footer-phone.png"/>
+                        <div class="footer-contanct-txt">
+                            <p>联系电话：</p>
+                            <p> <?php
+            echo cookie('phone');
+            ?></p>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="__PUBLIC__/images/email.png"/>
+                        <div class="footer-contanct-txt">
+                            <p>邮箱地址：</p>
+                            <p><?php
+            echo cookie('email');
+            ?></p>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="__PUBLIC__/images/address.png" />
+                        <div class="footer-contanct-txt">
+                            <p>公司地址：</p>
+                            <p><?php
+            echo cookie('address');
+            ?></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-bq">
+                <div class="footer-nav">
+                    <a href="__APP__/home/About">关于我们</a>
+                    <span>|</span>
+                    <a href="__APP__/home/News">华邦快讯</a>
+                    <span>|</span>
+                    <a href="__APP__/home/Notice">租车须知</a>
+                    <span>|</span>
+                    <a href="__APP__/home/Contanct">联系我们</a>
+                </div>
+                <p><a href="/" style="color: #7e7d7d;"><?php
+            echo cookie('company');
+            ?></a> 版权所有</p>
+                <p>网站备案号：  <a href="http://www.miitbeian.gov.cn/" target="_blank" style="color: #7e7d7d" rel="nofollow"><?php
+            echo cookie('record');
+            ?></a>  &nbsp;&nbsp; 公安备案号：  <?php
+            echo cookie('public');
+            ?></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
+

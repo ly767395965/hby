@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登录</title>
+		<meta name="format-detection" content="telephone=no" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+    	<link rel="stylesheet" href="__PUBLIC__/wap/css/css3.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/Login.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/Login.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+	</head>
+	<style>
+		body{
+			background: url(__PUBLIC__/wap/images/login-bg.jpg)no-repeat;
+			background-size:cover;
+		}
+	</style>
+	<body>
+		<section class="main">
+			<div class="login-top">
+        		<img src="__PUBLIC__/wap/images/login-logo.png" width="80"/>
+        		<h2>欢迎登录华邦出行</h2>
+    		</div>
+    		<div class="input-row">
+            	<input type="tel" class="input-clear" placeholder="手机号" id="loginUser" />
+            	<span class="input-del"></span>
+        	</div>
+        	<div class="input-row">
+            	<input type="password" class="input-password" placeholder="密码" id="loginPwd" />
+           	 	<span class="input-eyes"></span>
+       	 	</div>
+       	 	<p class="tips"><span style="color: red;">*</span>&nbsp;密码由字母,数字,下划线组成6-16位字符！</p>
+        	<div class="button-div">
+            	<div class="login-btn" id="login">登录</div>
+        	</div>
+        	<div class="forget-div">
+        		<span class="forget">忘记密码？</span>
+        	</div>
+    		<div class="login-reg">没有账号？
+        		<span><a href="{:U('./Wap/RegUser/index')}" style="color: white;">去注册</a></span>
+    		</div>
+    		<div class="msg">
+	    		<div class="msg-text"></div>
+	    	</div>
+		</section>
+	</body>
+</html>

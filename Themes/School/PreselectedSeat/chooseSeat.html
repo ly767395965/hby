@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时刻表</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/base.css" />
+    <style type="text/css">
+        #content{
+            width: 100%;
+        }
+        #content h1{
+            width: 25%;
+            font-size: 1.5em;
+            padding-top: 5%;
+            text-align: right;
+            font-weight: bold;
+            color: #211922;
+        }
+
+        #seat{
+            border-top: 1px solid silver;
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+
+        }
+        #seat ul{
+            margin-left: 4%;
+            width: 200px;
+            height: 300px;
+            margin-top: 10%;
+        }
+        #seatul li{
+            width: 100%;
+            height: 30px;
+            margin-top: 2px;
+        }
+        .bot{
+            background-color: #B9DEA0;
+            height: 25px;
+            width: 25px;
+            line-height: 25px;
+            margin: 3px;
+            float: left;
+            text-align: center;
+            outline: none;
+            font-size: 13px;;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .click{
+            background-color: #00dd1c;
+        }
+        .botright{
+            margin-left: 65px;
+        }
+
+        #right_div{
+            width: 160px;
+            height: 300px;
+            float: right;
+            margin-top: -80%;
+            border-left: 1px dashed #6e727b;
+        }
+    </style>
+</head>
+<body>
+<section class="main">
+    <include file="Index:index"/>
+    <div id="content">
+        <h1><img src="__PUBLIC__/School/img/train.png" width="25" height="25"/>&nbsp;&nbsp;选座位</h1>
+        <a href="#" onClick="javascript :history.go(-1);" style="float: right;margin-right: 10%;">返回上一页</a>
+
+        <div id="seat">
+            <ul id="seatul">
+                <li>
+                    <div class="bot botleft" >1</div>
+
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft click">2</div>
+                    <div attribute="" class="bot botleft click">3</div>
+                    <div attribute="" class="bot botright click">4</div>
+                    <div attribute="" class="bot click" >5</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft click">6</div>
+                    <div attribute="" class="bot botleft click">7</div>
+                    <div attribute="" class="bot botright click">8</div>
+                    <div attribute="" class="bot click" >9</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft click" >10</div>
+                    <div attribute="" class="bot botleft click" >11</div>
+                    <div attribute="" class="bot botright click" >12</div>
+                    <div attribute="" class="bot click" >13</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft" >14</div>
+                    <div attribute="" class="bot botleft" >15</div>
+                    <div attribute="" class="bot botright" >16</div>
+                    <div attribute="" class="bot" >17</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft" >18</div>
+                    <div attribute="" class="bot botleft" >19</div>
+                    <div attribute="" class="bot botright" >20</div>
+                    <div attribute="" class="bot" >21</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot botleft" >22</div>
+                    <div attribute="" class="bot botleft" >23</div>
+                    <div attribute="" class="bot botright" >24</div>
+                    <div attribute="" class="bot" >25</div>
+                </li>
+                <li>
+                    <div attribute="" class="bot">26</div>
+                    <div attribute="" class="bot">27</div>
+                    <div attribute="" class="bot">28</div>
+                    <div attribute="" class="bot">29</div>
+                    <div attribute="" class="bot">30</div>
+                    <div attribute="" class="bot">31</div>
+                </li>
+
+            </ul>
+            <div id="right_div">
+                <div style="width: 100px;height: 20px;margin-left: 10%;margin-top: 20%">车牌号:{$carinfo['carno']}</div>
+                <div style="width: 100px;height: 20px;margin-left: 10%;">发车时间:{$carinfo['time']}</div>
+                <div style="width: 100px;height: 20px;margin-left: 10%;">座位编号:<span id="seatnumber"></span></div>
+                <div style="width: 100px;height: 30px;line-height:30px;display:block;margin-left: 10%;margin-top: 50%;position: relative">
+                    <span attribute="" class="bot"></span>可选
+                </div>
+                <span style="width: 100px;height: 30px;line-height:30px;display: block;position: absolute;margin-left:4%;">
+                    <span attribute="" class="bot click"></span>已被选
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".bot").click(function () {
+            if($(this).hasClass('click')){
+                alert(123)
+            }else {
+                var seat = $(this).text();
+                $("#seatnumber").text(seat+'号座');
+                $(this).css('background-color','red');
+                $(this).siblings('.bot').not('.click').css('background-color','#B9DEA0');
+                $(this).parent('li').siblings().find('.bot').not('.click').css('background-color','#B9DEA0');
+            }
+
+        });
+    });
+</script>

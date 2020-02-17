@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>车辆定位信息</title>
+    <!--<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/font-awesome.min.css" />-->
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/qdStyle.css"/>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <!--<script type="text/javascript" src="__PUBLIC__/js/main.js"></script>-->
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=67jMQ5DmYTe1TLMBKFUTcZAR"></script>
+    <style>
+        .contanct {height:auto}
+        .contanct-map {height:auto }
+        #map {height: auto}
+
+        /*车辆筛选*/
+        .screen-box { line-height: 38px}
+        .screen-key, .screen-query, .screen-click {height: 23px}
+        .screen-query {width: 150px}
+        #functionarea { padding-left: 5px;padding-right: 20px}
+        .screen-click {border: none; background: #00a2e6;border-radius: 2px;width: 73px;color: white}
+        .screen-click:hover {opacity: 0.7}
+
+        .caradress { overflow-y:scroll;height: 74%}
+    </style>
+</head>
+<body>
+<!--导航-->
+<!--联系我们-->
+<div id="listtitle" class="tit-all clearfix" style="">
+    <h3 class="fl">
+        <i></i>
+        车辆定位展示
+    </h3>
+    <div class="screen-box fr">
+        车辆筛选:
+        <!--<select class="screen-key">-->
+        <!--<option value="0">租用状态</option>-->
+        <!--<option value="1">客户用车</option>-->
+        <!--<option value="2">具体车辆</option>-->
+        <!--</select>-->
+        <input class="screen-query" type="text" placeholder="请输入车牌号" />
+        <span id="functionarea" class="add-car ">
+            <if condition="checkAuth('CarinfoManage/addCarinfoManage')">
+                <input class="screen-click" type="button" value="进行筛选"/>
+            </if>
+        </span>
+    </div>
+</div>
+<div class="contanct">
+    <div class="contanct-map">
+        <div id="map"></div>
+    </div>
+    <div class="caradress">         <!--右边具体车辆栏-->
+
+    </div>
+</div>
+<div style="clear: both"></div>
+
+<!--<div class="contanct-type">-->
+<!--<h4><?php-->
+<!--echo cookie('company');-->
+<!--?> </h4>-->
+<!--<p>-->
+<!--<i class="fa fa-phone"></i>-->
+<!--联系方式：<?php-->
+<!--echo cookie('phone');-->
+<!--?></p>-->
+<!--<p>-->
+<!--<i class="fa fa-map-marker"></i>-->
+<!--地址：<?php-->
+<!--echo cookie('address');-->
+<!--?></p>-->
+<!--<p>-->
+<!--<i class="fa fa-internet-explorer"></i>-->
+<!--网址：<?php-->
+<!--echo cookie('domian');-->
+<!--?></p>-->
+<!--<div style="clear: both"></div>-->
+<!--</div>-->
+</body>
+<script type="text/javascript">
+    $(function () {
+        var header_height = $('#listtitle').height();
+        var body_height = window.innerHeight;
+        $('.contanct, .contanct-map, #map').css('height',body_height-header_height+"px");
+
+        carAjax(); //请求车辆信息,并定位
+
+        //点击发起车辆筛选请求
+        $('.screen-click').on('click',function () {
+            var key_query = $('.screen-query').val();
+            carAjax(key_query);
+        });
+
+
+    });
+
+    function carAjax(key_query) {
+        var url = "{:U('locationInfo')}";
+        var param = {'key_query':key_query};
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType:'json',
+            data: param,
+            success: function(data){
+
+                if(data['error'] == 0){
+                    var content = data['list'];
+                    var markers_ary = new Array;
+                    var query_html = '<h4>车辆列表：</h4>';
+                    for (var i=0; i < content.length;i++) {
+                        var son_ary = new Array;
+                        var son_ary_two = new Array;
+
+                        son_ary['content'] = content[i]['vehicleno'];           //组装过渡数组
+                        son_ary['acc'] = content[i]['drivername'];
+                        son_ary['gps_time'] = content[i]['positiontime'];
+                        son_ary_two['lat'] = content[i]['latitude'];
+                        son_ary_two['lng'] = content[i]['longitude'];
+                        son_ary['position'] = son_ary_two;
+
+                        markers_ary[i] = son_ary;
+                        query_html += '<span>'+content[i]["vehicleno"]+'('+content[i]['bizstatus']+')</span>'
+                    }
+                    $('.caradress').html(query_html);
+                    startMap(markers_ary)
+                }else{
+                    alert('未查询到车辆信息!');
+                }
+            }
+        });
+
+    }
+
+    //把数组转换为json字符串
+    $.fn.stringifyArray = function(array) {
+        return JSON.stringify(array)
+    };
+
+    //设置及启动地图
+    function startMap(markers) {
+        var adress = $(".caradress span");
+        var lng = 106.716591;
+        var lat = 26.556891;
+        createMap(lat, lng,12);
+        adress.click(function (){
+            $(this).css({color:"#ff8800"}).siblings("span").css({color:"#000"});
+            var index=$(this).index()-1;
+            var lat = markers[index].position.lat;
+            var lng = markers[index].position.lng;
+            var con = markers[index].content;
+            createMap(lat, lng,18);
+            setMapEvent();//设置地图事件
+            addMapOverlay(markers,index);
+        });
+        var map;
+        initMap(lat,lng,markers);
+    }
+
+    //创建和初始化地图函数：
+    function initMap(lat,lng,markers) {
+        createMap(lat, lng,12);//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMapOverlay(markers,-1);//向地图添加覆盖物
+    }
+
+    function createMap(lat, lng,sf) {
+        map = new BMap.Map("map");
+        map.centerAndZoom(new BMap.Point(lng, lat), sf);//显示位置
+
+    }
+
+    function setMapEvent() {
+        map.enableScrollWheelZoom();
+        map.enableKeyboard();
+        map.enableDragging();
+        map.enableDoubleClickZoom()
+    }
+
+    function addClickHandler(target, window) {
+        target.addEventListener("click", function () {
+            target.openInfoWindow(window);
+        });
+    }
+
+    function addMapOverlay(markers,l) {
+        for (var index = 0; index < markers.length; index++) {
+
+            var point = new BMap.Point(markers[index].position.lng, markers[index].position.lat);       //设置坐标经纬度及显示图片样式
+            if (l > -1 && l == index){                                                                     //判断是否传了车辆序号,如果有,这改变选中车辆的标注
+                var marker = new BMap.Marker(point, {
+                    seticon: new BMap.Icon("__PUBLIC__/images/location.png", new BMap.Size(30, 40)),
+                });
+            }else{
+                var marker = new BMap.Marker(point, {
+                    icon: new BMap.Icon("__PUBLIC__/images/location.png", new BMap.Size(30, 40)),
+                });
+            }
+            var opts = {
+                position : point,    // 指定文本标注所在的地理位置
+                offset   : new BMap.Size(-32,20)    //设置文本偏移量
+            };
+            var label = new BMap.Label(markers[index].content, opts);  // 创建文本标注对象
+            label.setStyle({
+                color : "black",
+                fontSize : "12px",
+                height : "13px",
+                lineHeight : "13px",
+                fontFamily:"微软雅黑",
+                border:"1px solid rgba(9,57,109,0.5)",
+            });
+            map.addOverlay(label);
+
+
+            var infoWindow = new BMap.InfoWindow('车牌号:'+markers[index].content +'<br/>'+'<span>驾驶员:</span>'+'<span>'+markers[index].acc+'</span><br/><span>定位时间:</span><span>'+markers[index].gps_time+'</span>');
+            addClickHandler(marker, infoWindow);
+            map.addOverlay(marker);
+        };
+    }
+
+    //向地图添加控件
+    function addMapControl() {
+        var scaleControl = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_LEFT});
+        scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+        map.addControl(scaleControl);
+        var navControl = new BMap.NavigationControl({
+            anchor: BMAP_ANCHOR_TOP_LEFT,
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        });
+        map.addControl(navControl);
+        var overviewControl = new BMap.OverviewMapControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: true});
+        map.addControl(overviewControl);
+    }
+
+</script>
+</html>

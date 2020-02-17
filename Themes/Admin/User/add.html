@@ -1,0 +1,244 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="robots" content="all" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/user.css" media="screen, projection">
+    <link rel="stylesheet" href="__PUBLIC__/js/jquery-ui/jquery-ui.min.css">
+    <script src="__PUBLIC__/js/jquery-1.12.3.min.js"></script>
+    <script src="__PUBLIC__/js/jquery-ui/jquery-ui.min.js"></script>
+    <link href="__PUBLIC__/css/shearphoto/ShearPhoto.css" rel="stylesheet" type="text/css" media="all">
+    <script  type="text/javascript" src="__PUBLIC__/js/shearphoto/ShearPhoto.js" ></script>
+    <script  type="text/javascript"  src="__PUBLIC__/js/shearphoto/handle.js" ></script>
+    <title>用户个人信息</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+<body>
+<div class="tit-all">
+    <h3><i></i>用户个人信息</h3>
+</div>
+<div class="user-mine">
+    <div class="wrapper">
+        <form  action="{:U('add')}" method="post"  enctype="multipart/form-data">
+
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label><i>*</i>用户名：</label>
+                    <input  class="input-wd-100" type="text" class="form-control" name="username" required placeholder="请输入手机号" value="<?php echo $UserName; ?>">
+                    <div id="UserNameHint" class="prompt"></div>
+
+                </div>
+                <div class="fl col-md pd-r">
+                    <label><i>*</i>真实姓名：</label>
+                    <input class="input-wd-100" type="text" class="form-control" name="name"  id="TrueName"  required placeholder="请输入真实姓名" value="">
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label><i>*</i> 登录密码：</label>
+                    <input class="input-wd-100"  type="password" name="Password" id="Password"  value="" required value="" maxlength="20" placeholder="请输入6-20位长度的登录密码">
+                </div>
+                <div class="fl col-md pd-r">
+                    <label>所属角色11：</label>
+                    <select class="input-wd-100" name="departmentid" class="form-control" required>
+                        <option  value="">请选择</option>
+                        <option  value="1">行政综合部门</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row clearfix" style="display:none;">
+
+            </div>
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label>用户类型：</label>
+                    <select class="input-wd-100" name="type" class="form-control" required>
+                        <option  value="2">普通员工</option>
+                        <option  value="1">管理员</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label><i>*</i>性别：</label>
+                    <select class="input-wd-100" name="sex" id="sex" class="form-control">
+                        <option  value="2">女</option>
+                        <option  value="1">男</option>
+                    </select>
+
+                </div>
+                <div class="fl col-md pd-r">
+                    <label>Email：</label>
+                    <input class="input-wd-100" type="email" class="form-control" name="email" value="<?php echo $EMail; ?>"  placeholder="XXXXX@example.com">
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label>身份证：</label>
+                    <input class="input-wd-100" type="text" class="form-control" name="identity" value=""   placeholder="身份证">
+                </div>
+                <div class="fl col-md pd-r">
+                    <label>驾驶证档案号：</label>
+                    <input class="input-wd-100" type="text" class="form-control" name="driverno" value=""   placeholder="驾驶证档案号">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="fl col-md pd-r">
+                    <label>联系方式：</label>
+                    <input class="input-wd-100" type="text" class="form-control" name="phonenumber" value=""   placeholder="联系方式">
+                </div>
+
+            </div>
+
+            <div class="row clearfix">
+                <div class="fl col-mh">
+                    <label>备注：</label>
+            <textarea class="input-wd-100 text-area" name="remark" class="form-control" rows="3">
+            </textarea>
+                </div>
+            </div>
+
+            <div class="fl col-mh">
+                <div class="fl col-mh">
+                    <input type="submit" class="btn-submit"  name="Save" value=" 保存  " class="btn btn-warning">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<div id="myModal" class="reveal-modal"><a class="close-reveal-modal" href="javascript:void(0)" onClick="document.getElementById('myModal').style.display='none'">&#215;</a>
+    <!--主功能部份 主功能部份的标签请勿随意删除，除非你对shearphoto的原理了如指掌，否则JS找不到DOM对象，会给你抱出错误-->
+    <div id="shearphoto_loading" style="margin:0;">程序加载中......</div>
+    <div id="shearphoto_main" style="margin:0;">
+
+        <!--primary范围开始-->
+        <div class="primary">
+            <!--main范围开始-->
+            <div id="main">
+                <div class="point"> </div>
+                <!--选择加载图片方式开始-->
+                <div id="SelectBox">
+                    <form    id="ShearPhotoForm" enctype="multipart/form-data" method="post"  target="POSTiframe">
+                        <input name="shearphoto" type="hidden" value="我要传参数" autocomplete="off">
+                        <!--示例传参数到服务端，后端文件UPLOAD.php用$_POST['shearphoto']接收,注意：HTML5切图时，这个参数是不会传的-->
+                        <a href="javascript:;" id="selectImage">
+                            <input type="file"  name="UpFile" autocomplete="off"/>
+                        </a>
+                    </form>
+                    <a href="javascript:;" id="PhotoLoading"></a> </div>
+                <!--选择加载图片方式结束--->
+                <div id="relat">
+                    <div id="black"> </div>
+                    <div id="movebox">
+                        <div id="smallbox"> <img src="/css/images/default.gif" class="MoveImg" /><!--截框上的小图-->
+                        </div>
+                        <!--动态边框开始-->
+                        <i id="borderTop"> </i> <i id="borderLeft"> </i> <i id="borderRight"> </i> <i id="borderBottom"> </i>
+                        <!--动态边框结束-->
+                        <i id="BottomRight"> </i> <i id="TopRight"> </i> <i id="Bottomleft"> </i> <i id="Topleft"> </i> <i id="Topmiddle"> </i> <i id="leftmiddle"> </i> <i id="Rightmiddle"> </i> <i id="Bottommiddle"> </i> </div>
+                    <img src="/css/images/default.gif" class="BigImg" /><!--MAIN上的大图-->
+                </div>
+            </div>
+            <!--main范围结束-->
+            <div style="clear: both"></div>
+            <!--工具条开始-->
+            <div id="Shearbar"> <a id="LeftRotate" href="javascript:;"> <em> </em> 向左旋转 </a> <em class="hint L"> </em>
+                <div class="ZoomDist" id="ZoomDist">
+                    <div id="Zoomcentre"> </div>
+                    <div id="ZoomBar"> </div>
+                    <span class="progress"> </span> </div>
+                <em class="hint R"> </em> <a id="RightRotate" href="javascript:;"> 向右旋转 <em> </em> </a>
+                <p class="Psava"> <a id="againIMG"  href="javascript:;">重新选择</a> <a id="saveShear" href="javascript:;">保存截图</a> </p>
+            </div>
+            <!--工具条结束-->
+        </div>
+        <!--primary范围结束-->
+        <div style="clear: both"></div>
+    </div>
+</div>
+<script>
+    function clicks(){
+        if($("#phone").val()!=='' && $("#Sex").val()!=='' && $("#TrueName").val()!=='' ){
+            $("#Save").attr("type","submit");
+            $("#Save").trigger("click");
+        }else{
+            $("#Save").attr("type","button");
+            alert("你有选项未填，请检查！")
+        }
+    }
+    $("#UserName").blur(function() {
+        var name = $(this).val();
+        if (name != "") {
+            $.get("/User/CheckUserExists.php?username=" + name, null, function(response) {
+                if (response == "1") {
+                    $("#UserNameHint").html("用户名已存在，请重新输入");
+                } else {
+                    $("#UserNameHint").html("");
+                }
+            })
+        }
+    })
+
+    /*图片上传的简单配置,想要设置更多的请另行复制一份handle.js放到自己的模块目录再改，切勿改公共模块的*/
+    var relativeUrl="/images/default_avatar/";//定义的相对目录
+    var HTML5_url = "ManageImage.php?uid=<?php echo $ID; ?>";//火狐谷歌操作的提交路径
+    var flash_url = "/comn/shearphoto/upload.php";//不用html5裁剪的
+
+
+
+</script>
+<script>
+
+    $("#birthday").datepicker({
+        changeYear: true,
+        regional:"zh-CN",
+        dateFormat:"yy-mm-dd",
+        timeFormat: "HH:mm:ss"
+    });
+
+    $("#phone").blur(function() {
+        var name = $(this).val();
+        var obj = $(this);
+        if(name==""){
+            $("#save").attr("type","button");
+            $(this).focus();
+            return false;
+        }else{
+
+            var reg = /^(\d{3,4})-(\d{7,8})/;//验证电话号码
+            var regph=/[1][3-9][0-9]{9,9}/;//验证手机号码
+
+            var re=name.match(reg);
+            var reph=name.match(regph);
+            if(re==null&&reph==null)//只能输入正确格式的手机或电话号码
+            {
+                $("#save").attr("type","button");
+                obj.focus();
+                return false;
+
+            }else{
+                $.get("/User/CheckUserExists.php?username=" + name, null, function(response) {
+                    if (response == "1") {
+                        $("#UserNameHint").html("用户名已存在，请重新输入");
+                    } else {
+                        $("#save").attr("type","submit");
+                        $("#UserNameHint").html("");
+                    }
+                })
+            }
+
+
+
+        }
+
+
+    })
+</script>
+</body>
+</html>

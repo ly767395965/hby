@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>驾驶员服务质量统计明细</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+
+<div class="tit-all">
+    <h3><i></i>驾驶员服务质量统计明细</h3>
+</div>
+<div class="user-mine">
+
+
+    <div style="width: 100%;" class="formbody">
+        <div style="width: 100%;height: 40px">
+            <span style="margin: auto; width: 300px;height:40px;line-height: 40px;font-size: 24px;margin-left: 45%">驾驶员违章处罚明细</span>
+        </div>
+        <span style="margin-left:5%;font-size: 20px;"><a href="{:U('DriverService/index')}">返回列表</a></span>
+        <table  class="order_table" style="width: 90%;margin-top: 1%;margin: auto;margin-top: 5px;">
+            <thead>
+            <tr style="font-size: 16px;">
+                <th>编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+                <th>驾驶员</th>
+                <th>类型</th>
+                <th>违章/处罚时间</th>
+                <th>违章/处罚内容</th>
+                <th>备注</th>
+                <th>是否处理</th>
+
+
+            </tr>
+            </thead>
+            <volist name="list1" id="temp1">
+                <tr>
+
+                    <td>{$temp1['id']}</td>
+                    <td>{$temp1.drivername}</td>
+                    <td>
+                        <if condition ="$temp1.peccancytype == 0" >
+                            交通违章
+                            <else/>
+                            企业处罚
+                        </if>
+                    </td>
+                    <td>{$temp1.peccancydate}</td>
+                    <td class="content" style="text-decoration:underline;color: #00a0e9;cursor: pointer;" data-id="{$temp1['id']}">{$temp1.peccancycontent}</td>
+                    <td>{$temp1.remark}</td>
+
+                    <td>
+                        <if condition ="$temp1.ishandle == 0" >
+                            未处理
+                            <else/>
+                            已处理
+                        </if>
+                    </td>
+
+
+            </volist>
+        </table>
+        <div class="digg">{$page1}</div>
+    </div>
+
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        $(".order_table").find('tr').each(function(){
+            var str = $(this).find('td').eq(4).text();
+            if (!str){
+                if (str.length >= 4){
+                    str = str.substr(0,6);
+                    $('.content').html(str+'...');
+
+                }
+            }
+
+
+        });
+
+        //点击显示内容
+        $(".content").click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type:'post',
+                url:"{:U('DriverService/showdetailed1')}",
+                data:{
+                    'id':id
+                },
+                success:function (result) {
+                    alert(result.info);
+
+                }
+            });
+        })
+
+    });
+
+</script>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>司机信息添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style type="text/css">
+        .input_normal{
+            margin-left: 5px;
+        }
+        .busi_input label{
+            width: 240px !important;
+
+        }
+        .box_fl{float:left;margin-left: 5%}
+        .sub_box {width:200px;clear:both;height: 100%;position: relative;margin: 0 auto;}
+    </style>
+</head>
+
+<div class="tit-all">
+    <h3><i></i>司机信息编辑</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('Driverinfo/editDriverinfo')}" onsubmit="return check()" method="post" enctype="multipart/form-data">
+                <!--<div class="busi_input clearfix">
+                    <label>公司标识：</label>
+                    <input class="input_normal" type="text" name="CompanyId" value="{$list['companyid']}"   placeholder="请输入公司标识" title="请输入公司标识" ><span class="font"/>
+                </div>-->
+                <div class="box_fl">
+                    <div class="busi_input clearfix" >
+                        <label>司机姓名：</label>
+                        <input class="input_normal" type="text" name="drivername" value="{$list['drivername']}" placeholder="请输入司机姓名" title="请输入司机姓名" ><span class="font"/>
+                    </div>
+                    <div class="busi_input clearfix" >
+                        <label>联系电话：</label>
+                        <input class="input_normal" type="text"   name="phone" value="{$list['phone']}"  id="phone"  placeholder="请输入联系电话" title="请输入联系电话" ><span  class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>服务费用：</label>
+                        <input class="input_normal" type="text"   name="cost" id="cost" value="{$list['cost']}"   placeholder="请输入服务费" title="请输入服务费" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>注册地行政区划代码：</label>
+                        <input class="input_normal" type="text"   name="address" value="{$list['address']}"   placeholder="请输入注册地行政区划代码" title="请输入注册地行政区划代码" ><span class="font" />
+                    </div>
+                    <div class="busi_input clearfix" >
+                        <label>状态：</label>
+                        <select class="input_normal" name="state" id="state">
+                            <option value="{$list['state']}" selected="selected"><if condition ="$list['state'] == 0">空闲 <else/>代驾</if></option>
+                            <option value="0">空闲</option>
+                            <option value="1">代驾</option>
+                        </select>
+                        <span class="font" id="stateinfo"></span>
+                    </div>
+
+
+
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员照片：</label>
+                        <input class="input_normal" type="file"   name="PhotoId" />
+                        <span class="font" style="color: red;display: block;margin-left: 49%">文件:{$list['photoid']}</span>
+                        <br/>
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>性别：</label>
+                        <select class="input_normal" name="DriverGender">
+                            <option value="{$list['drivergender']}" selected="selected"><if condition ="$list['drivergender'] == 0">男 <else/>女</if></option>
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>身份证号：</label>
+                        <input class="input_normal" type="text" id="idCard"  value="{$list['idcard']}"  name="idCard"  placeholder="请输入身份证号" title="请输入身份证号码" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>机动车驾驶证号：</label>
+                        <input class="input_normal" type="text"   value="{$list['licenseid']}" name="LicenseId"  placeholder="请输入机动车驾驶证号" title="请输入机动车驾驶证号" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>国籍：</label>
+                        <input class="input_normal" type="text" value="{$list['drivernationality']}"  name="DriverNationality"  placeholder="请输入国籍" title="请输入国籍" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员民族：</label>
+                        <!--<input class="input_normal" type="text" value="{$list['drivernation']}"  name="DriverNation"  placeholder="请输入驾驶员民族" title="请输入驾驶员民族" ><span class="font" />-->
+                        <select name="DriverNation" class="input_normal" id="DriverNation">
+                            <option <if condition ="$list.drivernation eq '汉族'">selected</if> value="汉族">汉族</option>
+                            <option <if condition ="$list.drivernation eq '蒙古族'">selected</if> value="蒙古族">蒙古族</option>
+                            <option <if condition ="$list.drivernation eq '回族'">selected</if> value="回族">回族</option>
+                            <option <if condition ="$list.drivernation eq '藏族'">selected</if> value="藏族">藏族</option>
+                            <option <if condition ="$list.drivernation eq '维吾尔族'">selected</if> value="维吾尔族">维吾尔族</option>
+                            <option <if condition ="$list.drivernation eq '苗族'">selected</if> value="苗族">苗族</option>
+                            <option <if condition ="$list.drivernation eq '彝族'">selected</if> value="彝族">彝族</option>
+                            <option <if condition ="$list.drivernation eq '壮族'">selected</if> value="壮族">壮族</option>
+                            <option <if condition ="$list.drivernation eq '布依族'">selected</if> value="布依族">布依族</option>
+                            <option <if condition ="$list.drivernation eq 朝鲜族">selected</if> value="朝鲜族">朝鲜族</option>
+                            <option <if condition ="$list.drivernation eq 满族">selected</if> value="满族">满族</option>
+                            <option <if condition ="$list.drivernation eq 侗族">selected</if> value="侗族">侗族</option>
+                            <option <if condition ="$list.drivernation eq 瑶族">selected</if> value="瑶族">瑶族</option>
+                            <option <if condition ="$list.drivernation eq 白族">selected</if> value="白族">白族</option>
+                            <option <if condition ="$list.drivernation eq 土家族">selected</if> value="土家族">土家族</option>
+                            <option <if condition ="$list.drivernation eq 哈尼族">selected</if> value="哈尼族">哈尼族</option>
+                            <option <if condition ="$list.drivernation eq 哈萨克族">selected</if> value="哈萨克族">哈萨克族</option>
+                            <option <if condition ="$list.drivernation eq 泰族">selected</if> value="泰族">泰族</option>
+                            <option <if condition ="$list.drivernation eq 黎族">selected</if> value="黎族">黎族</option>
+                            <option <if condition ="$list.drivernation eq 傈僳族">selected</if> value="傈僳族">傈僳族</option>
+                            <option <if condition ="$list.drivernation eq 佤族">selected</if> value="佤族">佤族</option>
+                            <option <if condition ="$list.drivernation eq 畲族">selected</if> value="畲族">畲族</option>
+                            <option <if condition ="$list.drivernation eq 高山族">selected</if> value="高山族">高山族</option>
+                            <option <if condition ="$list.drivernation eq 拉祜族">selected</if> value="拉祜族">拉祜族</option>
+                            <option <if condition ="$list.drivernation eq 水族">selected</if> value="水族">水族</option>
+                            <option <if condition ="$list.drivernation eq 东乡族">selected</if> value="东乡族">东乡族</option>
+                            <option <if condition ="$list.drivernation eq 纳西族">selected</if> value="纳西族">纳西族</option>
+                            <option <if condition ="$list.drivernation eq 景颇族">selected</if> value="景颇族">景颇族</option>
+                            <option <if condition ="$list.drivernation eq 柯尔克孜族">selected</if> value="柯尔克孜族">柯尔克孜族</option>
+                            <option <if condition ="$list.drivernation eq 土族">selected</if> value="土族">土族</option>
+                            <option <if condition ="$list.drivernation eq 达斡尔族">selected</if> value="达斡尔族">达斡尔族</option>
+                            <option <if condition ="$list.drivernation eq 仫佬族">selected</if> value="仫佬族">仫佬族</option>
+                            <option <if condition ="$list.drivernation eq 羌族">selected</if> value="羌族">羌族</option>
+                            <option <if condition ="$list.drivernation eq 布朗族">selected</if> value="布朗族">布朗族</option>
+                            <option <if condition ="$list.drivernation eq 撒拉族">selected</if> value="撒拉族">撒拉族</option>
+                            <option <if condition ="$list.drivernation eq 毛难族">selected</if> value="毛难族">毛难族</option>
+                            <option <if condition ="$list.drivernation eq 仡佬族">selected</if> value="仡佬族">仡佬族</option>
+                            <option <if condition ="$list.drivernation eq 锡伯族">selected</if> value="锡伯族">锡伯族</option>
+                            <option <if condition ="$list.drivernation eq 阿昌族">selected</if> value="阿昌族">阿昌族</option>
+                            <option <if condition ="$list.drivernation eq 普米族">selected</if> value="普米族">普米族</option>
+                            <option <if condition ="$list.drivernation eq 塔吉克族">selected</if> value="塔吉克族">塔吉克族</option>
+                            <option <if condition ="$list.drivernation eq 怒族">selected</if> value="怒族">怒族</option>
+                            <option <if condition ="$list.drivernation eq 乌孜别克族">selected</if> value="乌孜别克族">乌孜别克族</option>
+                            <option <if condition ="$list.drivernation eq 俄罗斯族">selected</if> value="俄罗斯族">俄罗斯族</option>
+                            <option <if condition ="$list.drivernation eq 鄂温克族">selected</if> value="鄂温克族">鄂温克族</option>
+                            <option <if condition ="$list.drivernation eq 崩龙族">selected</if> value="崩龙族">崩龙族</option>
+                            <option <if condition ="$list.drivernation eq 保安族">selected</if> value="保安族">保安族</option>
+                            <option <if condition ="$list.drivernation eq 裕固族">selected</if> value="裕固族">裕固族</option>
+                            <option <if condition ="$list.drivernation eq 京族">selected</if> value="京族">京族</option>
+                            <option <if condition ="$list.drivernation eq 塔塔尔族">selected</if> value="塔塔尔族">塔塔尔族</option>
+                            <option <if condition ="$list.drivernation eq 独龙族">selected</if> value="独龙族">独龙族</option>
+                            <option <if condition ="$list.drivernation eq 鄂伦春族">selected</if> value="鄂伦春族">鄂伦春族</option>
+                            <option <if condition ="$list.drivernation eq 赫哲族">selected</if> value="赫哲族">赫哲族</option>
+                            <option <if condition ="$list.drivernation eq 门巴族">selected</if> value="门巴族">门巴族</option>
+                            <option <if condition ="$list.drivernation eq 珞巴族">selected</if> value="珞巴族">珞巴族</option>
+                            <option <if condition ="$list.drivernation eq 基诺族">selected</if> value="基诺族">基诺族</option>
+                            <option <if condition ="$list.drivernation eq 其他">selected</if> value="其他">其他</option>
+                            <option <if condition ="$list.drivernation eq 外国血统中国籍人士">selected</if> value="外国血统中国籍人士">外国血统中国籍人士</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>驾驶员婚姻状态：</label>
+                        <select class="input_normal" name="DriverMaritalStatus">
+                            <option value="{$list['drivermaritalstatus']}" selected="selected">
+                                <switch name="list.drivermaritalstatus" >
+                                    <case value="0">未婚</case>
+                                    <case value="1">已婚</case>
+                                    <case value="2">离异</case>
+                                    <default />未知状态
+                                </switch>
+                            </option>
+                            <option value="0">未婚</option>
+                            <option value="1">已婚</option>
+                            <option value="2">离异</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员外语能力：</label>
+                        <input class="input_normal" type="text"  value="{$list['driverlanguagelevel']}"  name="DriverLanguageLevel"  placeholder="请输入驾驶员外语能力" title="请输入驾驶员外语能力" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员学历：</label>
+                        <!--<input class="input_normal" type="text" value="{$list['drivereducation']}"  name="DriverEducation"  placeholder="请输入驾驶员学历" title="请输入驾驶员学历" ><span class="font" />-->
+                        <select class="input_normal" name="DriverEducation" id="DriverEducation">
+                            <option value="18" <if condition ="$list.drivereducation eq 18">selected</if>>研究生班结业</option>
+                            <option value="19" <if condition ="$list.drivereducation eq 19">selected</if>>研究生班肄业</option>
+                            <option value="21" <if condition ="$list.drivereducation eq 21">selected</if>>大学本科毕业</option>
+                            <option value="22" <if condition ="$list.drivereducation eq 22">selected</if>>大学本科结业</option>
+                            <option value="23" <if condition ="$list.drivereducation eq 23">selected</if>>大学本科肄业</option>
+                            <option value="28" <if condition ="$list.drivereducation eq 28">selected</if>>大学普通版毕业</option>
+                            <option value="31" <if condition ="$list.drivereducation eq 31">selected</if>>大学专科毕业</option>
+                            <option value="32" <if condition ="$list.drivereducation eq 32">selected</if>>大学专科结业</option>
+                            <option value="33" <if condition ="$list.drivereducation eq 33">selected</if>>大学专科肄业</option>
+                            <option value="40" <if condition ="$list.drivereducation eq 40">selected</if>>中等职业教育</option>
+                            <option value="41" <if condition ="$list.drivereducation eq 41">selected</if>>中等专科毕业</option>
+                            <option value="42" <if condition ="$list.drivereducation eq 42">selected</if>>中等专科结业</option>
+                            <option value="43" <if condition ="$list.drivereducation eq 43">selected</if>>中等专科肄业</option>
+                            <option value="44" <if condition ="$list.drivereducation eq 44">selected</if>>职业高中毕业</option>
+                            <option value="45" <if condition ="$list.drivereducation eq 45">selected</if>>职业高中结业</option>
+                            <option value="46" <if condition ="$list.drivereducation eq 46">selected</if>>职业高中肄业</option>
+                            <option value="47" <if condition ="$list.drivereducation eq 47">selected</if>>技工学校毕业</option>
+                            <option value="48" <if condition ="$list.drivereducation eq 48">selected</if>>技工学校结业</option>
+                            <option value="60" <if condition ="$list.drivereducation eq 60">selected</if>>普通高级中学教育</option>
+                            <option value="61" <if condition ="$list.drivereducation eq 61">selected</if>>普通高中毕业</option>
+                            <option value="62" <if condition ="$list.drivereducation eq 62">selected</if>>普通高中结业</option>
+                            <option value="63" <if condition ="$list.drivereducation eq 63">selected</if>>普通高中肄业</option>
+                            <option value="70" <if condition ="$list.drivereducation eq 70">selected</if>>初中中学教育</option>
+                            <option value="71" <if condition ="$list.drivereducation eq 71">selected</if>>初中毕业</option>
+                            <option value="73" <if condition ="$list.drivereducation eq 73">selected</if>>初中肄业</option>
+                            <option value="80" <if condition ="$list.drivereducation eq 80">selected</if>>小学教育</option>
+                            <option value="81" <if condition ="$list.drivereducation eq 81">selected</if>>小学毕业</option>
+                            <option value="83" <if condition ="$list.drivereducation eq 83">selected</if>>小学肄业</option>
+                            <option value="90" <if condition ="$list.drivereducation eq 90">selected</if>>其他</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>户口登记机关名称：</label>
+                        <input class="input_normal" type="text"  value="{$list['drivercensus']}" name="DriverCensus"  placeholder="请输入户口登记机关名称" title="请输入户口登记机关名称" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>户口住址或常驻地址：</label>
+                        <input class="input_normal" type="text" value="{$list['driveraddress']}"  name="DriverAddress"  placeholder="请输入户口住址或常驻地址" title="请输入户口住址或常驻地址" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员通信地址：</label>
+                        <input class="input_normal" type="text"  value="{$list['drivercontactadress']}"  name="DriverContactAdress"  placeholder="请输入驾驶员通信地址" title="请输入驾驶员通信地址" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>机动车驾驶证扫描件文件编号：</label>
+                        <input class="input_normal" type="file"  value="{$list['licensephotoid']}"   name="LicensePhotoId"  placeholder="请输入机动车驾驶证扫描件文件编号" title="请输入机动车驾驶证扫描件文件编号" ><span class="font" />
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>准驾车型：</label>
+                        <select class="input_normal" name="DriverType" id="DriverType">
+                            <option value="A1" <if condition ="$list.drivertype eq A1">selected</if>>大型客车(A1)</option>
+                            <option value="A2" <if condition ="$list.drivertype eq A2">selected</if>>牵引车(A2)</option>
+                            <option value="A3" <if condition ="$list.drivertype eq A3">selected</if>>城市公交(A3)</option>
+                            <option value="B1" <if condition ="$list.drivertype eq B1">selected</if>>中型客车(B1)</option>
+                            <option value="B2" <if condition ="$list.drivertype eq B2">selected</if>>大型货车(B2)</option>
+                            <option value="C1" <if condition ="$list.drivertype eq C1">selected</if>>小型汽车(C1)</option>
+                            <option value="C2" <if condition ="$list.drivertype eq C2">selected</if>>小型自动挡汽车(C2)</option>
+                        </select>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>初次领取驾驶证日期：</label>
+                        <input class="input_normal" type="text" value="{$list['getdriverlicensedate']}"  name="GetDriverLicenseDate"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"    onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+                </div>
+                <div class="box_fl">
+                    <div class="busi_input clearfix" >
+                        <label>驾驶证有效期限起：</label>
+                        <input class="input_normal" type="text"  value="{$list['driverlicenseon']}" name="DriverLicenseOn"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>驾驶证有效期限止：</label>
+                        <input class="input_normal" type="text" value="{$list['driverlicenseoff']}"  name="DriverLicenseOff"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+
+                    <div class="busi_input clearfix" >
+                        <label>是否巡游出租汽车驾驶员：</label>
+                        <select class="input_normal" name="TaxiDriver">
+                            <option value="{$list['taxidriver']}" selected="selected"><if condition ="$list['taxidriver'] == 0">否 <else/>是</if></option>
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+
+
+                    <div class="busi_input clearfix" >
+                        <label>网络预约出租汽车驾驶员资格证号：</label>
+                        <input class="input_normal" type="text"  value="{$list['certificateno']}"   name="CertificateNo"  placeholder="请输入网络预约出租汽车驾驶员资格证号" title="请输入网络预约出租汽车驾驶员资格证号" ><span class="font"></span>
+                    </div>
+
+
+                    <div class="busi_input clearfix" >
+                        <label>网络预约出租汽车驾驶员证发证机构：</label>
+                        <input class="input_normal" type="text"  value="{$list['networkcarissueorganization']}" name="NetworkCarIssueOrganization"  placeholder="请输入网络预约出租汽车驾驶员证发证机构" title="请输入网络预约出租汽车驾驶员证发证机构" ><span class="font" ></span>
+                    </div>
+
+
+                    <div class="busi_input clearfix">
+                        <label>资格证发证日期：</label>
+                        <input class="input_normal" type="text" value="{$list['networkcarissuedate']}"  name="NetworkCarIssueDate"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>初次领取资格证日期：</label>
+                        <input class="input_normal" type="text" value="{$list['getnetworkcarproofdate']}" name="GetNetworkCarProofDate"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>资格证有效起始日期：</label>
+                        <input class="input_normal" type="text" value="{$list['networkcarproofon']}" name="NetworkCarProofOn"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>资格证有效截止日期：</label>
+                        <input class="input_normal" type="text" value="{$list['networkcarproofoff']}" name="NetworkCarProofOff"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>报备日期：</label>
+                        <input class="input_normal" type="text" value="{$list['registerdate']}" name="RegisterDate"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>服务类型：</label>
+                        <select class="input_normal" name="CommercialType">
+                            <option value="{$list['commercialtype']}" selected="selected">
+                                <switch name="list.commercialtype" >
+                                    <case value="1">网络预约出租汽车</case>
+                                    <case value="2">巡游出租汽车</case>
+                                    <case value="3">私人小客车合乘</case>
+                                    <default />未知状态
+                                </switch>
+                            </option>
+                            <option value="1">网络预约出租汽车</option>
+                            <option value="2">巡游出租汽车</option>
+                            <option value="3">私人小客车合乘</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+
+
+                    <div class="busi_input clearfix" >
+                        <label>驾驶员合同（或协议）签署公司：</label>
+                        <input class="input_normal" type="text"  value="{$list['contractcompany']}"   name="ContractCompany"  placeholder="请输入驾驶员合同（或协议）签署公司" title="请输入驾驶员合同（或协议）签署公司" ><span class="font"></span>
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>合同（或协议）有效期起：</label>
+                        <input class="input_normal" type="text" value="{$list['contracton']}"  name="ContractOn"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>合同（或协议）有效期止：</label>
+                        <input class="input_normal" type="text" value="{$list['contractoff']}"  name="ContractOff"  style="width: 300px;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>紧急情况联系人：</label>
+                        <input class="input_normal" type="text"  value="{$list['emergencycontact']}" name="EmergencyContact"  placeholder="请输入紧急情况联系人" title="请输入紧急情况联系人" ><span class="font" ></span>
+                    </div>
+                    <div class="busi_input clearfix" >
+                        <label>紧急情况联系人电话：</label>
+                        <input class="input_normal" type="text" value="{$list['emergencycontactphone']}"   name="EmergencyContactPhone"  placeholder="请输入紧急情况联系人电话号" title="请输入紧急情况联系人电话" ><span class="font"></span>
+                    </div>
+                    <div class="busi_input clearfix" >
+                        <label>紧急情况联系人通信地址：</label>
+                        <input class="input_normal" type="text"  value="{$list['emergencycontactaddress']}" name="EmergencyContactAddress"  placeholder="请输入紧急情况联系人通信地址" title="请输入紧急情况联系人通信地址" ><span class="font" ></span>
+                    </div>
+
+
+                    <div class="busi_input clearfix">
+                        <label>是否专职驾驶员：</label>
+                        <select class="input_normal" name="FullTimeDriver">
+                            <option value="{$list['fulltimedriver']}" selected="selected"><if condition ="$list['fulltimedriver'] == 0">否 <else/>是</if></option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+
+                    <div class="busi_input clearfix" >
+                        <label>是否在驾驶员黑名单内：</label>
+                        <select class="input_normal" name="InDriverBlacklist">
+                            <option value="{$list['infriverblacklist']}" selected="selected"><if condition ="$list['infriverblacklist'] == 0">否 <else/>是</if></option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                        <span class="font"></span>
+                    </div>
+                </div>
+                    <div class="busi_input sub_box">
+                        <label class="busi_bz">&nbsp;</label>
+                        <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+                        <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重填</button>
+                    </div>
+
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+</html>
+<script type="text/javascript">
+    $(function () {
+        $('#idCard').blur(function () {
+            var str = $(this).val();
+            if (str.length != 18){
+                alert('请输入18位正确的身份证号');
+            }
+
+        });
+    })
+</script>

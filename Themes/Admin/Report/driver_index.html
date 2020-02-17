@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>驾驶员报备信息异常记录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <style>
+        .excel-but {margin-left: 1em}
+        .excel-box {background-color: white;position:fixed;z-index: 5;margin-left:39.5%;padding: 20px;border-radius:5px;height: 150px}
+        .excel-box input {border: 1px solid lightgrey;}
+        .excel-box div {margin-bottom: 5px;}
+        .excel-title {text-align: center;font-weight:bold;font-size: 1.1em}
+        .file-box {width: 174px}
+        .excel-sub-box {text-align: center;margin-top: 15px}
+        .excel-sub-box input {margin: 0 10px;background-color: lightskyblue;width: 50px;height: 20px;color: white;border: none}
+        .excel-sub-box input:hover {background-color: #00a0e9}
+    </style>
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        驾驶员报备信息异常记录
+    </h3>
+    <span class="add-car fr">
+        <if condition="checkAuth('Report/car_index')">
+            <a href="{:U('Report/car_index')}" title="区域信息管理">车辆报备信息异常记录</a>
+        </if>
+    </span>
+</div>
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 96%;background: black;opacity: 0.6;display: none"></div>
+<div class="formbody" id="print_box">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1031px;height: 20px;margin-top: 16px" >
+        <form action="{:U('Report/driver_index')}" method="get" style="position: absolute;">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select"  style="width: 200px;" id="query_class">
+                    <option selected="selected" value="">请选择分类查询</option>
+                    <option value="0" <if condition ="$res.select eq 0">selected</if>>驾驶员</option>
+                    <option value="1" <if condition ="$res.select eq 1">selected</if>>驾驶证号</option>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;" id="key"  name="key" value="{$res.key}" placeholder="请输入查询条件" title="请输入查询条件" >
+
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <input type="text" value="时间区间" class="input_normal" style="width: 72px;margin-left: 10px"/>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$res.start neq 0'>{$res.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$res.stop neq 0'>{$res.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+                <input type="button" value="导出excel" class="btn-submit excel-but" />
+                <input type="button" value="打印" id="print" class="btn-submit excel-but" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <table  class="tablelist">
+        <thead>
+        <tr style="align: center; font-size: 16px;" >
+            <th style="width: 130px;">序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i></th>
+            <th>驾驶员id</th>
+            <th>驾驶员姓名</th>
+            <th>驾驶证号</th>
+            <th>异常信息个数</th>
+            <th>异常信息详情</th>
+            <th>记录时间</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的记录
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr>
+                    <td>{$temp['id']}</td>
+                    <td>{$temp['driverid']}</td>
+                    <td>{$temp['drivername']}</td>
+                    <td>{$temp['licenseid']}</td>
+                    <td>{$temp['times']}</td>
+                    <td>
+                        异常信息:
+                        <volist name="temp.content" id="data">
+                            {$data.name}--{$data.false}(有误)&nbsp&nbsp
+                        </volist>
+                    </td>
+                    <td>{$temp['addtime']}</td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<div class="excel-box" style="display: none">
+    <div>
+        <form action="{:U('Report/excelDriver')}" method="post">
+            <div class="excel-title">导出excel文件设置</div>
+            <div>
+                <label>文件名称:</label>
+                <input type="text" name="file_name" class="file-box" placeholder="请输入生成文件名称">
+            </div>
+            <div>
+                <label>生成文件类型:</label>
+                <input type="radio" checked  name="ex_type" value="0">excel2003
+                <input type="radio" name="ex_type" value="1">excel2007
+            </div>
+            <div class="excel-sub-box">
+                <input type="submit" value="导出">
+                <input type="button" id="excel-cancel" value="取消">
+            </div>
+        </form>
+    </div>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>
+
+<script>
+    $(function () {
+        //批量删除
+        new DelAll({
+            "allClass":$('.all'),
+            "listClass":$('.cBox'),
+            "delAllBtn":$('.del-all-btn'),
+            "delUrl":"delAll",
+            "listCheckboxName":"ids[]",
+            "imgUrl":"../../../Public/images"
+        });
+
+        $('.excel-but').on('click',function () {
+            $('#query_l').show();
+            $('.excel-box').show();
+            $('.file-box').val('驾驶员异常信息记录'+timeDate());
+        });
+        
+        $('#excel-cancel, #query_l').on('click',function () {
+            $('#query_l').hide();
+            $('.excel-box').hide();
+        });
+
+        //打印
+        $('#print').on('click',function () {
+            $('#form-section').html('车辆报备信息预警记录');
+            $('#form-section').css({'text-align':'center','margin-top':'20px',});
+            document.body.innerHTML=document.getElementById('print_box').innerHTML;
+            window.print();
+            location.reload();
+        });
+    });
+
+    //将时间戳转换为指定格式的时间
+    function timeDate() {
+        var date = 0;
+        var now = new Date();
+        var   y = (now.getYear()).toString();
+        y = y[1]+y[2];
+        var   yf = (now.getFullYear());
+        var   m = (now.getMonth()+1);
+        var   d = (now.getDate());
+        var   h = (now.getHours());
+        var   i = (now.getMinutes());
+        var   s = (now.getSeconds());
+        if (m<10){m = '0'+m;}
+        if (d<10){d = '0'+d;}
+        if (h<10){h = '0'+h;}
+        if (i<10){i = '0'+i;}
+        if (s<10){s = '0'+s;}
+
+        date = yf+m+d+h+i+s;
+        return   date;
+    };
+
+</script>

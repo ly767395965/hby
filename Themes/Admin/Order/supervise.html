@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>取车前流程管理</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        订单管理列表
+    </h3>
+    <span id="functionarea" class="add-car fr">
+            <if condition="checkAuth('CarinfoManage/addCarinfoManage')">
+                <a href="{:U('Order/add')}" title="添加订单">添加订单</a>
+            </if>
+        </span>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1006px;height: 20px;" >
+        <form action="{:U('Order/supervise')}" method="get" style="position: absolute;height: 50px">
+            <input type="hidden" value="{$act}" id="act" name="act">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select" id="select" style="width: 200px;">
+                    <if condition ="$msg.select eq 0"><option selected value="0">订单号</option><else/><option value="0">订单号</option></if>
+                    <if condition ="$msg.select eq 1"><option selected value="1">客户</option><else/><option value="1">客户</option></if>
+                    <if condition ="$msg.select eq 2"><option selected value="2">车型</option><else/><option value="2">车型</option></if>
+                    <if condition ="$msg.select eq 3"><option selected value="3">订单状态</option><else/><option value="3">订单状态</option></if>
+                    <if condition ="$msg.select eq 4"><option selected value="4">账号/手机</option><else/><option value="4">账号/手机</option></if>
+                    <if condition ="$msg.select eq 5"><option selected value="5">车牌号</option><else/><option value="5">车牌号</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;display: none" value="{$msg.key}"  name="key" id="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                <select class="input_normal" name="key_state" id="key_state" style="width: 200px;display: none">
+                    <!--<option <if condition ="$msg.key eq 0">selected</if> value="0">未支付</option>-->
+                    <option <if condition ="$msg.key eq 1">selected</if> value="1">已支付</option>
+                    <option <if condition ="$msg.key eq 2">selected</if> value="2">已派车</option>
+                    <option <if condition ="$msg.key eq 3">selected</if> value="3">已取车</option>
+                    <!--<option <if condition ="$msg.key eq 4">selected</if> value="4">已还车</option>-->
+                    <!--<option <if condition ="$msg.key eq 5">selected</if> value="5">已结账</option>-->
+                    <!--<option <if condition ="$msg.key eq 6">selected</if> value="6">同意退押</option>-->
+                    <!--<option <if condition ="$msg.key eq 7">selected</if> value="7">正常结单</option>-->
+                    <option <if condition ="$msg.key eq 11">selected</if> value="11">申请退款</option>
+                </select>
+
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <select class="input_normal" name="select_time"  style="width: 80px;">
+                        <option <if condition ="$msg.select_time eq 0">selected</if> value="0">下单时间</option>
+                        <option <if condition ="$msg.select_time eq 1">selected</if> value="1">取车时间</option>
+                        <option <if condition ="$msg.select_time eq 2">selected</if> value="2">还车时间</option>
+                    </select>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th style="width: 70px;">编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th style="width: 50px">客户</th>
+            <th style="width: 100px">联系方式</th>
+            <th>车型</th>
+            <th style="width: 186px">订单号</th>
+            <th style="width: 80px">车辆牌照</th>
+            <th style="width: 135px">取车时间</th>
+            <th style="width: 135px">还车时间</th>
+            <th>车辆单价</th>
+            <th>预付金额</th>
+            <th>应收金额</th>
+            <th>补交金额</th>
+            <th>违章押金</th>
+            <th>是否代驾</th>
+            <th>取车方式</th>
+            <th style="width: 135px">下单时间</th>
+            <th>订单状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到需要处理的订单
+            </div>
+            <else/>
+
+            <volist name="list" id="temp">
+                <tr>
+                    <td style="padding-left: 5px"><a href="{:U('Order/orderInfo')}?id={$temp['id']}">{$temp['id']}</a></td>
+                    <td><a href="{:U('Member/Index')}">{$temp.username}</a></td>
+                    <td><a href="{:U('Member/Index')}">{$temp.phone}</a></td>
+                    <td><a href="{:U('car_model/Index')}">{$temp.carmodelname}</a></td>
+                    <td><a href="{:U('Order/orderInfo')}?id={$temp['id']}">{$temp.order_code}</a></td>
+                    <td><a href="{:U('carinfo_manage/Index')}">{$temp.carno}</a></td>
+                    <td>{$temp.pk_date}</td>
+                    <td>{$temp.re_date}</td>
+                    <td>{$temp.u_price}</td>
+                    <td>{$temp.pre_price}</td>
+                    <td>{$temp.price_rec}</td>
+                    <td>{$temp.price_paided}</td>
+                    <td>{$temp.deposit}</td>
+                    <td><if condition ="$temp['drive_state']==0">无代驾<else/>代驾</if></td>
+                    <td><if condition ="$temp['pk_way']==1">自取<else/>送车上门</if></td>
+                    <td>{$temp.order_date}</td>
+                    <td>
+                        <switch name="temp.order_state" >
+                            <case value="0">未支付</case>
+                            <case value="1">已支付</case>
+                            <case value="2">已派车</case>
+                            <case value="3">已取车</case>
+                            <case value="4">已还车</case>
+                            <case value="5">已结账</case>
+                            <case value="6">已结单</case>
+                            <case value="10">订单取消</case>
+                            <case value="11">退款申请</case>
+                            <case value="12">同意退款</case>
+                            <case value="13">退款完成</case>
+                            <default />未知
+                        </switch>
+                    </td>
+                    <td class="tools">
+                        <ul class="toolbar">
+                            <!--为派车并且订单状态小于3(3为以取车)-->
+                            <if condition = "$temp.order_state lt 3 && !$temp['car_id']">
+                                <li class="click" style="width: 65px">
+                                    <a  href="{:U('Order/supervise')}?id={$temp['id']}&action=send" >
+                                        <img src="__PUBLIC__/images/t02.png"  />派车
+                                    </a>
+                                </li>
+                            </if>
+                            <!--订单状态小于3,并且已派车,并且(无需代驾或者已分配代驾)-->
+                            <if condition="$temp.order_state lt 3 && $temp['car_id'] && (($temp['drive_state'] eq 0) || ($temp['drive_state'] eq 1 && $temp['be_driver']))">
+                                <if condition="$temp['pk_way']==1">
+                                    <li class="click" style="width: 65px">
+                                        <a style="color: green;" href="{:U('Order/supervise')}?id={$temp['id']}&action=take_car" >
+                                            <img src="__PUBLIC__/images/t02.png"  />客户取车
+                                        </a>
+                                    </li>
+                                    <else/>
+                                    <li class="click" style="width: 65px">
+                                        <a style="color: green;" href="{:U('Order/supervise')}?id={$temp['id']}&action=give_car" >
+                                            <img src="__PUBLIC__/images/t02.png"  />送车上门
+                                        </a>
+                                    </li>
+                                </if>
+                            </if>
+                            <if condition="$temp.order_state eq 11">
+                                <li class="click" style="width: 65px; ">
+                                    <a  href="javascript:MscBox('系统信息',t[0],'提示：是否退款？','确定退款,取消关闭','{:U('order_ope')}?id={$temp['id']}&action=refund')" style="color: red;">
+                                        <img src="__PUBLIC__/images/t02.png"  />退款申请
+                                    </a>
+                                </li>
+                            </if>
+
+                            <if condition="checkAuth('order/order_ope')">
+                                <if condition=" $temp['order_state'] lt 4 ">
+                                    <a  href="javascript:MscBox('系统信息',t[0],'提示：是否进行代驾操作？','','{:U('supervise')}?id={$temp['id']}&action=driver')" >
+                                        <li style="width: 65px;text-align: center"> 代驾操作</li>
+                                    </a>
+                                </if>
+                            </if>
+
+                            <if condition="checkAuth('Order/editOrder')">
+                                <if condition="$temp['order_state']==0">
+                                    <a href="javascript:MscBox('系统信息',t[0],'提示：是否取消订单？','确定取消,取消关闭','{:U('order_ope')}?id={$temp['id']}&action=cancel')" >
+                                        <li style="width: 65px;text-align: center"> 取消订单</li>
+                                    </a>
+                                </if>
+                                <if condition="($temp['order_state'] gt 0) && ($temp['order_state'] lt 3)">
+                                    <a  href="javascript:MscBox('系统信息',t[0],'提示：是否退款？','确定退款,取消关闭','{:U('order_ope')}?id={$temp['id']}&action=refund')" >
+                                        <li style="width: 65px;text-align: center"> 申请退款</li>
+                                    </a>
+                                </if>
+                            </if>
+
+                        </ul>
+                    </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        var select = $('#select').val();
+        condition(select);                         //根据不同的筛选条件设定初始条件
+
+        $('#select').change(function () {
+            var select = $('#select').val();
+            change_se();                          //同步筛选条件,并初始条件的隐藏属性
+            condition(select);                    //根据不同的筛选条件设定初始条件
+        });
+
+//        根据不同的筛选条件设定初始条件
+        function condition(select) {
+            if (select == '6'){
+                $('#key_check').css('display','block');
+
+            }else if (select == 3){
+                $('#key_state').css('display','block');
+            }else{
+                $('#key').css('display','block');
+                $('#key').val('');
+            }
+        }
+//        同步筛选条件,并初始条件的隐藏属性
+        function change_se() {
+            $('#key_check').css('display','none');
+            $('#key').css('display','none');
+            $('#key_state').css('display','none');
+
+        }
+
+    });
+
+</script>

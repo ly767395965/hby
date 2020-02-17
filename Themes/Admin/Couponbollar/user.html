@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>优惠劵领取人</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        优惠劵领取人
+    </h3>
+</div>
+<form class="register-form" name="CarModelForm" id="CarModelForm" action="__SELF__" method="post" enctype="multipart/form-data">
+    <div class="busi_input clearfix" style="margin: 20px 15px;">
+
+        <select class="input_normal" name="select" style=" width: 100px;height: 32px;line-height: 32px;border-top: solid 1px #a7b5bc;border-left: solid 1px #a7b5bc;border-right: solid 1px #ced9df;border-bottom: solid 1px #ced9df;background: url(../images/inputbg.gif) repeat-x;text-indent: 10px;"  id="select">
+            <option value="0" <eq name="msg['select']" value="0" >selected</eq>>领取人</option>
+            <option value="1" <eq name="msg['select']" value="1" >selected</eq>>领取时间段</option>
+            <option value="2" <eq name="msg['select']" value="2" >selected</eq>>使用情况</option>
+        </select>
+        <div class="key" id="nom_key">
+            <input type="text" value="{$msg['key']}" placeholder="请输入查询条件" name="key" id="key" style="width: 300px;height: 32px;line-height: 32px;border-top: solid 1px #a7b5bc;border-left: solid 1px #a7b5bc;border-right: solid 1px #ced9df;border-bottom: solid 1px #ced9df;background: url(../images/inputbg.gif) repeat-x;text-indent: 10px;float: left;margin-left: 2px">
+        </div>
+        <div class="key" id="time_key" style="display: none">
+            <input class="input_normal" type="text"   name="start" style="width: 150px;height: 32px" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+            <input class="input_normal" type="text"   name="stop" style="width: 150px;height: 32px" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+        </div>
+        <div class="key" id="use_key" style="display: none">
+            <select class="input_normal" name="use_key" style="height: 32px;width: 300px">
+                <option value="0" <eq name="msg['use_key']" value="0" >selected</eq>>未使用</option>
+                <option value="1" <eq name="msg['use_key']" value="1" >selected</eq>>已使用</option>
+            </select>
+        </div>
+
+
+
+        <input type="submit" value="查询" style="width: 85px;height: 35px;    background: url(__PUBLIC__/images/btnbg.png) no-repeat center; margin-left:20px;font-size: 14px;font-weight: bold;color: #fff;cursor: pointer;border-radius: 3px;"/>
+    </div>
+</form>
+<div class="formbody">
+    <table  class="tablelist" width="100%">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th>序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i></th>
+            <th>领取人</th>
+            <th>联系方式</th>
+            <th>领取时间</th>
+            <th>截止期限</th>
+            <!--<th>最低消费金额</th>-->
+            <th>优惠方式</th>
+            <th>类型</th>
+            <th>使用情况</th>
+            <!--<th>发行状态</th>-->
+            <!--<th>操作</th>-->
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                该优惠劵还未有人领取
+            </div>
+            <else/>
+            <volist name="list" id="vo">
+                <tr>
+                    <td>{$vo['id']}</td>
+                    <td>{$vo['username']}</td>
+                    <td>{$vo['phone']}</td>
+                    <td>{$vo['receive_time']}</td>
+                    <td><if condition="$vo['termofvalidity'] eq '0000-00-00 00:00:00'">无限制<else/>{$vo['termofvalidity']}</if></td>
+                    <!--<td>{$vo['min_consume']}</td>-->
+                    <td>
+                        <switch name="vo.type" >
+                            <case value="0">优惠现金：￥{$vo['money']}</case>
+                            <case value="1">折扣优惠：{$vo['discount']}折</case>
+                            <case value="2">立即减免：￥{$vo['money']}</case>
+                            <default />异常
+                        </switch>
+                    </td>
+                    <td>
+                        <switch name="vo.type">
+                            <case value="1">折扣卷</case>
+                            <case value="0">现金卷</case>
+                            <case value="2">立即减免</case>
+                            <default />异常
+                        </switch>
+                    </td>
+                    <td>
+                        <switch name="vo.user_type">
+                            <case value="0">未使用</case>
+                            <case value="1">已使用</case>
+                            <case value="2">不可使用</case>
+                            <default />异常
+                        </switch>
+                    </td>
+                    <!--<td >
+                        <switch name="vo.issue_state">
+                            <case value="0">禁止发行</case>
+                            <case value="1"><span style="color: green">允许发行</span></case>
+                            <default />异常
+                        </switch>
+                    </td>-->
+
+                </tr>
+
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+<input type="hidden" value="{$msg['select']}" id="msg_select">
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        var val = $('#msg_select').val();
+        if (val != ''){
+            $('.key').hide();
+            $(".key:eq("+val+")").show();
+        }
+
+        $('#select').change(function () {
+            $('.key').hide();
+            var val = $(this).val();
+            $(".key:eq("+val+")").show();
+        })
+    });
+</script>

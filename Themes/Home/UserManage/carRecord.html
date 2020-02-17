@@ -1,0 +1,260 @@
+<meta charset="utf-8"/>
+<style>
+    .carcontent {
+        width: 100%;
+        height: 100%;
+    }
+
+    .carcontent td{
+        border: solid 1px black;
+    }
+
+    .carcontent table {
+        border-collapse:collapse;
+    }
+
+    #page {
+        float: right;
+    }
+    tr:hover{
+        background-color: #ff8800;
+    }
+</style>
+<div class="carcontent">
+    <h3>租车记录</h3>
+    <table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+        <tbody>
+        <tr align="center">
+            <td style="width: 23%;">订单号</td>
+            <td>下单时间</td>
+            <td>取车时间</td>
+            <td>还车时间</td>
+            <td style="width: 9%;">订单总金额</td>
+            <td style="width: 8%;">订单状态</td>
+            <td style="width: 15%;">操作</td>
+        </tr>
+        <volist name="list" id="temp">
+            <tr align="center">
+                <td>{$temp['order_code']}</td>
+                <td>{$temp['order_date']}</td>
+                <td>{$temp['pk_date']}</td>
+                <td>{$temp['re_date']}</td>
+                <td>￥{$temp['pre_price']}</td>
+                <td>
+                    <if condition="$temp['order_state'] ==0">
+                        未付款
+                    </if>
+                    <if condition="$temp['order_state'] ==1">
+                        已付款
+                    </if>
+                    <if condition="$temp['order_state'] ==2">
+                        已派车
+                    </if>
+                    <if condition="$temp['order_state'] ==3">
+                        已取车
+                    </if>
+                    <if condition="$temp['order_state'] ==4">
+                        已还车
+                    </if>
+
+                    <if condition="$temp['order_state'] ==5">
+                        已结账
+                    </if>
+                    <if condition="$temp['order_state'] ==6">
+                        正在退违章押金
+                    </if>
+
+                    <if condition="$temp['order_state'] ==7">
+                        已退违章押金
+                    </if>
+
+                    <if condition="$temp['order_state'] ==10">
+                        已取消
+                    </if>
+
+                    <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                        退款审核中
+                    </if>
+
+                    <if condition="$temp['order_state'] ==13" >
+                        已退款
+                    </if>
+
+                </td>
+                <td style="width: 15%;text-align: center;">
+                    <if condition="$temp['order_state'] gt 3 && $temp['order_state'] ==10 && $temp['pay_way'] gt 0">
+                        <a href="{:U('UserManage/refundApply')}?id={$temp['id']}" style="display: inline-block;">退款申请</a>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==0" >
+                        <span class="payselect" data-id="{$temp['id']}" style="cursor: pointer; display: inline-block;">付款</span> |
+                        <a href="{:U('UserManage/offOrder')}?id={$temp['id']}" style="display: inline-block;">取消</a>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                        <p style="cursor: pointer; display: inline-block;">退款审核中</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==2" >
+                        <p style="cursor: pointer; display: inline-block;">已派车</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==3" >
+                        <p style="cursor: pointer; display: inline-block;">已取车</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==4" >
+                        <p style="cursor: pointer; display: inline-block;">已还车</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==5" >
+                        <p style="cursor: pointer; display: inline-block;">待退违章押金</p>
+                    </if>
+                    <if condition="$temp['order_state'] ==6" >
+                        <p style="cursor: pointer; display: inline-block;">正在退违章押金</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==7" >
+                        <p style="cursor: pointer; display: inline-block;">已完结</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==13" >
+                        <p style="cursor: pointer; display: inline-block;">已完结</p>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==1">
+                        <a href="{:U('UserManage/offOrder')}?id={$temp['id']}" style="display: inline-block;">取消</a>
+                    </if>
+                    <if condition="$temp['order_state'] == 10 &&  $temp['pay_way'] == 0">
+                        <p style="cursor: pointer; display: inline-block;">已完结</p>
+                    </if>
+
+                    | <a href="{:U('UserManage/orderPage')}?id={$temp['id']}" style="display: inline-block;">详情</a>
+                </td>
+            </tr>
+        </volist>
+        </tbody>
+    </table>
+    <div class="curr-page" id="page">
+        {$page}
+    </div>
+</div>
+
+
+
+
+
+<div class="agree-bg">
+    <div class="agree-box">
+        <div class="agree-title">
+            <h3>选择支付方式</h3>
+            <span>&times;</span>
+        </div>
+        <div class="agree-list">
+            <div id="pay"  style="width: 400px;height: 75px!important;  float: left; display: block;margin-top: 10px; ">
+                <form action="" method="post">
+                    <label style="font: '微软雅黑', '宋体'; margin-left: 20px; font-size: 20px;  font-weight: bold;">支付平台：</label>
+                    <br/>
+                    <br/>
+                    <label><input type="radio"  name="pay[]" class="pays" value="Alipay" style="vertical-align: middle"/>支付宝</label>
+                    <label> <input type="radio" name="pay[]" class="pays" value="WeChat" style="vertical-align: middle" />微信</label>
+                    <br>
+                    <br>
+                    <span style="font-size: 20px; font-weight: bold;color: #606060;">订单总价：</span><span id="jiege" style="font-size: 18px;color: #f90;"> </span>
+                </form>
+
+                <br>
+                <!--提交支付信息表单-->
+                <form class="payclass" id="payclass" action="#" method="post">
+                    <input type="hidden" value="" name="ordernum" id="ordernum">
+                    <input type="hidden" name="WIDout_trade_no"  value="{$ordercode[0]['order_code']}">
+                    <input type="hidden" name="WIDsubject" value="华邦租车">
+                    <input type="hidden" name="WIDtotal_fee" value="{$total}">
+                    <input type="hidden" name="WIDbody" value="">
+                    <input type="submit" class="alipay" value="我要支付" style="width: 100px;height: 40px; background-color: #00a2e1; border: none; color:#fffdee;border-radius: 5px; "/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>-->
+
+<script>
+    $(function () {
+
+        $(".payselect").click(function () {
+            var order = $(this).attr("data-id");
+//            alert(order);
+            $.ajax({
+                type: "post",
+                url: "{:U('UserManage/pay')}",
+                data: {
+                    id : order,
+                },
+                success: function(data){
+                    $('#jiege').html('￥'+data.total);
+                    $("#ordernum").val(data.id);
+//                   console.log(data.id);
+                }
+            });
+
+            $(".agree-bg").fadeIn();
+            return false;
+        });
+
+        $(".agree-title span").click(function () {
+            $(".agree-bg").fadeOut();
+        });
+
+//        click为事件名，不需要改
+//        .curr_page表示class名，后面的a表示在这个class的div中给a标记添加click方法
+        $(document).on("click",".curr-page a",function(){
+
+            var pageOBJ = this;
+            var url = pageOBJ.href;
+            $.ajax({
+                type:'get',
+                url:url,
+                success:function (result) {
+                    //main是class名，即显示数据的这个div的class名
+
+                    $(".carcontent").html(result);
+
+//                    console.log(result);
+                }
+            });
+            return false;
+        })
+    });
+</script>
+
+<!--支付方式-->
+<script>
+    $(function () {
+
+        var clicknum = 0;
+
+        $('.pays').click(function () {
+            var Selected = $(this).val();
+            var zfb = '__APP__/Home/Pay/doAlipay';
+            var wx  = '__APP__/Home/WexinPay/index';
+            if (Selected == 'Alipay') {
+                $('.payclass').attr("action",zfb);
+            } else {
+                $('.payclass').attr("action", wx);
+            }
+            clicknum += 1;
+        });
+
+        $("form").submit(function(e){
+            var url = $(this).attr("action");
+            if (url=='#') {
+                alert('请选择支付方式!');
+                return false;
+            }
+
+        });
+
+    });
+
+</script>

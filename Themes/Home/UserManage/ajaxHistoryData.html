@@ -1,0 +1,250 @@
+<!--<ul class="title">-->
+<!--<li class="active">当前订单车辆轨迹</li>-->
+<!--<li id="active">历史订单车辆轨迹</li>-->
+<!--</ul>-->
+<table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+    <tbody>
+    <tr align="center" style="background: #e4f1f9">
+        <td style="width: 20%;">订单号</td>
+        <td style="width: 12%;">下单时间</td>
+        <td style="width: 12%;">取车时间</td>
+        <td style="width: 12%;">还车时间</td>
+        <td style="width: 9%;">车辆数量</td>
+        <td style="width: 8%;">订单状态</td>
+        <td style="width: 13%;">操作</td>
+    </tr>
+    <volist name="list" id="temp">
+        <tr align="center" id="tr">
+            <td class="details" data-id="{$temp['id']}" style="cursor: pointer;color: #00a2e1!important;">{$temp['order_code']} </td>
+            <td>{$temp['order_date']}</td>
+            <td>{$temp['pk_date']}</td>
+            <td>{$temp['re_date']}</td>
+            <td class="cartnumber">{$temp['cartnumber']}</td>
+            <td style="width: 140px;">
+                <if condition="$temp['usertype'] == 1">
+                    <!--大客户订单状态判断-->
+                    <if condition="$temp['order_state'] ==0">
+                        <span style="color: #ff8800">未付款</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==1">
+                        <span style="color: #00a2e1">已付款</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==2">
+                        <span style="color: #747474">已派车</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==3">
+                        <span style="color: #747474">已取车</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==4">
+                        <span style="color: #747474">已还车</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==7">
+                        <span style="color: #747474">已结账</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==13">
+                        <span style="color: #747474">已退款</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                        <span style="color: #747474">已结账(未结清)</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1" >
+                        <span style="color: #747474">已结账</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==10">
+                        <span style="color: #747474">已取消</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12">
+                        <span style="color: #747474">退款受理中</span>
+                    </if>
+                    <else/>
+                    <!--普通客户订单状态判断-->
+                    <if condition="$temp['order_state'] ==0">
+                        <span style="color: #ff8800">未付款</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] != 0">
+                        <span style="color: #00a2e1">已付款</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] == 0">
+                        <span style="color: #ff8800">未付款(可用车)</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==2">
+                        <span style="color: #747474">已派车</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==3">
+                        <span style="color: #747474">已取车</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==4">
+                        <span style="color: #747474">已还车</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                        <span style="color: #747474">已结账(未结清)</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1 || $temp['order_state'] ==5 && $temp['check_out'] ==3 || $temp['order_state'] ==5 && $temp['check_out'] ==4" >
+                        <span style="color: #747474">已结账</span>
+                    </if>
+                    <if condition="$temp['order_state'] ==6">
+                        <span style="color: #747474">正在处理违章</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==7">
+                        <span style="color: #747474">已退违章押金</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==10">
+                        <span style="color: #747474">已取消</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                        <span style="color: #747474">退款受理中</span>
+                    </if>
+
+                    <if condition="$temp['order_state'] ==13" >
+                        <span style="color: #747474">已退款</span>
+                    </if>
+                </if>
+
+            </td>
+            <td data-id="{$temp['id']}" class="cartLocation" ieminumber="{$temp['ieminumber']}" style="cursor: pointer;">
+                查看车辆当前位置
+            </td>
+        </tr>
+    </volist>
+
+    </tbody>
+</table>
+<style type="text/css">
+    .car_div{
+        width: 70%;
+        height: 300px;
+        background-color: #ccdbe4;
+        margin:-150px auto;
+        z-index: 99;
+        position: relative;
+        border: 5px solid #e5e5e5;
+
+
+    }
+
+    #close_button{
+        float: right;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+    #tab_title{
+        width: 80%;
+        height: 20px;
+        background-color: #9c9e9f;
+        margin: auto;
+
+
+    }
+    #tab_title tr th{
+        background-color: #dff0d8;
+        width: 20%;
+        height: 30px;
+        border: 3px solid #ddd;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    #div_content{
+        width: 80%;
+        height: 250px;
+        margin: auto;
+        overflow-y: auto;
+    }
+    #tab_content{
+        width: 98%;
+        height: 5px;
+        background-color: #f9f9f9;
+        margin: auto;
+
+    }
+    .review{
+        cursor: pointer;
+    }
+    #tab_content tr td{
+        border: 3px solid #66677c;
+        text-align: center;
+    }
+    .txtcolor{
+        color: red;
+    }
+</style>
+<div class="car_div" style="display: none">
+    <span id="close_button"><img src="__PUBLIC__/images/close_button.png" width="32" height="32"/></span>
+    <table id="tab_title">
+        <tr>
+            <th>车牌号</th>
+            <th>是否代驾</th>
+            <th>操作</th>
+        </tr>
+    </table>
+    <div id="div_content">
+        <table id="tab_content">
+
+
+        </table>
+    </div>
+
+</div>
+<div class="curr-page" id="page" style="width: 500px;">
+    {$page}
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".cartLocation").click(function () {
+//            $(document).on('click','.cartLocation',function () {
+            var id = $(this).attr('data-id');
+            var ieminumber = $(this).attr('ieminumber');
+            var cartnumber = $(this).siblings('.cartnumber').text();
+            if (ieminumber != cartnumber){
+                $.ajax({
+                    type: "post",
+                    url: "{:U('UserManage/getOrderCarall')}",
+                    data: {
+                        id : id
+                    },
+                    success: function(data){
+                        $("#tab_content tr").remove();
+                        var tr = '';
+                        if (data){
+                            $(".car_div").css('display','block');
+                            for (var i = 0;i<data.length;i++){
+                                if (data[i].imei == 0){
+                                    tr += '<tr>'+'<td>'+data[i].carno+'</td>'+'<td>'+data[i].driveid+'</td>'+'<td orderid='+data[i].id+' cartid='+data[i].carid+' carno='+data[i].carno+' imei='+data[i].imei+' class="review txtcolor">'+data[i].prompt+'</td>'+'</tr>'
+                                } else {
+                                    tr += '<tr>'+'<td>'+data[i].carno+'</td>'+'<td>'+data[i].driveid+'</td>'+'<td orderid='+data[i].id+' cartid='+data[i].carid+' carno='+data[i].carno+' imei='+data[i].imei+' class="review">'+data[i].prompt+'</td>'+'</tr>'
+                                }
+
+                            }
+                            $("#tab_content").append(tr);
+                            $(".review").click(function () {
+                                var orderid = $(this).attr('orderid');
+                                var cartid = $(this).attr('cartid');
+                                var carno = $(this).attr('carno');
+                                var imei = $(this).attr('imei');
+                                if (imei == 0){
+                                    alert('当前车辆没有定位设备,无法定位!');
+                                    return false;
+                                } else {
+                                    window.location.href="{:U('UserManage/markPlayback')}?orderid="+orderid+'&'+'cartid='+cartid+'&'+'carno='+carno;
+                                }
+                            });
+                        }
+
+                    }
+
+                });
+            } else {
+                alert("当前订单下的车辆没有定位设备,无法定位!");
+                return false;
+            }
+        });
+        //关闭订单车辆列表
+        $("#close_button").click(function () {
+            $(".car_div").css('display','none');
+        });
+    });
+</script>

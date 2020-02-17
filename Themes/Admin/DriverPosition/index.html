@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>联系我们_{$sys_title}</title>
+    <!--<link type="text/css" rel="stylesheet" href="__PUBLIC__/css/font-awesome.min.css" />-->
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="__PUBLIC__/css/qdStyle.css"/>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <!--<script type="text/javascript" src="__PUBLIC__/js/main.js"></script>-->
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=67jMQ5DmYTe1TLMBKFUTcZAR"></script>-->
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=3f46317c0a41f613795214f5f71dfb23"></script>
+    <style>
+        .contanct {height:auto}
+        .contanct-map {height:auto }
+        #map {height: auto}
+
+        /*车辆筛选*/
+        .screen-box { line-height: 38px}
+        .screen-key, .screen-query, .screen-click {height: 23px}
+        .screen-query {width: 150px}
+        #functionarea { padding-left: 5px;padding-right: 20px}
+        .screen-click {border: none; background: #00a2e6;border-radius: 2px;width: 73px;color: white}
+        .screen-click:hover {opacity: 0.7}
+
+        .caradress { overflow-y:scroll;height: 74%}
+
+        .amap-marker-label {width: 35px;height: 8px;border-radius: 3px;line-height: 8px}
+    </style>
+</head>
+<body>
+<!--导航-->
+<!--联系我们-->
+<div id="listtitle" class="tit-all clearfix" style="">
+    <h3 class="fl">
+        <i></i>
+        车辆位置展示
+    </h3>
+    <div class="screen-box fr">
+        代驾筛选:
+        <select class="screen-key">
+            <option value="0">代驾姓名</option>
+            <option value="1">代驾车辆</option>
+        </select>
+        <label class="screen-query-box">
+            <input class="screen-query" type="text" placeholder="请输入对应条件"/>
+        </label>
+        <span id="functionarea" class="add-car ">
+            <input class="screen-click" type="button" value="进行筛选"/>
+        </span>
+    </div>
+</div>
+<div class="contanct">
+    <div class="contanct-map">
+        <div id="map"></div>
+    </div>
+    <div class="caradress">         <!--右边具体车辆栏-->
+
+    </div>
+</div>
+<div style="clear: both"></div>
+</body>
+<script type="text/javascript">
+    $(function () {
+//        make_map();
+        var header_height = $('#listtitle').height();
+        var body_height = window.innerHeight;
+        $('.contanct, .contanct-map, #map').css('height',body_height-header_height+"px");
+
+        carAjax(); //请求车辆信息,并定位
+
+        $(document).on('click','.caradress span',function(){
+            var index = $(this).index()-1;
+            var key = $('.screen-key').val();
+            var key_query = $('.screen-query').val();
+            if (key_query != ''){
+                carAjax(key,key_query,index);
+            }else{
+                carAjax('','',index);
+            }
+        });
+
+        //点击发起车辆筛选请求
+        $('.screen-click').on('click',function () {
+            var key = $('.screen-key').val();
+            var key_query = $('.screen-query').val();
+            if (key_query != ''){
+                carAjax(key,key_query);
+            }else{
+                alert('请输入或选择筛选条件!');
+            }
+        });
+
+
+    });
+
+    function carAjax(key,key_query,index) {
+        var url = "{:U('driver_query')}";
+        var param = {'key':key,'key_query':key_query,'index':index};
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType:'json',
+            data: param,
+            success: function(data){
+                if (data['msg']){
+                    alert(data['msg'])
+                }
+                if(data['code']){
+                    var content = data['content'];
+                    var index = data['index'];
+                    console.log(content);
+
+                    var markers_ary = new Array;
+                    var query_html = '<h4>代驾列表：</h4>';
+                    for (var i=0; i < content.length;i++) {
+                        if (content[i]['login_state'] == 1){content[i]['login_state'] = '在线';}else{content[i]['login_state'] = '下线';}
+                        if (content[i]['state']){content[i]['state'] = '代驾中';}else{content[i]['login_state'] = '空闲';}
+                        if (!content[i]['carno']){content[i]['carno'] = '空闲'};
+
+                        var son_ary = new Array;
+                        var son_ary_two = new Array;
+
+                        son_ary['content'] = content[i]['drivername'];           //组装过渡数组
+                        son_ary['login_state'] = content[i]['login_state'];
+                        son_ary['carno'] = content[i]['carno'];
+                        son_ary['acc'] = content[i]['acc'];
+                        son_ary['gps_time'] = content[i]['gps_time'];
+                        son_ary_two['lat'] = content[i]['lat'];
+                        son_ary_two['lng'] = content[i]['lng'];
+                        son_ary['position'] = son_ary_two;
+
+                        markers_ary[i] = son_ary;
+                        query_html += '<span>'+content[i]["drivername"]+'('+content[i]['carno']+')</span>'
+                    }
+                    $('.caradress').html(query_html);
+
+                    var center = [];
+                    if (index >= 0){
+                        center['lng'] = content[index]['lng'];
+                        center['lat'] = content[index]['lat'];
+                        var zoom = 22;
+                    }else{
+                        center['lng'] = 106.716591;
+                        center['lat'] = 26.556891;
+                        var zoom = 12;
+                    }
+
+                    make_map(center,markers_ary,zoom,index);    //调用地图制作函数
+                }
+            }
+        });
+
+    }
+
+    //把数组转换为json字符串
+    $.fn.stringifyArray = function(array) {
+        return JSON.stringify(array)
+    };
+
+    function make_map(center,data,zoom,index) {
+        if (!zoom){zoom = 12};
+        var map = new AMap.Map('map', {             //创建地图
+            resizeEnable: true,
+            zoom:zoom,
+            center: [center.lng, center.lat],
+        });
+
+        var infoWindow = new AMap.InfoWindow();
+
+        for (var i=0; i<data.length; i++){          //创建地图标注
+            if (index != i){
+            var marker = new AMap.Marker({
+                icon : '__PUBLIC__/images/location.png',//24px*24px
+                position : [data[i].position.lng, data[i].position.lat],
+                offset : new AMap.Pixel(-12,-12),
+                map : map
+            });
+            }else{
+                var marker = new AMap.Marker({
+                    icon : '__PUBLIC__/images/location_red.png',//24px*24px
+                    position : [data[i].position.lng, data[i].position.lat],
+                    offset : new AMap.Pixel(-12,-12),
+                    map : map
+                });
+            }
+
+            //设置文字标注
+            marker.setMap(map);//设置鼠标划过点标记显示的文字提示
+            marker.setTitle(data[i].content);
+            marker.setLabel({
+                offset: new AMap.Pixel(-5, -16),
+                content: data[i].content
+            });
+
+            //信息框内容
+            marker.content= '<div>'+data[i].content+'('+data[i].login_state+')</div><div>代驾车辆:'+data[i].carno+'</div>';
+            marker.on('click', function (e) {                           //点击弹出信息框
+                infoWindow.setContent(e.target.content);
+                infoWindow.open(map, e.target.getPosition());
+            });
+        }
+
+        //加载地图控件
+        AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],function(){
+            map.addControl(new AMap.ToolBar());
+            map.addControl(new AMap.Scale());
+            map.addControl(new AMap.OverView({isOpen:true}));
+        });
+
+    }
+</script>
+</html>

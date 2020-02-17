@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>个人信息</title>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <style>
+
+        .perinfo-content {
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+        }
+
+        .perinfo-content td{
+            border: solid 1px #ffffff;
+        }
+
+        .perinfo-content table {
+            border-collapse:collapse;
+        }
+
+        #page {
+            float: right;
+            margin-right: 100px;
+        }
+        #tr:hover{
+            background-color: #f7e6d3;
+        }
+        .footer-nav span,.footer-nav a{display: inline-block;}
+        #pay input:hover{background: #23ace1!important;}
+
+        #sum td {line-height: 20px;padding-left: 35px;}
+        ul{list-style-type: none;padding-left: 5px;margin-bottom: -2px}
+        .tab{width:100%;margin: 10px auto}
+        a{text-decoration: none;}
+
+        .title li{display: inline-block;border: 1px solid #999;border-bottom: 2px solid #a00;background: #fff;text-align: center;width: 40%;height: 30px;margin: 0 0 0 10px;line-height: 30px;cursor: pointer;}
+        .title .active{border-top:2px solid #a00;border-left: 2px solid #a00;border-right: 2px solid #a00;border-bottom: 2px solid #fff;cursor: pointer; }
+        #content{margin: 0;border: 1px solid #ccc;border-top: 2px solid #a00;width: 100%;min-height: 500px;}
+        #content div{display: block;padding: 10px 0}
+        #content .mod{display: block;}
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="top-img" style="background: url('__PUBLIC__/images/top-pic4.jpg') center center"></div>
+<include file="UserManage/header"/>
+<div class="perInfo-box">
+    <div class="perInfo-nav">
+        <include file="UserManage:link"/>
+    </div>
+
+    <div class="perinfo-content" style="margin-left: 10px;">
+        <h3 style="font-size: 16px;margin-bottom: 10px;float: left">车辆监控</h3>
+        <!--<span  style="color: #747474;float: right; margin-top: 10px;margin-right: 10px;">提示:<i></i></span>-->
+        <br>
+        <div class="tab">
+            <ul class="title">
+                <li class="active">当前订单车辆轨迹</li>
+                <li id="active">历史订单车辆轨迹</li>
+            </ul>
+            <div id="content">
+                <div class="mod ">
+                    <!--<ul>-->
+                    <!--<li><a href="#">当前车辆轨迹</a> </li>-->
+                    <!--</ul>-->
+                    <table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+                        <tbody>
+                        <tr align="center" style="background: #e4f1f9">
+                            <td style="width: 20%;">订单号</td>
+                            <td style="width: 12%;">下单时间</td>
+                            <td style="width: 12%;">取车时间</td>
+                            <td style="width: 12%;">还车时间</td>
+                            <td style="width: 9%;">车辆数量</td>
+                            <td style="width: 8%;">订单状态</td>
+                            <td style="width: 13%;">操作</td>
+                        </tr>
+                        <volist name="list" id="temp">
+                            <tr align="center" id="tr">
+                                <td class="details" data-id="{$temp['id']}" style="cursor: pointer;color: #00a2e1!important;">{$temp['order_code']} </td>
+                                <td>{$temp['order_date']}</td>
+                                <td>{$temp['pk_date']}</td>
+                                <td>{$temp['re_date']}</td>
+                                <td class="cartnumber">{$temp['cartnumber']}</td>
+                                <td style="width: 140px;">
+                                    <if condition="$temp['usertype'] == 1">
+                                        <!--大客户订单状态判断-->
+                                        <if condition="$temp['order_state'] ==0">
+                                            <span style="color: #ff8800">未付款</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==1">
+                                            <span style="color: #00a2e1">已付款</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==2">
+                                            <span style="color: #747474">已派车</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==3">
+                                            <span style="color: #747474">已取车</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==4">
+                                            <span style="color: #747474">已还车</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==7">
+                                            <span style="color: #747474">已结账</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==13">
+                                            <span style="color: #747474">已退款</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                                            <span style="color: #747474">已结账(未结清)</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1" >
+                                            <span style="color: #747474">已结账</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==10">
+                                            <span style="color: #747474">已取消</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12">
+                                            <span style="color: #747474">退款受理中</span>
+                                        </if>
+                                        <else/>
+                                        <!--普通客户订单状态判断-->
+                                        <if condition="$temp['order_state'] ==0">
+                                            <span style="color: #ff8800">未付款</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] != 0">
+                                            <span style="color: #00a2e1">已付款</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] == 0">
+                                            <span style="color: #ff8800">未付款(可用车)</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==2">
+                                            <span style="color: #747474">已派车</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==3">
+                                            <span style="color: #747474">已取车</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==4">
+                                            <span style="color: #747474">已还车</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                                            <span style="color: #747474">已结账(未结清)</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1 || $temp['order_state'] ==5 && $temp['check_out'] ==3 || $temp['order_state'] ==5 && $temp['check_out'] ==4" >
+                                            <span style="color: #747474">已结账</span>
+                                        </if>
+                                        <if condition="$temp['order_state'] ==6">
+                                            <span style="color: #747474">正在处理违章</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==7">
+                                            <span style="color: #747474">已退违章押金</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==10">
+                                            <span style="color: #747474">已取消</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                                            <span style="color: #747474">退款受理中</span>
+                                        </if>
+
+                                        <if condition="$temp['order_state'] ==13" >
+                                            <span style="color: #747474">已退款</span>
+                                        </if>
+                                    </if>
+
+                                </td>
+                                <td data-id="{$temp['id']}" ieminumber="{$temp['ieminumber']}" class="cartLocation" style="cursor: pointer;">
+                                    查看车辆当前位置
+                                </td>
+
+                            </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                    <div class="curr-page" id="page" style="width: 500px;">
+                        {$page}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div style="clear: both;"></div>
+
+</div>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+
+
+
+</html>
+
+<script type="text/javascript">
+    $(function(){
+        $(".title li").click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            $(".mod").eq($(".title li").index(this)).show().siblings(".mod").hide();
+        });
+
+
+        //
+        $(".cartLocation").click(function () {
+            var id = $(this).attr('data-id');
+            var ieminumber = $(this).attr('ieminumber');
+            var cartnumber = $(this).siblings('.cartnumber').text();
+            if (ieminumber != cartnumber){
+                window.location.href="{:U('UserManage/getCartLocation')}?id="+id;
+            } else {
+                alert("当前订单下的车辆没有定位设备!");
+                return false;
+
+            }
+
+        });
+
+        $("#active").click(function () {
+
+            $.ajax({
+                type: "post",
+                url: "{:U('UserManage/historyData')}",
+                data: {
+
+                },
+                success: function(data){
+                    $(".mod").empty();
+                    $(".mod").html(data);
+                }
+            });
+        });
+
+        $(".active").click(function () {
+            $.ajax({
+                type: "post",
+                url: "{:U('UserManage/cartMonitor')}",
+                data: {
+
+                },
+                success: function(data){
+                    $(".mod").html(data)
+                }
+            });
+        });
+
+    });
+
+
+    $(function () {
+        //click为事件名，不需要改
+        //.curr_page表示class名，后面的a表示在这个class的div中给a标记添加click方法
+        $(document).on("click",".curr-page a",function(){
+
+            var pageOBJ = this;
+            var url = pageOBJ.href;
+            $.ajax({
+                type:'get',
+                url:url,
+                success:function (result) {
+                    $(".mod").html(result);
+                }
+            });
+
+            return false;
+        })
+    });
+</script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>密码强度检测</title>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <style type="text/css">
+        body {
+            font: 12px/1.5 Arial;
+        }
+
+        input {
+            float: left;
+            font-size: 12px;
+            width: 150px;
+            font-family: arial;
+            padding: 3px;
+            border: 1px solid black;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+
+        #tips {
+            float: left;
+            margin: 2px 0 0 20px;
+        }
+
+        #tips span {
+            float: left;
+            width: 50px;
+            height: 20px;
+            color: white;
+            background: green;
+            margin-right: 2px;
+            line-height: 20px;
+            text-align: center;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function() {
+            var aStr = ["弱", "中", "强"];
+
+            function checkStrong(val) {
+                var modes = 0;
+                if (val.length < 6) return 0;
+                if (/\d/.test(val)) modes++; //数字
+                if (/[a-z]/.test(val)) modes++; //小写
+                if (/[A-Z]/.test(val)) modes++; //大写
+                if (/\W/.test(val)) modes++; //特殊字符
+                if (val.length > 12) return 4;
+                return modes;
+            };
+            $(".pass").keyup(function() {
+                var val = $(this).val();
+                var num = checkStrong(val);
+                switch (num) {
+                    case 0:
+                        break;
+                    case 1:
+                        $("#tips span").css('background', 'yellow').text('').eq(num - 1).css('background', 'red').text(aStr[num - 1]);
+                        break;
+                    case 2:
+                        $("#tips span").css('background', 'green').text('').eq(num - 1).css('background', 'red').text(aStr[num - 1]);
+                        break;
+                    case 3:
+                        $("#tips span").css('background', 'green').text('').eq(num - 1).css('background', 'red').text(aStr[num - 1]);
+                        break;
+                    default:
+                        break;
+                }
+            })
+        })
+    </script>
+</head>
+
+<body>
+<input type="text" class="pass" value="" maxlength="16" />
+<div id="tips"><span></span><span></span><span></span></div>
+</body>
+
+</html>

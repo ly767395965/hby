@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户的添加查看</title>
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/css/select.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/editor/kindeditor.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <script type="text/javascript">
+        KE.show({
+            id : 'content7',
+            cssPath : './index.css'
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+            $(".select2").uedSelect({
+                width : 167
+            });
+            $(".select3").uedSelect({
+                width : 100
+            });
+            agent_change();
+            $('#user_type').change(function () {
+                agent_change();
+            })
+
+        });
+        //显示或隐藏代理商
+        function agent_change() {
+            if ($('#user_type').val() == 3){
+                $('#agent').css('display','block');
+            }else{
+                $('#agent').css('display','none');
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="{:U('Index/index')}">首页</a></li>
+        <li><a href="#">系统设置</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+
+
+    <div id="usual1" class="usual">
+
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" >修改代理商信息</a></li>
+            </ul>
+        </div>
+
+        <div id="tab1" class="tabson">
+            <form  action="__SELF__" method="post"  enctype="multipart/form-data">
+                <ul class="forminfo">
+                    <li><label>代理商名称<b>*</b></label><input name="name" type="text" class="dfinput" placeholder="代理商的名称" value="{$list.name}"  style="width:518px;"/></li>
+                    <li><label>联系人<b>*</b></label><input name="people" type="text" class="dfinput" placeholder="请填写真实名字" value="{$list.people}"  style="width:518px;"/></li>
+                    <li><label>联系电话：<b>*</b></label><input name="phone" type="text" class="dfinput" placeholder="请填写联系电话" value="{$list.phone}" style="width:518px;"/></li>
+                    <li><label>联系地址：<b>*</b></label><input name="address" type="text" class="dfinput" placeholder="请填写联系地址" value="{$list.address}"  style="width:518px;"/></li>
+                    <li><label>身份证号：<b>*</b></label><input name="identitys" type="text" class="dfinput" placeholder="请填写代理商提供的身份证号" value="{$list.identitys}"  style="width:518px;"/></li>
+                    <li><label>备注<b>*</b></label>
+                        <textarea class="input-wd-100 text-area" name="remark" style="width:545px;height:60px;border: 1px solid gainsboro" class="form-control" rows="5">{$list.remark}</textarea>
+                    </li>
+                    <li><label>&nbsp;</label><input name="" type="submit" class="btn" style="color: white;background: #00a0e9" value="修改"/></li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+    </script>
+
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+
+
+
+
+</div>
+
+
+</body>
+
+</html>

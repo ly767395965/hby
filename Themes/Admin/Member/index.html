@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>优惠劵</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        会员信息
+    </h3>
+     <span id="functionarea" class="add-car fr">
+            <if condition="checkAuth('Member/addMember')">
+                <a href="{:U('Member/addMember')}" title="添加会员">添加会员</a>
+            </if>
+        </span>
+</div>
+
+<div class="formbody" style="margin-top: 20px;">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 550px;height: 20px;" >
+            <form action="{:U('Member/index')}" method="get" style="position: absolute;">
+                <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                    <select class="input_normal" name="select"  style="width: 200px;">
+                        <option selected="selected" value="">请选择分类查询</option>
+                        <option value="1">真实姓名</option>
+                        <option value="2">用户账户</option>
+                    </select>
+                </div>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                    <input class="input_normal" type="text"  style="width: 200px;"   name="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                    <input type="submit" value="查询" name="submit" class="btn-submit" />
+                </div>
+            </form>
+        </div>
+    </div>
+<table  class="tablelist" width="100%">
+    <thead>
+    <tr style="align: center; font-size: 16px;">
+        <th>序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i></th>
+        <th>真实姓名</th>
+        <th>用户账户</th>
+        <th>用户类型</th>
+        <th>身份证号码</th>
+        <th>用户性别</th>
+        <th>用户积分</th>
+        <th>用户余额</th>
+        <th>账户状态</th>
+        <th>结账周期</th>
+        <th>注册时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <if condition ="$list[0]['id'] == ''">
+        <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+            未查询到符合条件的会员
+        </div>
+        <else/>
+        <volist name="list" id="temp">
+            <tr>
+                <td>{$temp['id']}</td>
+                <td>{$temp['username']}</td>
+                <td>{$temp['phone']}</td>
+                <td><if condition="$temp['usertype']==0">普通用户<else/>大客户</if></td>
+                <td>{$temp['identitys']}</td>
+                <td><if condition="$temp['sex']==1">男<else/>女</if></td>
+                <td>{$temp['score']}</td>
+                <td>￥{$temp['balance']}</td>
+                <td><if condition="$temp['state']==0"><span style="color: #aad83e;">正常</span><else/><span style="color: #CC0000">冻结</span></if></td>
+                <td>
+                    <if condition="$temp['check_cycle']==0">现结<else/>{$temp['check_cycle']}个月</if>
+                </td>
+                <td>{$temp['addtime']}</td>
+                <td>
+                    <if condition="$temp['state']==0">
+                        <span style="width: 50px;  float: left; display: block;">
+                            <if condition="checkAuth('Member/Frozen')">
+                                <a  href="{:U('Member/Frozen')}?id={$temp['id']}" style="text-align: center; color: #CC0000;">冻结</a>
+                            </if>
+                        </span>
+                        <span style="width: 50px;  float: left;">
+                            <if condition="checkAuth('Member/editMember')">
+                                <a href="{:U('Member/editMember')}?id={$temp['id']}" >
+                                    编辑
+                                </a>
+                            </if>
+                        </span>
+                        <span style="width: 80px;float: left;">
+                             <if condition="checkAuth('Member/editPass')">
+                                 <a href="{:U('Member/editPass')}?id={$temp['id']}" >
+                                     初始化密码
+                                 </a>
+                             </if>
+                        </span>
+                         <span style="width: 50px;  float: left;">
+                              <if condition="checkAuth('Member/del')">
+                                  <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Member/del')}?id={$temp['id']}')"  >
+                                      删除
+                                  </a>
+                              </if>
+                        </span>
+                        <else/>
+                        <span style="width: 50px; float: left;">
+                            <if condition="checkAuth('Member/Thaw')">
+                                <a  href="{:U('Member/Thaw')}?id={$temp['id']}" style="color: #aad83e;">解冻</a>
+                            </if>
+                        </span>
+                        <span style="width: 50px;  float: left;">
+                            <if condition="checkAuth('Member/editMember')">
+                                <a href="{:U('Member/editMember')}?id={$temp['id']}" >
+                                    编辑
+                                </a>
+                            </if>
+                        </span>
+                        <span style="width: 80px;  float: left;">
+                            <if condition="checkAuth('Member/editPass')">
+                                <a href="{:U('Member/editPass')}?id={$temp['id']}" >
+                                    初始化密码
+                                </a>
+                            </if>
+                        </span>
+                        <span style="width: 50px;  float: left;">
+                            <if condition="checkAuth('Member/del')">
+                                <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Member/del')}?id={$temp['id']}')"  >
+                                    删除
+                                </a>
+                            </if>
+                        </span>
+                    </if>
+                </td>
+
+                </td>
+            </tr>
+
+        </volist>
+    </if>
+</table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>

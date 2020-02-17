@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>我</title>
+		<meta name="format-detection" content="telephone=no" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+    	<link rel="stylesheet" href="__PUBLIC__/wap/css/hbindex.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/Myinfor.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+
+		<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/Myinfor.js" ></script>
+
+		
+	</head>
+	<body>
+		<section class="main">
+			<div class="empty" style="overflow: hidden">
+				<div class="me-top">
+					<div class="me-header">
+						<img src="__PUBLIC__/wap/images/header.jpg" />
+					</div>
+					<div class="userInfo">
+						<i id="login">登录/注册</i>
+						
+						<span id="userPhone"></span>
+					</div>
+				</div>
+				<ul class="me-list">
+					<li tapmode="hover" id="myOrder">
+							我的订单
+						<img src="__PUBLIC__/wap/images/meOrder.png" />
+						<span class="icon-arrowright"></span>
+						<div class="me-list-line"></div>
+					</li>
+		        <!--<li tapmode="hover" onclick="aliPay()">-->
+		            <!--在线充值-->
+		            <!--<img src="../image/me-icon.png"/>-->
+		            <!--<span class="icon-arrowright"></span>-->
+		            <!--<div class="me-list-line"></div>-->
+		        <!--</li>-->
+		       <li tapmode="hover" id="Coupon">
+		            优惠券
+		            <img src="__PUBLIC__/wap/images/me-icon.png"/>
+		            <span class="icon-arrowright"></span>
+		           <div class="me-list-line"></div>
+		        </li>
+		        <!--<li tapmode="hover">-->
+		            <!--余额-->
+		            <!--<img src="../image/me-icon.png"/>-->
+		            <!--<span class="icon-arrowright"></span>-->
+		        <!--</li>-->
+    			</ul>
+			    <ul class="me-list">
+			        <li id="peronInfo">
+			           		 个人信息
+			            <img src="__PUBLIC__/wap/images/mePerson.png"/>
+			            <span class="icon-arrowright"></span>
+			            <div class="me-list-line"></div>
+			        </li>
+			        <li id="setPwd">
+			           		 修改密码
+			            <img src="__PUBLIC__/wap/images/mexPwd.png"/>
+			            <span class="icon-arrowright"></span>
+			        </li>
+			    </ul>
+			    <ul class="me-list">
+			        <li id="about">
+			           		 关于华邦
+			            <img src="__PUBLIC__/wap/images/meabout.png"/>
+			            <span class="icon-arrowright"></span>
+			            <div class="me-list-line"></div>
+			        </li>
+			        <li >
+						<a href="tel:4000272777">
+			            	客服电话
+			            <img src="__PUBLIC__/wap/images/mecall.png"/>
+			            <span class="telpho">400-0272-777</span>
+						</a>
+			        </li>
+			    </ul>
+    			<div class="tuichu" id="tuichu">退出登录</div>
+			</div>
+			<div class="msg">
+				<div class="kuang">
+		    		<div class="msg-text"></div>
+		    		<div class="yn-sen">
+		    			<div class="yes-btn">确定</div>
+		    			<div class="no-btn">取消</div>
+		    		</div>
+	    		</div>
+	    	</div>
+			<!--底部导航栏-->
+			<footer class="index-footer">
+				<ul id="home">
+					<li class="footer-nav" id="s1"> 
+						<a href="{:U('./Wap/Index/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/home.png"/></span>
+							<p>首页</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Activity/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/acti.png" /></span>
+							<p>活动</p>
+						</a>	
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/CarRrental/index')}">
+							<span><img src="__PUBLIC__/wap/images/car.png" /> </span>
+							<p>租车</p>
+						</a>
+					</li>
+					<li class="footer-nav" >
+						<a href="{:U('./Wap/Tourism/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/trip.png" /></span>
+							<p>旅游出行</p>
+						</a>
+					</li>
+					<li class="footer-nav">
+						<a href="{:U('./Wap/Myinfor/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/login-user1.png" /></span>
+							<p class="active">我的</p>
+						</a>
+					</li>
+				</ul>
+			</footer>
+		</section>
+	</body>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发放优惠劵列表</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .del-all-btn{margin-left: 10px;background: #F0F5F7;border: 1px solid #00a2e6;border-radius: 2px;margin-bottom: 2px}
+        .del-all-btn:hover {background: #0295D3;color: white}
+        /*.order_table th,.order_table td {text-align: center}*/
+        .order_table th{width: 10%}
+    </style>
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        直接发放优惠劵
+    </h3>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1005px;height: 20px;" >
+        <form action="{:U('Coupontype/distribute')}" method="get" style="position: absolute;height: 50px">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select" id="select"  style="width: 200px;">
+                    <if condition ="$msg.select eq 0"><option selected value="0">客户名称</option><else/><option value="0">客户名称</option></if>
+                    <if condition ="$msg.select eq 1"><option selected value="1">客户账号</option><else/><option value="1">客户账号</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;" value="{$msg.key}"  name="key" id="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div style="float: left">
+        <input type="checkbox"  name="all" class="all">全选<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>
+        <if condition="checkAuth('Order/delAll')"><input type="button" value="批量发放" class="del-all-btn" distribute_obj = "0"></if>
+        <if condition="checkAuth('Order/delAll')"><input type="button" value="全体发放" class="del-all-btn" distribute_obj = "1"></if>
+        <if condition="checkAuth('Order/delAll')"><input type="button" value="未获取发放" class="del-all-btn" distribute_obj = "2"></if>
+    </div>
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th style="width: 5%" class="all">编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th >客户</th>
+            <th >联系方式</th>
+            <th>用户类型</th>
+            <th >身份证号</th>
+            <th >当前活动优惠劵数</th>
+            <th style="width: 18%">操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的客户
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr <if condition ="$temp['usertype']==1">style="color: #3EAFE0"</if>>
+                <td><input type="checkbox" class="cBox" name="ids" value="{$temp['id']}">{$temp['id']}</td>
+                <td>{$temp.username}</td>
+                <td>{$temp.phone}</td>
+                <td>
+                    <if condition="$temp.usertype eq 0">
+                        普通客户<else/>大客户
+                    </if>
+                </td>
+                <td>{$temp.identitys}</td>
+                <td>
+                    <if condition="$temp.coupon_times gt 0">
+                        已获取{$temp.coupon_times}张
+                        <else/>
+                        未获取
+                    </if>
+                </td>
+                <td class="tools">
+                    <ul class="toolbar">
+                        <if condition="checkAuth('CarAgent/packInfo')">
+                            <li class="click" id="orderinfo" >
+                                <a href="#" class="distribute_one" distribute_obj = "3" ids="{$temp.id}">
+                                    <img src="__PUBLIC__/images/t02.png"  />单独发放
+                                </a>
+                            </li>
+                        </if>
+                    </ul>
+                </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+<input type="hidden" value="{$act}" id="act"> <!--获取操作方式-->
+</html>
+
+<script>
+    $(function () {
+        //批量提交
+        $('.del-all-btn, .distribute_one').click(function () {
+
+            if (yes_no()){    //启用确认取消弹出框，并判断返回的值
+                switch ($(this).attr('distribute_obj')){
+                    case '0':
+                        var id_ary = document.getElementsByName('ids');
+                        var id_str='';
+                        for(var i=0; i<id_ary.length; i++){
+                            if(id_ary[i].checked) id_str+=id_ary[i].value+','; //如果选中，将value添加到变量s中
+                        }
+                        break;
+                    case '1':
+                        id_str = '';
+                        break;
+                    case '3':
+                        id_str = $(this).attr('ids');
+                        break;
+                }
+                var url = "{:U('distribute')}";
+                var param = {'ids':id_str,'distribute_type':$(this).attr('distribute_obj')};    //axjx传输的值，ids为发放的客户id，distribute_type用于判断发放方式
+                $.post(url,param,function(data){
+                    alert(data['msg']);
+                    self.location.reload();  //刷新本页
+                });
+            }
+
+        });
+
+        //全选
+        $('.all').click(function () {
+            $("input[name='ids']").prop('checked',$(this).prop('checked'));
+        });
+
+    });
+    //确认取消对话框
+    function yes_no() {
+        if(window.confirm('你确定要发放优惠劵么？')){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>

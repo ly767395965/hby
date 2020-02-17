@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会议订单结账页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3 ><i></i>会议订单结账</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('finance/meetingCost')}" method="post" enctype="multipart/form-data">
+                <div id="tsBox" style="display: block;width: 1000px;margin: 70px auto 0px">
+                    <div class="busi_box">
+                        <input type="hidden" value="{$list.id}" id="id" name="id"><!--获取订单id-->
+                        <input type="hidden" value="{$list.action}" id="action" name="action"><!--获取操作方式-->
+                        <div class="busi_input clearfix">
+                            <label>会议名称:</label>
+                            <input class="input_normal" type="text" value="{$list.meeting_name}" id="meeting_name" name="meeting_name" disabled="disabled" placeholder="请输入客户名称"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>车辆总数:</label>
+                            <input class="input_normal" type="text" value="{$list.car_num}" id="car_num" name="car_num" disabled="disabled" placeholder="请输入租用车辆的数量"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>取车时间:</label>
+                            <input class="input_normal" type="text" value="<?php if ($list) {echo $list['pk_date'];}else{ echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);}?>" id="pk_date" name="pk_date"  placeholder="请输入取车时间" disabled="disabled" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>还车时间:</label>
+                            <input class="input_normal" type="text" value="<?php if ($list) {echo $list['re_date'];}else{ echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']+86400);}?>"  id="re_date"  name="re_date"  placeholder="请输入还车时间" disabled="disabled" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>租车时长:</label>
+                            <li>总时长为<span id="rent_time" style="color: #f00;">1</span>天</li>
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>预计结款日期:</label>
+                            <input class="input_normal" type="text" value="<?php if ($list) {echo $list['expect_date'];}else{ echo date('Y-m-d',$_SERVER['REQUEST_TIME']+2592000);}?>"  id="expect_date"  name="expect_date"  placeholder="请输入还车时间" disabled="disabled" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})"  >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>外调成本:</label>
+                            <input class="input_normal" type="text" value="{$list.out_cost}" id="out_cost" name="out_cost"  placeholder="请输入该订单的外调成本" disabled="disabled"  >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>杂项成本:</label>
+                            <input class="input_normal" type="text" value="{$list.mixed_cost}" id="mixed_cost" name="mixed_cost"  placeholder="请输入该订单的油费，维修费等杂项费用的总和" >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>租车总价:</label>
+                            <input class="input_normal" type="text" value="{$list.price_rec}" id="price_rec" name="price_rec"  placeholder="请输入该订单的总价" style="background: #E3E3E3" readonly="readonly">
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>实收金额:</label>
+                            <input class="input_normal" type="text" value="{$list.price_rec}" id="collections_rec" name="collections_rec"  placeholder="请输入该订单的总价" >
+                        </div>
+                        <div id="price_paided_box" style="display: none">
+                            <div class="busi_input clearfix">
+                                <label>已收金额:</label>
+                                <input class="input_normal" type="text" value="{$list.collections_rec}" id="price_paided_a" name="price_paided" readonly="readonly" style="background: #E3E3E3">
+                            </div>
+                            <div class="busi_input clearfix">
+                                <label>尾款补收:</label>
+                                <input class="input_normal" type="text" value="" id="price_paided_b" name="price_paided"  placeholder="请输入该次补收的具体金额" >
+                            </div>
+                        </div>
+                    </div>
+                    <div style="float: left">
+                        <div class="busi_input clearfix" id="checkout_state">
+                            <label>是否结清:</label>
+                            <select name='check_state' id="check_out" class="check_state">
+                                <option value='1' >已结清</option>
+                                <option value='2' >未结清</option>
+                            </select>
+                        </div>
+                        <div class="busi_input clearfix" id="pay_way">
+                            <label>支付方式:</label>
+                            <select name='pay_way' class="pay_way">
+                                <option value='1' >支付宝</option>
+                                <option value='2' >微信支付</option>
+                                <option value='3' selected="selected">现金</option>
+                            </select>
+                        </div>
+                        <div class="busi_input clearfix" id="is_invoice">
+                            <label>是否开票:</label>
+
+                            是<input type="radio" <if condition="($list.is_invoice eq 1)">checked</if> name="is_invoice"  value="1" >
+                            否<input type="radio" <if condition="($list.is_invoice eq 0)">checked</if> name="is_invoice"  value="0"   >
+                        </div>
+                    <div class="invoice" <if condition="($list.is_invoice eq 0)">style="display: none"</if> >
+                        <div class="busi_input clearfix">
+                            <label>发票号:</label>
+                            <input class="input_normal" type="text" value="{$list.in_code}" id="in_code" name="in_code" placeholder="请输入发票号"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>开票金额:</label>
+                            <input class="input_normal" type="text" value="{$list.in_price}" id="in_price" name="in_price"  placeholder="请输入开票金额"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>额外税收:</label>
+                            <input class="input_normal" type="text" value="{$list.in_cost}" id="in_cost" name="in_cost" placeholder="请输入额外税收"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <b style="margin-left: 12%">注意：额外税收无需客户承担</b>
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>开票单位:</label>
+                            <input class="input_normal" type="text" value="{$list.in_dep}" id="in_dep" name="in_dep" placeholder="请输入开票单位"   >
+                        </div>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>订单备注:</label>
+                        <textarea style="width: 300px" name="remarks">{$list.remarks}</textarea>
+                    </div>
+
+                    <div id="charge_msg" class="busi_input clearfix" style="color: #f00;">
+                        <label></label>
+                        <li style=""><b>注意!收取费用为实收金额：</b>￥<span></span></li>
+                    </div>
+                </div>
+                <div class="busi_input clearfix" style="clear: both;margin: 100px auto 0px;width: 200px">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">提交</button>
+                    <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重置</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+    <input type="hidden" value="{$list.mixed_cost}" id="mixed_cost_false" >
+</div>
+<script id="jq" type="text/javascript">
+    $(function(){
+        var phone,id;//客户手机，编号
+        var shortdayprice,weekdayprice,monthdayPrice,d_price,dd;//短租价格，周租价格，月租价格,实际单价,租车天数
+
+        var action = $('#action').val();//获取操作方法
+        switch (action) {
+            case 'checkout' :
+                change_msg(1);
+                    read('#mixed_cost');
+                break;
+            case 'fill_price' :
+                $('#price_paided_box').css('display','block');
+                read('#collections_rec,#in_code,#in_price,#in_cost,#in_dep,#mixed_cost');
+                price_paided(1);
+                change_msg(2);
+                break;
+            default :
+                break;
+        }
+        $('#in_cost').blur(function () {
+            var action = $('#action').val();    //获取具体操作
+            if (action == 'checkout'){
+                var in_cost = $(this).val();
+                var mixed_cost = $('#mixed_cost_false').val();//获取杂项成本
+                in_cost = parseFloat(in_cost);
+                mixed_cost = parseFloat(mixed_cost);
+                $('#mixed_cost').val(mixed_cost + in_cost);
+            }
+        });
+        $('#is_invoice input').click(function () {
+            var val = $(this).val();
+            if (val == 1){
+                $('.invoice').css('display','block');
+            }else{
+                $('.invoice').css('display','none');
+            }
+        });
+        //结账时改变实收金额，即时改变收费提示信息
+        $('#collections_rec').change(function () {
+            change_msg(1);
+            check_out();
+        });
+        //收账时改变尾款补收金额，随之改变提示、实收金额、结账状态
+        $('#price_paided_b').change(function () {
+            price_paided(2);
+            change_msg(2);
+            check_out();
+        });
+        //点击弹出查询框
+        $('#user_query').click(function () {
+            $('#query_l').css('display','block');
+            $('.busi_query').css('display','block');
+        })
+        //去数据库中查询是否有该客户信息
+        $('.phone_query').click(function () {
+            $('.user_msg').css('display','none');
+            $('.busi_query a').css('display','none');
+
+            var url = "{:U('query')}";
+            var phone_query = $("#phone_query").val();
+            if(phone_query == ''){
+                alert ('客户账号不能为空，客户账号为手机号');
+            }else{
+                var param = {'phone_query':phone_query};
+                $.get(url,param,function(data){
+                    data = JSON.parse(data);
+                    if(data['code'] == '1'){
+                        if(data['user']['usertype']==0){
+                            $('#query_msg').css({'display':'block','color':'red'});
+                            $('#query_msg').html('消息：此用户为普通用户，请前往普通订单录入页面！');
+                        }else{
+                            $('#query_msg').css({'display':'block','color':'green'});
+                            $('#query_msg').html('消息：'+data['msg']);
+                            $('.user_msg').css('display','block');
+                            $('.user_msg').find('#username').html('姓名：'+data['user']['username'])
+                            $('.user_msg').find('#phone_msg').html('手机：'+data['user']['phone'])
+                            id = data['user']['id'];
+                            phone = data['user']['phone'];
+                        }
+                    }else{
+                        $('#query_msg').css({'display':'block','color':'red'});
+                        $('#query_msg').html('消息：'+data['msg']);
+                        $('.busi_query a').css('display','block');
+                    }
+                })
+            }
+        });
+
+        //将用户账号写入文本框，并隐藏查询框
+        $('.order').click(function () {
+            $('#phone').val(phone);
+            $('#id').val(id);
+            $('#query_l').css('display','none');
+            $('.busi_query').css('display','none');
+        });
+        //点击遮蔽层，恢复页面
+        $('#query_l').click(function () {
+            $('#query_l').css('display','none');
+            $('.busi_query').css('display','none');
+            $('.car_query').css('display','none');
+            $('#query_car').css('display','none');
+            $('#query_driver').css('display','none');
+        });
+        //车辆编号选择框弹出
+        $('#car_query').click(function () {
+            $('#query_car').css('display','block');
+            $('#query_l').css('display','block');
+        });
+        //判断是否代驾，改变代驾费的显示与隐藏
+        $('#drive_state').find('input').click(function () {
+            var val = $(this).val();
+            if (val == 1){
+                $('#drive_cost').css('display','block')
+            }else{
+                $('#drive_cost').css('display','none')
+            }
+        });
+
+        //选择代驾人编号
+        $('#query_driver tr').click(function () {
+            var val = $(this).find('.first').text();
+            var driver_name = $(this).find('.second').text();
+            $('.be_driver').val(val);
+            $('#be_driver').val(driver_name);
+            $('#query_driver').css('display','none');
+            $('#query_l').css('display','none');
+        });
+        //判断是否代驾，计算应付价格
+        $('#drive_state input').click(function () {
+            var val = $(this).val();
+            $('#drive_state_val').val(val);
+            price_rec(val);
+        });
+        //弹出送车屏蔽栏
+        $('#pk_way').change(function () {
+            var val = $(this).val();
+            if(val == 2){
+                $('#pk_way_box').css('display','block');
+            }else{
+                $('#pk_way_box').css('display','none');
+            }
+        });
+
+        //收费信息改变
+        function change_msg(a) {
+            if (a == 1){
+                var collections_rec = $('#collections_rec').val();
+                $('#charge_msg').find('span').text(collections_rec);
+            }else{
+                var price_paided_b = $('#price_paided_b').val();
+                $('#charge_msg').find('li').text('注意!收取费用为尾款金额：'+'￥'+price_paided_b);
+            }
+        }
+        //改变补收金额时，随之改变实收金额
+        function price_paided(a) {
+            var price_ture= $('#price_paided_a').val();                 //已收金额
+            var price_rec= $('#price_rec').val();                       //应付金额，租车总价
+            if (a == 1){
+                var price_paided_b = price_rec - price_ture;            //尾款补收金额
+                $('#price_paided_b').val(price_paided_b);
+            }else{
+                var price_paided_b= $('#price_paided_b').val();         //获取尾款补收金额
+                price_paided_b = parseInt(price_paided_b);
+                price_ture = parseInt(price_ture);
+                var collections_rec = price_ture + price_paided_b;
+                $('#collections_rec').val(collections_rec);
+            }
+        }
+        //根据实收和应收，判断结账状态
+        function check_out() {
+            var price_rec= $('#price_rec').val();                       //应付金额，租车总价
+            var collections_rec = $('#collections_rec').val();          //实收金额
+            if (price_rec == collections_rec){
+                $('#check_out').val(1)
+            }else{
+                $('#check_out').val(2)
+            }
+        }
+        //改变输入框为readonly只读模式
+        function read(obj){
+            var arr = obj.split(',');
+            for(var i = 0; i<arr.length;i++) {
+                $(arr[i]).css({'background':'#E3E3E3','cursor':'not-allowed'});
+                $(arr[i]).attr('readonly','readonly');
+            }
+        }
+    });
+
+</script>
+
+</html>

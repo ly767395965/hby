@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻分类列表</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        新闻分类列表
+    </h3>
+    <span id="functionarea" class="add-car fr">
+            <if condition="checkAuth('Newclass/addNewclass')">
+                <a href="{:U('Newclass/addNewclass')}" title="添加新闻分类">添加新闻分类</a>
+            </if>
+        </span>
+</div>
+<br/>
+<div class="formbody">
+    <table  class="tablelist">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th style="width: 130px;"><input type="checkbox"  name="all" class="all">编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;<if condition="checkAuth('Newclass/delAll')"><a href="javascript:void (0);" class="del-all-btn" ><font color="red">批量删除</font></a></if></th>
+            <th >分类名称</th>
+            <th >操&nbsp;作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 30%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的新闻分类
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr>
+                    <td><input type="checkbox" class="cBox" name="ids[]" value="{$temp['id']}">{$temp['id']}</td>
+                    <td>{$temp['classname']}</td>
+                    <td class="tools">
+                        <ul class="toolbar">
+                            <if condition="checkAuth('Newclass/editNewclass')">
+                                <li class="click" >
+                                    <!--<input style="background: url("")" type="button" class="click" onclick='MscBox("系统信息",t[0],"您确定要修改吗？","确定跳转取消关闭","{:U('CarModel/upCarmodel')}?id={$temp.id}");' value="编辑"  />-->
+                                    <a href="{:U('Newclass/editNewclass')}?id={$temp['id']}" >
+                                        <img src="__PUBLIC__/images/t02.png"  />编辑
+                                    </a>
+                                </li>
+                            </if>
+                            <if condition="checkAuth('Newclass/del')">
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Newclass/del')}?id={$temp['id']}')" >
+                                        <img src="__PUBLIC__/images/t03.png" /> 删除
+                                    </a>
+                                </li>
+                            </if>
+                        </ul>
+                    </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<!--<div class="digg">{$page}</div>-->
+</body>
+</html>
+<script>
+    $(function () {
+        //批量删除
+        new DelAll({
+            "allClass":$('.all'),
+            "listClass":$('.cBox'),
+            "delAllBtn":$('.del-all-btn'),
+            "delUrl":"delAll",
+            "listCheckboxName":"ids[]",
+            "imgUrl":"../../../Public/images"
+        });
+    });
+
+</script>

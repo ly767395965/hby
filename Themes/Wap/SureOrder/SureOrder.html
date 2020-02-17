@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>确认订单</title>
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/css3.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/SureOrder.css" />
+		
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+
+		<script type="text/javascript" src="__PUBLIC__/js/coupon.js"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=f328f4f333b50677fc21342456c468cf"></script>
+		<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/SureOrder.js"></script>
+
+	</head>
+	<style>
+		#yhmoney{
+			font-style: normal;
+			font-size: 16px;
+			color: rgb(255, 136, 0);
+
+		}
+		#yhmo{
+			color: #ff8800;
+			font-size: 20px;
+			font-weight: bold;
+			position: relative;
+			top: 1px;
+		}
+		.act_introduce {
+			margin-top: 3px;
+		}
+		.act_introduce span {padding-left: 5px}
+	</style>
+	<body>
+		<section class="main">
+			<div class="orderInfo">
+				<div class="orderInfo-img">
+					<img src="" width="95%" />
+				</div>
+				<div class="orderInfo-dis">
+					<h4>
+                  <span id="pp"></span>
+                   <span class="cartype" id="cartype"></span>
+              </h4>
+					<div class="orderCarInfo" id="orderCarInfo">
+						<span></span>款 |
+						<span></span>座 |
+						<span></span> | 排量
+						<span></span>
+					</div>
+					<div class="orderPrize">
+						单价:
+						<font color="#00A2E1">￥</font><i class="orderPrizeType" id="orderPrizeType"></i>元/天
+					</div>
+				</div>
+			</div>
+			<ul class="orderInfo-ul">
+				<li style="margin-bottom: 0">
+					<span class="orderDate-l">取车时间：</span>
+					<span class="orderDate-r" id="startTime"></span>
+				</li>
+				<li style="margin-bottom: 0">
+					<span class="orderDate-l">还车时间：</span>
+					<span class="orderDate-r" id="endTime"></span>
+				</li>
+				<li>
+					<span class="orderDate-l">租车时长：</span>
+					<span class="orderDate-r" id="renTime" style="color: #00a2e1"></span>
+				</li>
+				<li style="margin: 0">
+					<span class="orderDate-l"><div class="checkbox" id="driving"></div> 是否代驾<span style="font-size: 12px;zoom: 0.8;position: relative;top: -2px;">(200元/天)</span></span>
+					<span class="orderDate-r"><i style="font-size: 12px;zoom: 0.9;font-style: normal;">代驾费*租车天数 = <font color="#ff8800">￥</font></i><i id="dj" style="color: #ff8800; font-style: normal;">0</i></span>
+				</li>
+				<li style="margin: 0">
+					<span class="orderDate-l"><div class="checkbox" id="sCar"></div> 是否送车</span>
+					<span class="orderDate-r"><i style="font-size: 12px;font-style: normal">送车服务:</i>
+                <i class="sc">免费送车</i>
+            </span>
+				</li>
+				<div class="adress" id="allmap">
+					<span class="adress-title">送车地址：</span>
+					<textarea id="adress"></textarea>
+					<div class="clear"></div>
+					<div class="wxTip">温馨提示：免费送车服务仅限贵阳市两城区（南明区、云岩区），如有疑问请致电：400-027-2777</div>
+				</div>
+
+				<li style="margin: 0" id="coup">
+					<span class="orderDate-l"><div class="checkbox" id="Couponbtn"></div> 优惠券</span>
+					<span class="Couponbtn-r"><i style="font-size: 12px;font-style: normal"></i>
+		                <i class="sc"></i>
+		           </span>
+					<span class="orderDate-l activity"><div class="checkbox" id="activity"></div> 优惠活动</span>
+					<span class="Couponbtn-r"><i style="font-size: 12px;font-style: normal"></i>
+		                <i class="sc"></i>
+		           </span>
+				</li>
+
+
+					<div class="Couponbtn" id="" da="">
+
+
+					</div>
+
+
+				<li style="margin-top: 10px;margin-bottom: 60px;">
+					<span  class="orderDate-r" style="float: right;margin-right:20px; ;display: none;font-size: 12px;" id="hysp"><i style="font-style:normal;font-size: 16px;color: #ff8800;" id="yhmoney"></i> </span>
+					<span class="orderDate-r" style="font-size: 12px;margin-right:  5px">(代驾费*租车天数)+(租价*租车天数)=总价:<font color="#ff8800">￥</font><i style="font-style:normal;font-size: 16px;color: #ff8800;" id="allPrize"></i> </span>
+				</li>
+			</ul>
+			<div class="order-btns">
+				<div class="btns-no">
+					<div class="showAll" id="yh" style="display: none;">
+						<span id="yhmo"></span>
+					</div>
+					<div class="showAll" style="margin-right: 5px">合计：
+					<font color="#ff8800">￥ </font><span id="showAll" class=""></span></div>
+
+				</div>
+				<div class="submit" id="subOrder" tapmode="hover">提交订单</div>
+			</div>
+			<div id="payBg">
+				<div id="payMain">
+					<p>暂且仅支付宝支付<br/><span style="color: red;left: 40px;">(请在·我的订单)<br/>(查看订单记录!)</span></p>
+					
+					<button tapmode="hover" class="paybtn" id="pay">立即使用支付宝</button>
+					<div tapmode="hover" class="paybtn" id="nopay">再看看</div>
+				</div>
+			</div>
+			<div class="msg">
+	    		<div class="msg-text"></div>
+	    	</div>
+		</section>
+	</body>
+	<script>
+		$(function () {
+
+
+			/***************************************
+			 由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。
+			 ***************************************/
+
+		})
+	</script>
+<script>
+	var active = {$active};
+</script>
+</html>

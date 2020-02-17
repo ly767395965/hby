@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>无标题文档</title>
+<!--[if lt IE 8]>
+   我低于IE8了
+<![endif]-->
+<style>
+*{ margin:0; padding:0;}
+  .low-IE{position:fixed; top:0; left:0; right:0; bottom:0; background:url(low-IE.jpg); z-index:999999999999999999999999999;}
+  .low-box{ width:600px; height:400px; position:absolute;left:50%; margin-left:-300px;  top:50%; margin-top:-200px;}
+  .low-box h2{ line-height:40px; color:#FFF;}
+  .low-box ul li{ text-align:center; list-style:none; float:left; width:100px; height:100px; padding:25px;}
+  .low-box ul li a{ color:#000; text-decoration:none;}
+  .low-box ul li a:hover{ color:#FFF; text-decoration:underline;}
+</style>
+</head>
+
+<body>
+<div class="low-IE" id="low">
+    <div class="low-box">
+       <h2>您使用的浏览器版本过低，可能存在安全风险，请升级以下浏览器：</h2>
+        <ul>
+          <li>
+            <a href="#">
+            <img src="ie.png"/>
+            <p>IE浏览器</p>
+            </a>
+          </li>
+          <li>
+             <a href="#">
+            <img src="guge.png"/>
+            <p>谷歌浏览器</p>
+            </a>
+          </li>
+          <li>
+             <a href="#">
+            <img src="huohu.png"/>
+            <p>火狐浏览器</p>
+            </a>
+          </li>
+          <li>
+             <a href="#">
+            <img src="o.png"/>
+            <p>欧朋浏览器</p>
+            </a>
+          </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

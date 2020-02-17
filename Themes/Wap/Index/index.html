@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="format-detection" content="telephone=no" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>首页</title>
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/swiper.min.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/hbindex.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/index.js" ></script>
+
+	</head>
+	<style>
+		html, body {
+        	position: relative;
+       	 	height: 100%;
+   		}
+   		.swiper-container {
+       		width: 100%;
+       		height:120px;
+        }
+        
+    	.swiper-slide {
+    		width: 100%;
+      		text-align: center;
+        /* Center slide text vertically */
+	        display: -webkit-box;
+	        display: -ms-flexbox;
+	        display: -webkit-flex;
+	        margin: 0;
+	        padding: 0;
+	        display: flex;
+	        -webkit-box-pack: center;
+	        -ms-flex-pack: center;
+	        -webkit-justify-content: center;
+	        justify-content: center;
+	        -webkit-box-align: center;
+	        -ms-flex-align: center;
+	        -webkit-align-items: center;
+	        align-items: center;
+    	}
+	</style>
+	<body>
+		<section class="main">、
+			<!--头部header-->
+			<header class="hb-index-header">
+				<div class="index-header-left"></div>
+				<div class="index-header-center">
+					<a href="{:U('./Wap/Search/index')}"><input type="text" placeholder="请输入搜索车型" /></a>
+				</div>
+				<div class="index-header-right"><img src="__PUBLIC__/wap/wapimages/saomiao.png" width="25" /></div>
+			</header>
+			<!--首页banner-->
+			<aside class="index-banner" id="banner">
+				<div class="hd">
+					<ul></ul>
+				</div>
+				<div class="bd" id="slid">
+					<ul>
+						
+					</ul>
+				</div>
+			</aside>
+			<!--快速导航-->
+			<article class="nav-btn">
+				<div class="nav-btn-box" id="news">
+					<span>新闻</span>
+					<div class="nav-btn-dis">新闻中心</div>
+					<img src="__PUBLIC__/wap/wapimages/news.png" width="34" height="33" />
+					<div class="nav-btn-line"></div>
+				</div>
+				<div class="nav-btn-box" id="xuzhi">
+					<span>须知</span>
+					<div class="nav-btn-dis">租车须知</div>
+					<img src="__PUBLIC__/wap/wapimages/book.png" width="34" height="33" />
+					<div class="nav-btn-line"></div>
+				</div>
+				<div class="nav-btn-box" id="tehui">
+					<span>特惠</span>
+					<div class="nav-btn-dis">特惠车辆</div>
+					<img src="__PUBLIC__/wap/wapimages/icon-favo.png" width="34" height="33" />
+					<div class="nav-btn-line"></div>
+				</div>
+				<div class="nav-btn-box" id="carrental">
+					<span>租车</span>
+					<div class="nav-btn-dis">立即租车</div>
+					<img src="__PUBLIC__/wap/wapimages/car.png" width="34" height="33" />
+					<div class="nav-btn-line"></div>
+				</div>
+			</article>
+			<!--优惠活动-->
+			<article class="list-title-line">
+				<div class="list-title">优惠活动</div>
+			</article>
+			<div class="swiper-container">
+        		<div class="swiper-wrapper">
+            		
+		           
+        		</div>
+   	 		</div>
+   	 		<div class="youhui-more">
+   	 			<span style="color:#ff8800;">本公司所有车辆均免收手续费、保险费！</span>
+   	 		</div>
+   	 		<!--推荐车型-->
+   	 		<article class="list-title-line">
+				<div class="list-title">推荐车型</div>
+			</article>
+			<div class="car-list">
+				<ul>
+					
+					
+				</ul>
+				<div class="fanye">
+					
+					<button class="up fl">上一页</button>
+					<div class="yema fl">第<span id="num"></span>页</div>
+					<button class="down fl">下一页</button>
+				</div>
+			</div>
+			<div style="height: 60px; width: 100%;"></div>
+			
+			
+			<!--底部导航栏-->
+			<footer class="index-footer">
+				<ul id="home">
+					<li class="footer-nav" > 
+						<a href="{:U('./Wap/Index/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/home1.png"/></span>
+							<p class="active">首页</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Activity/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/acti.png" /></span>
+							<p>活动</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/CarRrental/index')}">
+							<span><img src="__PUBLIC__/wap/images/car.png" /> </span>
+							<p>租车</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Tourism/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/trip.png" /></span>
+							<p>旅游出行</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Myinfor/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/login-user.png" /></span>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</footer>
+		</section>
+	</body>
+	
+	<script type="text/javascript" src="__PUBLIC__/wap/js/swiper.min.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/TouchSlide.1.1.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+</html>

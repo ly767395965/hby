@@ -1,0 +1,71 @@
+/*汽车详情*/
+.carPic{width: 100%;position: relative;}
+.carPic img{width: 100%;}
+.rencar_div{width: 100%;height: 50px;z-index:9999999999;line-height: 50px;text-align:center;color: #ffffff;position: fixed;bottom: 0;left: 0;}
+.rencar_btn{float: left;width: 50%;height: 50px;}
+.rencar_btn_no{background: #f9f8f8;font-size: 16px;color: #666;position: relative}
+.rencar_btn_no:after{z-index:999;content:"";position:absolute;top:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.5);transform: scaleY(0.5);}
+.rencar_btn_no.hover{background: #e4f1f9}
+.rencar_btn_sure{background: #ff8800;font-size: 16px;}
+.rencar_btn_sure.hover{background: #e57c04}
+.swiper-pagination-progress .swiper-pagination-progressbar{background: #ff8800!important;}
+.carInfo-title{position: absolute;z-index:99;padding:8px 3%;color:#edecec;bottom: 0;left: 0;width: 100%;height: 30px;background: rgba(0,0,0,0.5);}
+.carInfo-title p{font-size: 14px;color: #ffffff;}
+.carInfo-title span{color: #f1f1f1;font-size: 12px;}
+.dateTime-div{background:#ffffff;width: 100%;height: 130px;margin:0px auto;position: relative;}
+.dateTime-div:after{z-index:999;content:"";position:absolute;bottom:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.5);transform: scaleY(0.5);}
+.dateTime-box{width: 50%;height: 100%;position: relative;}
+.dateTime-box.hover{background: rgba(0,127,204,0.05)}
+.dateTime-box:nth-child(1){float: left;}
+.dateTime-box:nth-child(1):after{content:"";position:absolute;top:0;right:0;background: #d9d9d9;width:1px;height:165px; -webkit-transform: scaleX(0.4);transform: scaleX(0.4);}
+.dateTime-box:nth-child(2){float: right;}
+.dateTime-title{width:100%;text-align: center;font-size: 14px;color: #747474;line-height: 30px;padding-top: 15px;}
+.dateShow{-webkit-appearance:none;background:transparent;position:relative;text-align: center;border: none;outline: none;width: 100%;height: 30px;line-height: 30px;font-size: 16px;color: #00a2e1;}
+.timeShow{-webkit-appearance:none;background:transparent;text-align: center;border: none;outline: none;width: 100%;padding-top:5px;height: 30px;line-height: 30px;font-size: 14px;color: #333;}
+.timeLine{margin:0 auto;background: #d9d9d9;width:50%; height:1px; -webkit-transform: scaleY(0.6);transform: scaleY(0.6);}
+.prize-box{width: 100%;height: auto;line-height:24px;text-indent:20px;color:#333333;background: #ffffff;margin: 0 auto;padding: 10px 0px;position: relative;}
+.prize-box:after{z-index:999;content:"";position:absolute;bottom:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.6);transform: scaleY(0.6);}
+.prize-div{width: 100%;height: auto;font-size: 12px;}
+.prize-div i{font-style: normal}
+.car-info{width: 100%;height: auto;background: #ffffff;margin: 0px auto;}
+.car-info h5:after{z-index:999;content:"";position:absolute;bottom:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.6);transform: scaleY(0.6);}
+.car-info h5{position: relative;color: #333333;text-align: center;font-style:normal;font-weight:normal;line-height: 30px;font-size: 14px;margin-bottom: 10px;background: #f1f1f1;}
+.car-info ul li{width:100%;text-indent: 10px;line-height: 40px;position: relative;}
+.car-info ul li:after{content:"";position:absolute;bottom:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.4);transform: scaleY(0.4);}
+.car-info ul li:last-child:after{height:1px;background: #d9d9d9;}
+.car-info ul li i{display:inline-block;width: 30%;color: #747474;font-style: normal;}
+.car-info ul li span{display:inline-block;color: #333333;width: 65%;}
+#prize{color: #ff8800;font-size: 20px;font-weight: bold;}
+
+.msg{
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	z-index: 99;
+}
+.msg-text{
+	position: relative;
+	width:200px;
+	height: 40px;
+	border: 1px solid rgba(26, 30, 4,0.1);
+	background-color:rgba(255,255,255,0.9);
+	margin: 25% auto;
+	border-radius: 7px;
+	color: #000000;
+	letter-spacing: 1px;
+	font-size: 1.1em;
+	text-align: center;
+	line-height: 40px;
+	
+}
+.tips{
+	display: block;
+	width: 90%;
+	margin: 0 auto;
+	text-align: left;
+	height: 25px;
+	line-height: 25px;
+}

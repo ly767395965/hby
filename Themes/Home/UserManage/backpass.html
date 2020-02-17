@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>找回密码_{$sys_title}</title>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+            //通过change事件，当元素失去焦点时，记录该元素的value值
+            $('#hqYzm').click(function () {
+                var usertel = $("input[name='phone']").val();
+                //获取当前的value值
+                //通过ajax传递到处理程序
+                $.ajax({
+                    //处理程序url
+                    url:"{:U('UserManage/setSms')}",
+                    //传值方式
+                    type:'post',
+                    //数据类型
+                    dataType:'json',
+                    data:{
+                        usertel:usertel,
+                    },
+                });
+            })
+        });
+    </script>
+</head>
+<body>
+<include file="./Public/header.html"/>
+
+<div class="reg-bg">
+    <div class="reg-page">
+        <div class="reg-title">
+            <div class="reg-title-txt">
+                <img src="__PUBLIC__/images/login-logo.png" height="40" />
+                <span>修改密码</span>
+            </div>
+            <div id="particles" style="position:absolute;top:0;z-index: 2;width: 450px;height: 100px;"></div>
+        </div>
+        <form method="post" action="{:U('UserManage/BackPass')}">
+            <div class="reg-content">
+                <div class="reg-box">
+                    <i class="fa fa-mobile" aria-hidden="true" style="font-size: 27px;top: 10px;"></i>
+                    <input class="reg-input" name="phone" id="mobilePhone" type="text" placeholder="请输入注册的手机号">
+                </div>
+                <div class="divBox" style="margin-bottom: 15px;">
+                    <div class="reg-yzm">
+                        <input type="text" name="code" class="yzm-input" placeholder="输入验证码" easyform="uint:1;length:5;" message="请输入5位验证码" easytip="theme:blue;">
+                        <input type="button" value="获取验证码" id="hqYzm" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="reg-box">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <input class="reg-input" name="newpass" type="password" placeholder="请输入6-16位新密码">
+                </div>
+                <div class="btnBox">
+                    <a href="{:U('/Home/Login')}">返回登陆</a>
+                    <input type="submit" value="保存修改" class="reg-btn" style="width: 188px"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#particles').particleground({
+            dotColor: '#fff',
+            lineColor: 'transparent',
+            density:600,
+            particleRadius:2.5
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function() {
+        //同意协议验证
+        $(".reg-btn").click(function () {
+            if(!$("#agree").is(':checked')){
+                $("#agreeTs").fadeIn(250).click(function () {
+                    $(this).fadeOut(250);
+                    return false;
+                });
+            }else{
+                $("#agreeTs").fadeOut(250);
+            }
+        });
+    });
+
+
+    //获得焦点变化
+    $(".reg-box input").focus(function () {
+        $(this).siblings(".fa").css({color:"#00a2e1"})
+    });
+    $(".reg-box input").blur(function () {
+        $(this).siblings(".fa").css({color:"#aaaaaa"})
+    });
+    //仿刷新：检测是否存在cookie
+    $(function(){
+        if($.cookie("captcha")){
+            var count = $.cookie("captcha");
+            var btn = $('#hqYzm');
+            btn.val(count+'s后重发').attr('disabled',true).css('cursor','auto');
+            var resend = setInterval(function(){
+                count--;
+                if (count > 0){
+                    btn.val(count+'s后重发').attr('disabled',true).css('cursor','auto');
+                    $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+                    $('#hqYzm').css({background:"#c1c1c1",cursor:"auto"});
+                }else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").attr("disabled",true);
+                    $('#hqYzm').css({background:"#c1c1c1",cursor:"auto"});
+                }
+            }, 1000);
+        }
+        //输入手机号检测
+        $("#mobilePhone").blur(function () {
+            var phone=$(this).val();
+            var te=/^(1)(3[0-9]|4[0-9]|5[0-9]|7[0-9]|8[0-9])[0-9]{8}$/;
+            if(te.test(phone)){
+                $('#hqYzm').css({background:"#00a2e1",cursor:"pointer"});
+                $('#hqYzm').attr("disabled",false);
+            }else{
+                $('#hqYzm').css({background:"#c1c1c1",cursor:"auto"});
+                $('#hqYzm').attr("disabled",true);
+            }
+        });
+        //输入手机号检测
+        $("#mobilePhone").keyup(function () {
+            var phone=$(this).val();
+            var te=/^(1)(3[0-9]|4[0-9]|5[0-9]|7[0-9]|8[0-9])[0-9]{8}$/;
+            if(te.test(phone)){
+                $('#hqYzm').css({background:"#00a2e1",cursor:"pointer"});
+                $('#hqYzm').attr("disabled",false);
+            }else{
+                $('#hqYzm').css({background:"#c1c1c1",cursor:"auto"});
+                $('#hqYzm').attr("disabled",true);
+            }
+        });
+        $('#hqYzm').hover(function () {
+            $(this).css({background:"#35addc"});
+        },function () {
+            $(this).css({background:"#00a2e1"});
+        });
+        //点击改变按钮状态
+        $('#hqYzm').click(function(){
+            var btn = $(this);
+            var count = 60;
+            var resend = setInterval(function(){
+                count--;
+                if (count > 0){
+                    btn.val(count+"s后重发");
+                    $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
+                    $('#hqYzm').css({background:"#c1c1c1",cursor:"auto"});
+                }else {
+                    clearInterval(resend);
+                    btn.val("获取验证码").attr("disabled",false);
+                    $('#hqYzm').css({background:"#00a2e1",cursor:"pointer"});
+                }
+            }, 1000);
+            btn.attr('disabled',true).css('cursor','auto');
+        });
+    });
+</script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>线路列表</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/base.css" />
+    <style type="text/css">
+        #content{
+            width: 100%;
+        }
+        #content h1{
+            width: 28%;
+            font-size: 1.5em;
+            padding-top: 5%;
+            text-align: right;
+            font-weight: bold;
+            color: #211922;
+        }
+        #content ul{
+            border-top: 2px solid #999;
+            margin-top: 13px;
+            width: 100%;
+            min-height: 300px;
+        }
+        #content ul li{
+            margin-top: 15px;
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            font-size: 14px;
+            text-align: center;
+            border-bottom: 1px dashed #6e727b;
+        }
+    </style>
+</head>
+<body>
+<section class="main">
+    <include file="Index:index"/>
+    <div id="content">
+        <h1><img src="__PUBLIC__/School/img/luxian.png" width="30" height="30"/>&nbsp;路线列表</h1>
+        <ul>
+            <volist name="list" id="id">
+                <li linenumber="{$id['id']}"><span style="">{$id['route_name']}<----------({$id['cartnumber']}辆车)----------></span><span class="look">查看路线</span> | <span class="Choice">选座位</span></li>
+            </volist>
+
+
+        </ul>
+    </div>
+
+</section>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        var userId = $.cookie('userId');//用户id;
+        var schoolid = $.cookie('schoolid');//用户id;
+
+        $('.look').click(function () {
+            //获取路线
+            var look = $(this).parent('li').attr('linenumber');
+            alert(look);
+            $.ajax({
+                url :urls + 'School/ PreselectedSeat/look',
+                type : 'post',
+                dataType : 'json',
+                data : {
+                    look : look
+                },
+                success:function(ret){
+
+                }
+            });
+        });
+
+
+        //选择座位
+        $('.Choice').click(function () {
+            //获取路线
+            var linenumber = $(this).parent('li').attr('linenumber');
+            var url = "../PreselectedSeat/selection?linenumber="+linenumber+"&schoolid="+schoolid;
+            window.location.href = url;
+        });
+
+    });
+</script>

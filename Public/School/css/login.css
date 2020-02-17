@@ -1,0 +1,39 @@
+@charset "utf-8";
+/*html,body,div,p,form,label,ul,li,dl,dt,dd,ol,img,button,b,em,strong,small,h1,h2,h3,h4,h5,h6{margin:0;padding:0;border:0;list-style:none;font-style:normal;}*/
+/*body{font-family:SimHei,'Helvetica Neue',Arial,'Droid Sans',sans-serif;font-size:14px;color:#333;background:#f2f2f2;}*/
+/*a, a.link{color:#666;text-decoration:none;font-weight:500;}*/
+/*a, a.link:hover{color:#666;}*/
+/*h1,h2,h3,h4,h5,h6{font-weight: normal;}*/
+
+.welcome{width:100%;}
+.welcome img{width:100%;}
+.login-inp{border:1px solid #fff;border-radius:5px;width: 90%;margin: 15px auto;}
+.login-inp label{width:4em;text-align:center;display:inline-block;color:#fff;}
+.login-inp input{line-height:40px;color:#fff;background-color:transparent;border:none;outline: none;}
+.login-inp a{display:block;width:100%;text-align:center;line-height:40px;color:#fff;font-size:16px;letter-spacing:5px;}
+.login-txt{text-align:center;color:#fff;}
+.login-txt a{color:#fff;padding:0 5px;}
+.msg{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99;
+}
+.msg-text{
+    position: relative;
+    width:200px;
+    height: 40px;
+    border: 1px solid rgba(26, 30, 4,0.1);
+    background-color:rgba(255,255,255,0.9);
+    margin: 40% auto;
+    border-radius: 7px;
+    color: #000000;
+    letter-spacing: 1px;
+    font-size: 1.1em;
+    text-align: center;
+    line-height: 40px;
+
+}

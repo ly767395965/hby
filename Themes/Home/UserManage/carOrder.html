@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>个人信息</title>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <style>
+
+        .perinfo-content {
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+        }
+
+        .perinfo-content td{
+            border: solid 1px #ffffff;
+        }
+
+        .perinfo-content table {
+            border-collapse:collapse;
+        }
+
+        #page {
+            float: right;
+        }
+        #tr:hover{
+            background-color: #f7e6d3;
+        }
+        .footer-nav span,.footer-nav a{display: inline-block;}
+        #pay input:hover{background: #23ace1!important;}
+
+        #sum td {line-height: 20px;padding-left: 35px;}
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="top-img" style="background: url('__PUBLIC__/images/top-pic4.jpg') center center"></div>
+<include file="UserManage/header"/>
+<div class="perInfo-box">
+    <div class="perInfo-nav">
+        <include file="UserManage:link"/>
+    </div>
+
+    <div class="perinfo-content" style="margin-left: 10px;">
+        <h3 style="font-size: 16px;margin-bottom: 10px;float: left">租车记录</h3>
+        <span  style="color: #747474;float: right; margin-top: 10px;margin-right: 10px;">提示:<i>点击订单号可查看订单详情</i></span>
+        <br>
+        <if condition ="$list[0]['id'] == ''">
+            <div style=" height: 348px;line-height: 348px; text-align: center;color: #ff8800; font-size: 38px;">暂无租车记录,赶快去下单吧!</div>
+            <else/>
+            <table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+                <tbody>
+                <tr align="center" style="background: #e4f1f9">
+                    <td style="width: 20%;">订单号</td>
+                    <td style="width: 12%;">下单时间</td>
+                    <td style="width: 12%;">取车时间</td>
+                    <td style="width: 12%;">还车时间</td>
+                    <td style="width: 9%;">订单金额</td>
+                    <td style="width: 8%;">订单状态</td>
+                    <td style="width: 13%;">操作</td>
+                </tr>
+                <volist name="list" id="temp">
+                    <tr align="center" id="tr">
+                        <td class="details" data-id="{$temp['id']}" style="cursor: pointer;color: #00a2e1!important;">{$temp['order_code']} </td>
+                        <td>{$temp['order_date']}</td>
+                        <td>{$temp['pk_date']}</td>
+                        <td>{$temp['re_date']}</td>
+                        <td>￥{$temp['price_rec']}</td>
+                        <td style="width: 140px;">
+                            <if condition="$temp['usertype'] == 1">
+                                <!--大客户订单状态判断-->
+                                <if condition="$temp['order_state'] ==0">
+                                    <span style="color: #ff8800">未付款</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==1">
+                                    <span style="color: #00a2e1">已付款</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==2">
+                                    <span style="color: #747474">已派车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==3">
+                                    <span style="color: #747474">已取车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==4">
+                                    <span style="color: #747474">已还车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==7">
+                                    <span style="color: #747474">已结账</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==13">
+                                    <span style="color: #747474">已退款</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                                    <span style="color: #747474">已结账(未结清)</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1" >
+                                    <span style="color: #747474">已结账</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==10">
+                                    <span style="color: #747474">已取消</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12">
+                                    <span style="color: #747474">退款受理中</span>
+                                </if>
+                                <else/>
+                                <!--普通客户订单状态判断-->
+                                <if condition="$temp['order_state'] ==0">
+                                    <span style="color: #ff8800">未付款</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] != 0">
+                                    <span style="color: #00a2e1">已付款</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==1 && $temp['collections_rec'] == 0">
+                                    <span style="color: #ff8800">未付款(可用车)</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==2">
+                                    <span style="color: #747474">已派车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==3">
+                                    <span style="color: #747474">已取车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==4">
+                                    <span style="color: #747474">已还车</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                                    <span style="color: #747474">已结账(未结清)</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1 || $temp['order_state'] ==5 && $temp['check_out'] ==3 || $temp['order_state'] ==5 && $temp['check_out'] ==4" >
+                                    <span style="color: #747474">已结账</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==6">
+                                    <span style="color: #747474">正在处理违章</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==7">
+                                    <span style="color: #747474">已退违章押金</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==10">
+                                    <span style="color: #747474">已取消</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                                    <span style="color: #747474">退款受理中</span>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==13" >
+                                    <span style="color: #747474">已退款</span>
+                                </if>
+                            </if>
+
+                        </td>
+                        <td style="width: 13%; text-align: center;">
+                            <if condition="$temp['usertype'] == 1">
+                                <!--大客户操作状态-->
+                                <if condition="$temp['order_state'] ==0" >
+                                    <span class="payselect" data-id="{$temp['id']}" style="cursor: pointer; display: inline-block;">立即付款</span><br/>
+                                    <a class="orderNo" href="javascript:MscBox('系统信息',t[1],'您确定要取消订单吗？','取消后订单将消失！','{:U('UserManage/offOrder')}?id={$temp['id']}')" >
+                                        取消订单
+                                    </a>
+                                    <!--<a class="orderNo" href="{:U('UserManage/offOrder')}?id={$temp['id']}" >-->
+                                    <!--取消订单-->
+                                    <!--</a>-->
+                                    <style>
+                                        .orderNo:hover{color: #f00}
+                                        .payselect:hover{color: #00a2e1}
+                                    </style>
+                                </if>
+                                <!--<if condition="($temp['order_state'] ==5 || $temp['order_state'] ==6 || $temp['order_state'] ==7) && $temp['check_out'] ==2" >-->
+                                <!--<span style="color: #747474">待结单</span>-->
+                                <!--</if>-->
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] !=1" >
+                                    <span style="color: #747474">已结账(未结清)</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==5 && $temp['check_out'] ==1" >
+                                    <span style="color: #747474">已完结</span>
+                                </if>
+                                <!--<if condition="($temp['order_state'] ==5 || $temp['order_state'] ==6 || $temp['order_state'] ==7) && $temp['check_out']!=2 && $temp['check_out']!=0"  >-->
+                                <!--<span style="color: #747474">已完结</span>-->
+                                <!--</if>-->
+
+                                <if condition="$temp['order_state'] ==2 " >
+                                    <span style="color: #747474">已派车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==3 " >
+                                    <span style="color: #747474">已取车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==4 " >
+                                    <span style="color: #747474">已还车</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==7 " >
+                                    <span style="color: #747474">已完结</span>
+                                </if>
+                                <if condition="$temp['collections_rec'] !=0 && $temp['order_state'] == 1">
+                                    <a href="javascript:MscBox('系统信息',t[1],'您确定要取消订单吗？','','{:U('UserManage/offOrder')}?id={$temp['id']}')" >
+                                        取消订单
+                                    </a>
+                                </if>
+
+                                <!--<a href="{:U('UserManage/refundApply')}?id={$temp['id']}" style="display: inline-block;">退款申请</a>-->
+
+                                <if condition="$temp['collections_rec'] !=0 && ($temp['order_state'] == 11 || $temp['order_state'] == 12)">
+                                    <p style="cursor: pointer; display: inline-block;">退款受理中</p>
+                                </if>
+                                <!--<if condition="$temp['collections_rec'] !=0 && $temp['order_state'] == 12">-->
+                                <!--<p style="cursor: pointer; display: inline-block;">正在退款</p>-->
+                                <!--</if>-->
+                                <if condition=" $temp['order_state'] == 13">
+                                    <span style="color: #747474">已完结</span>
+                                </if>
+                                <if condition="$temp['order_state'] ==10 && $temp['collections_rec'] ==0">
+                                    <span style="color: #747474">已完结</span>
+                                </if>
+                                <else/>
+                                <!--普通客户的操作-->
+                                <if condition="$temp['collections_rec'] neq 0 && $temp['order_state'] ==10">
+                                    <a href="{:U('UserManage/refundApply')}?id={$temp['id']}" style="display: inline-block;">退款申请</a>
+                                </if>
+                                <if condition="$temp['collections_rec'] == 0 && $temp['order_state'] ==10">
+                                    <p style="cursor: pointer; display: inline-block;color: #747474">已完结</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==0" >
+                                    <span class="payselect" data-id="{$temp['id']}" style="cursor: pointer; display: inline-block;">立即付款</span><br/>
+                                    <a class="orderNo" href="javascript:MscBox('系统信息',t[1],'您确定要取消订单吗？','取消后订单将消失！','{:U('UserManage/offOrder')}?id={$temp['id']}')" >
+                                        取消订单
+                                    </a>
+                                    <style>
+                                        .orderNo:hover{color: #f00}
+                                        .payselect:hover{color: #00a2e1}
+                                    </style>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==11 || $temp['order_state'] ==12" >
+                                    <p style="cursor: pointer; display: inline-block;">退款受理中</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==2" >
+                                    <p style="cursor: pointer; display: inline-block;">已派车</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==3" >
+                                    <p style="cursor: pointer; display: inline-block;">已取车</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==4" >
+                                    <p style="cursor: pointer; display: inline-block;">已还车</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==5" >
+                                    <p style="cursor: pointer; display: inline-block;">待处理违章</p>
+                                </if>
+                                <if condition="$temp['order_state'] ==6" >
+                                    <p style="cursor: pointer; display: inline-block;">正在处理违章</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==7" >
+                                    <p style="cursor: pointer; display: inline-block;color: #747474">已完结</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==13" >
+                                    <p style="cursor: pointer; display: inline-block;color: #747474">已完结</p>
+                                </if>
+
+                                <if condition="$temp['order_state'] ==1">
+                                    <a href="javascript:MscBox('系统信息',t[1],'您确定要取消订单吗？','','{:U('UserManage/offOrder')}?id={$temp['id']}')" >
+                                        取消订单
+                                    </a>
+                                </if>
+                            </if>
+
+                        </td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+            <div class="curr-page" id="page" style="width: 500px;">
+                {$page}
+            </div>
+        </if>
+
+
+
+
+        <div class="agree-bg" style="background: rgba(0,0,0,0.5)" id="order-pay">
+            <div class="agree-box" style="width: 400px;height:300px;margin-top:160px;margin-left: -200px;">
+                <div class="agree-title" id="pay-class">
+                    <h3><b>选择支付方式</b></h3>
+                    <span>&times;</span>
+                </div>
+                <div class="agree-list">
+                    <div id="pay"  style="width: 400px;height: 75px!important;  float: left; display: block;margin-top: 10px; ">
+                        <form action="" method="post">
+                            <label style="font: '微软雅黑', '宋体'; margin-left: 20px; font-size: 18px;  font-weight: bold;">支付平台：</label>
+                            <br/>
+                            <br/>
+                            <label><input type="radio"  name="pay[]" class="pays" value="Alipay" style="cursor:pointer;vertical-align: middle;margin-right: 5px;"/>支付宝</label>
+                            <label> <input type="radio" name="pay[]" class="pays" value="WeChat" style="cursor:pointer;vertical-align: middle;margin-right: 5px;" />微信</label>
+                            <br>
+                            <br>
+                            <span style="font-size: 14px;margin-top:10px;margin-left:100px;font-weight: bold;color: #606060;">订单总价：<span id="jiege" style="font-size: 18px;color: #f90;display: inline-block"> </span></span>
+                        </form>
+
+                        <br>
+                        <!--提交支付信息表单-->
+                        <form class="payclass" id="payclass" action="#" method="post">
+                            <input type="hidden" value="" name="ordernum" id="ordernum">
+                            <input type="hidden" name="WIDout_trade_no"  value="{$ordercode[0]['order_code']}">
+                            <input type="hidden" name="WIDsubject" value="华邦租车">
+                            <input type="hidden" name="WIDtotal_fee" value="{$total}">
+                            <input type="hidden" name="WIDbody" value="">
+                            <input type="submit" class="alipay" value="我要支付" style="width: 130px;height: 40px; background-color: #00a2e1; border: none; color:#fffdee;border-radius: 5px;margin-left: 100px;cursor: pointer;"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--订单详情-->
+        <div class="agree-bg" id="order-bg">
+            <div class="agree-box">
+                <div class="agree-title" id="order-title">
+                    <h3><b>订单详情</b></h3>
+                    <span>&times;</span>
+                </div>
+                <div class="agree-list">
+                    <i style="font: '微软雅黑', '宋体'; margin-left: 20px; font-size: 14px;  font-weight: bold;">基本信息</i>
+                    <br/>
+                    <div class="dingdan-info">
+                        <div class="dingdan-infobox dingdan-infobox1" style="overflow: hidden">
+                            <img src="" alt="车辆图片" title="车辆图片" id="carimg" width="220" height="150" style=" margin-top: -30px">
+                        </div>
+                        <div class="dingdan-infobox">
+                            <ul>
+                                <li style=" width: 420px;">
+                                    <span id="ordermeber" style=" width: 290px; "></span>
+                                    <span id="bujiao"   style="width:140px;float: right;margin-right: -10px;color: red; "></span>
+                                </li>
+                                <li style=" width: 420px;">
+                                    <span id="name" style="width:140px;"></span>
+                                    <span id="date" style="width:140px;"></span>
+                                    <span id="driver_price"   style="width:140px;float: right;margin-right: -10px;  "></span>
+
+                                </li>
+                                <li style=" width: 420px;">
+                                    <span id="jine" style="width:140px;"></span>
+                                    <span id="everyjine" style="width:140px;"></span>
+                                    <span id="shishou"   style="width:140px;float: right;margin-right: -10px;  "></span>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <br/>
+                    <h3><b style="margin-left: 20px;font-size: 14px;">交易明细</b></h3>
+                    <div style="width: 760px;min-height: 10px;margin-left: 20px;margin-top: -20px;border: 1px solid #CCCCCC">
+                        <br/>
+                        <table style="width: 758px;margin: 0 auto;"  >
+
+                            <tbody id="traderInfo">
+                            <tr style="height: 20px; width: 100%; ">
+                                <th>交易订单号</th>
+                                <th>交易时间</th>
+                                <th>交易金额</th>
+                                <th>交易项目</th>
+                                <th>交易状态</th>
+
+                            </tr>
+
+                            </tbody>
+
+                            <!--<tr id="sum">-->
+                            <!--<td></td>-->
+                            <!--</tr>-->
+                        </table>
+                        <br/>
+                    </div>
+                    <br/>
+                    <i style="font: '微软雅黑', '宋体'; margin-left: 20px; font-size: 14px;  font-weight: bold;">车辆信息</i>
+                    <br/>
+                    <div class="dingdan-info">
+                        <div class="dingdan-infobox dingdan-infobox1">
+                            <p id="pk_date"></p>
+                            <p id="re_date"></p>
+                            <p id="drive_state"></p>
+                            <p id="pk_way"></p>
+
+
+
+                        </div>
+                        <div class="dingdan-infobox">
+                            <ul>
+                                <li>
+                                    <span id="brand"></span>
+                                    <span id="carmodeltype"></span>
+                                </li>
+                                <li>
+                                    <span id="agestyle"></span>
+                                    <span id="carmodelname"></span>
+                                </li>
+                                <li>
+                                    <span id="bearboxtype"></span>
+                                    <span id="sitecount"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="">
+
+                    </div>
+                    <div style="width: 759px; height: 30px;border-top:medium none;  line-height: 30px; border: 1px solid #ccc;float: left; margin-left: 20px;">
+                        <span style="width: 285px; border-right: 1px solid #ccc; float: left;margin-left: 10px;" id="carno"></span>
+                        <span style="margin-left: 10px;" id="send_location"></span>
+
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <br/>
+                    <i style="font: '微软雅黑', '宋体'; margin-left: 20px; font-size: 14px;  font-weight: bold;">附加信息</i>
+                    <br/>
+                    <div class="dingdan-info">
+                        <div class="dingdan-infobox dingdan-infobox1">
+                            <ul>
+                                <li>
+                                    <span id="dp_price"></span>
+                                    <span id="in_price"></span>
+                                    <span id="in_code"></span>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="dingdan-infobox">
+                            <ul>
+                                <li>
+                                    <span id="in_cost"></span>
+                                    <span id="oil_price"></span>
+                                    <span id="tolls"></span>
+                                </li>
+                                <li style="width: 500px; ">
+                                    <span id="in_dep" style="width: 280px;"></span>
+                                    <span id="wash_price"></span>
+                                </li>
+                                <li>
+                                    <span id="re_price"></span>
+
+
+                                </li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div style="clear: both;"></div>
+
+</div>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+<script>
+    $(function () {
+
+        $(document).on("click",".curr-page a",function(){
+            var pageOBJ = this;
+            var url = pageOBJ.href;
+            $.ajax({
+                type:'get',
+                url:url,
+                success:function (result) {
+                    //main是class名，即显示数据的这个div的class名
+                    $(".perinfo-content").html(result);
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
+<script>
+    $(function () {
+
+        $(document).on("click",".payselect",function(){
+            alert('您好,请下载APP进行支付!');
+            var url = "{:U('Down/index')}";
+            window.location.href=url;
+//            var order = $(this).attr("data-id");
+//            $.ajax({
+//                type: "get",
+//                url: "{:U('UserManage/pay')}",
+//                data: {
+//                    id : order,
+//                },
+//                success: function(data){
+//                    $('#jiege').html('￥'+data.total);
+//                    $("#ordernum").val(data.id);
+//                    console.log(data);
+//                }
+//            });
+//
+//            $("#order-pay").fadeIn();
+//            return false;
+        });
+
+        $(document).on("click","#pay-class span",function(){
+            $("#order-pay").fadeOut();
+        });
+
+    });
+</script>
+<!--支付方式-->
+<script>
+    $(function () {
+
+        var clicknum = 0;
+
+        $('.pays').click(function () {
+            var Selected = $(this).val();
+            var zfb = '__APP__/Home/Pay/doAlipay';
+            var wx  = '__APP__/Home/WexinPay/index';
+            if (Selected == 'Alipay') {
+                $('.payclass').attr("action",zfb);
+            } else {
+                $('.payclass').attr("action", wx);
+            }
+            clicknum += 1;
+        });
+
+        $("form").submit(function(e){
+            var url = $(this).attr("action");
+            if (url=='#') {
+                alert('请选择支付方式!');
+                return false;
+            }
+
+        });
+
+    });
+
+</script>
+</html>
+<!--订单详情-->
+<script>
+    var y = 0;
+    $(function () {
+        $(document).on("click",".details",function () {
+            var order = $(this).attr("data-id");
+            $.ajax({
+                type: "get",
+                url: "{:U('UserManage/orderPage')}",
+                data: {
+                    id : order,
+                },
+                success: function(data){
+                    console.log(data);
+                    $('#carimg').attr("src","__PUBLIC__/"+data.img);
+                    $('#name').html("租车人："+data.name);
+                    $('#date').html("租期："+data.times);
+
+                    $('#jine').html("订单金额：￥"+data.price_rec);
+
+                    $('#everyjine').html("日租价：￥"+data.u_price);
+                    $('#ordermeber').html("订单号："+data.order_code);
+                    $('#pk_date').html("取车时间："+data.pk_date);
+                    $('#re_date').html("还车时间："+data.re_date);
+                    $('#drive_state').html("是否代驾："+data.drive_state);
+                    $('#pk_way').html("是否送车："+data.pk_way);
+                    $('#brand').html("品牌："+data.brand);
+                    $('#carmodeltype').html("车辆类型："+data.carmodeltype);
+                    $('#agestyle').html("年代款："+data.agestyle);
+                    $('#carmodelname').html("车型："+data.carmodelname);
+                    $('#bearboxtype').html("变速箱："+data.bearboxtype);
+                    $('#sitecount').html("座位数："+data.sitecount);
+                    if (data.car_id == 0){
+                        $('#carno').html("车牌号："+"(未指派车辆)");
+                    }else {
+                        $('#carno').html("车牌号："+data.carno);
+                    }
+                    $('#send_location').html("&nbsp;&nbsp;&nbsp;&nbsp;送车地址："+data.send_location);
+                    $('#dp_price').html("违章金额：￥"+data.dp_price);
+                    $('#in_price').html("开票金额：￥"+data.in_price);
+                    if (data.in_code == 0){
+                        $('#in_code').html("发票号："+"(未开票)");
+                    }else {
+                        $('#in_code').html("发票号：￥"+data.in_code);
+                    }
+                    $('#in_cost').html("开票成本：￥"+data.in_cost);
+                    if (data.in_dep == ''){
+                        $('#in_dep').html("开票单位："+"未填写");
+                    } else {
+                        $('#in_dep').html("开票单位："+data.in_dep);
+                    }
+                    $('#wash_price').html("洗车费：￥"+data.wash_price);
+                    $('#oil_price').html("油费：￥"+data.oil_price);
+                    $('#tolls').html("过路费：￥"+data.tolls);
+                    $('#re_price').html("维修费：￥"+data.re_price);
+                    $('#driver_price').html("代驾费：￥"+data.driver_price);
+                    $('#shishou').html("实际支付：￥"+data.sumnum);
+                    $('#sum td').html("交易总金额：￥"+data.ordersum);
+
+                    var bujiao = data.price_rec - data.sumnum;//应收金额 减 实收金额
+                    if (data.order_state == 0){
+                        $('#bujiao').html("未支付");
+                    } else if(data.order_state == 10) {
+                        $('#bujiao').html("订单已取消");
+                    } else if(data.order_state == 11 || data.order_state == 12) {
+                        $('#bujiao').html("退款已受理");
+                    } else if(data.order_state == 13) {
+                        $('#bujiao').html("已退款:￥"+data.sumnum);
+                    } else {
+                        if (data.check_out == 1 && data.order_state > 0 ){
+                            $('#bujiao').html("已付款");
+                        } else if(data.price_rec != data.sumnum) {
+                            if ( data.check_out !=1 && data.order_state > 0){
+                                $('#bujiao').html("欠款：￥"+bujiao);
+                            } else {
+                                $('#bujiao').html("已结清")
+                            }
+
+                        }
+                    }
+                    console.log(data.ordersum);
+                    //交易明细
+                    var trade = data.trade;
+                    for (var i=0;i<trade.length;i++){
+
+                        $('#traderInfo').append("'<tr class='trade_table'>" +
+                                "<td>"+trade[i]['trade_code']+"</td>" +
+                                "<td>"+trade[i]['charge_time']+"</td>" +
+                                "<td>"+trade[i]['charge_sum']+"</td>" +
+                                "<td>"+trade[i]['charge_road']+"</td>" +
+                                "<td>"+trade[i]['pay_way']+"</td>" +
+                                "</tr>'");
+                    }
+                    $(".trade_table td").css("text-align","center");
+
+                    y++;
+//                    $("#").val(data.id);
+//                    console.log(data);
+                }
+            });
+            $("#order-bg").fadeIn();
+            return false;
+        }),
+
+                $(document).on("click","#order-title span",function(){
+                    $('.trade_table').remove();
+                    $("#order-bg").fadeOut();
+                });
+    })
+</script>

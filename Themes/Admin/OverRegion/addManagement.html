@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>经营区域信息添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <!--<script type="text/javascript" src="__PUBLIC__/Uploadpictures/diyUpload/js/webuploader.html5only.min.js"></script>-->
+    <!--<script type="text/javascript" src="__PUBLIC__/Uploadpictures/diyUpload/js/diyUpload.js"></script>-->
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .box_fl{float:left;margin-left: 0%}
+        label{width: 150px !important;}
+        .sub_box {clear:both;height: 100%;position: relative;margin-left:17%;margin-top: 3em}
+    </style>
+    <script type="text/javascript">
+
+        $(function(){
+            var model_id = $('#brand').val();
+            carmodel(model_id);
+            //通过change事件，当元素失去焦点时，记录该元素的value值
+            $('#brand').change(function () {
+                //获取当前的value值
+                var id = ($(this).val());
+                //通过ajax传递到处理程序
+                carmodel(id)
+            })
+        });
+        function carmodel(id){
+            $.ajax({
+                //处理程序url
+                url:"{:U('NetCarInfo/ajax')}",
+                //传值方式
+                type:'post',
+                //数据类型
+                dataType:'json',
+                data:{
+                    id:id,
+                },
+                //接受处理程序返回的数据data
+                success:function(data){
+                    //清空元素
+                    $('#carmodel option[value!=""]').remove();
+                    //通过ecsh来遍历返回的数据data
+                    $.each(data,function (i) {
+                        //将遍历的值添加到页面元素
+                        $('#carmodel').append("<option value='"+data[i]['id']+"'>"+data[i]['carmodelname']+"</option>");
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+<body style="height: 100%;">
+<div class="tit-all">
+    <h3><i></i>经营区域信息添加页面</h3>
+</div>
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 135%;background: black;display: none;opacity: 0.6"></div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('OverRegion/addManagement')}" method="post" enctype="multipart/form-data" style="height: auto">
+                <div class="busi_input clearfix">
+                    <label>地域名：</label>
+                    <input class="input_normal" type="text"   name="region_name" id="region_name"  value="{$list.region_name}" placeholder="请输入地域名" >
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>行政区划编号：</label>
+                    <input class="input_normal" type="text"   name="address" id="address"  value="{$list.address}" placeholder="请输入行政区划编号">
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>所属级别：</label>
+                    <select class="input_normal" name="leave" id="leave">
+                        <option value="0" <if condition ="$list.leave eq 0">selected</if>>省</option>
+                        <option value="1" <if condition ="$list.leave eq 1">selected</if>>市</option>
+                        <option value="2" <if condition ="$list.leave eq 2">selected</if>>县/区</option>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix province"  style="display: none">
+                    <label>所属省级地域：</label>
+                    <select class="input_normal" name="province" id="province">
+                        <volist name="province" id="pro">
+                            <option value="{$pro.id}" <if condition ="$list.pid eq $pro.id">selected</if>>{$pro.region_name}</option>
+                        </volist>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix city"  style="display: none">
+                    <label>所属市级地域：</label>
+                    <select class="input_normal" name="city" id="city">
+                        <volist name="city" id="city_info">
+                            <option value="{$city_info.id}" <if condition ="$list.pid eq $city_info.id">selected</if>>{$city_info.region_name}</option>
+                        </volist>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix" >
+                    <label>是否为经营区域：</label>
+                    <select class="input_normal" name="Is_operate" id="Is_operate">
+                        <option value="0" <if condition ="$list.is_operate eq 0">selected</if>>否</option>
+                        <option value="1" <if condition ="$list.is_operate eq 1">selected</if>>是</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">注:如果为否,那该地域下的子地域也不是经营区域</i>
+                </div>
+
+                <input type="hidden" value="{$list.id}" name="id" id="is_add">
+
+                <div class="clearfix sub_box">
+                    <label class="busi_bz">&nbsp;</label>
+
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">
+                        添加
+                    </button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+</body>
+</html>
+<script>
+    $(function () {
+        switch ($('#leave').val()){     //根据地域级别初始化地域选择框的显示
+            case '1':
+                $('.province').show();
+                $('.city').hide();
+                break;
+            case '2':
+                $('.province').show();
+                if ($('#city').html() != ''){
+                    $('.city').show();
+                }
+                break;
+        }
+        if ($('#is_add').val()){    //判断是修改还是添加,改变提交路径
+            $('#account-submit').text('修改');
+            $('form').attr('action',"{:U('OverRegion/editManagement')}");
+        }
+
+        $('#leave').on('change',function () {       //改变地域等级时,弹出父级地域选择框
+            switch ($(this).val()){
+                case '1':
+                    $('.province').show();
+                    break;
+                case '2':
+                    $('.province').show();
+                    $('.city').show();
+                    break;
+                default:
+                    $('.province').hide();
+                    $('.city').hide();
+            }
+        });
+
+        $('#province').on('change',function () {       //改变地域等级时,弹出父级地域选择框
+            if ($('#leave').val() == 2){
+                var param = {pid:$(this).val()};
+                $.get('{:U(cityAjax)}',param,function(data){
+                    data = JSON.parse(data);
+                    if(data['error'] == '0'){
+                        var list = data['list'];
+                        var ary;
+                        $('#city').html('');
+                        for (var i=0;i<list.length;i++){
+                            ary = list[i];
+                            $('#city').append('<option value="'+ary.id+'">'+ary.region_name+'</option>');
+                        }
+                        $('.city').show();
+                    }else{
+                        $('#city').val(0);
+                        $('.city').hide();
+                        alert('未查询子地域');
+                    }
+                })
+            }
+
+        });
+    })
+</script>

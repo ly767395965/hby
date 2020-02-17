@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收费查询</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        订单管理列表
+    </h3>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1006px;height: 20px;" >
+        <form action="{:U('Finance/financecost')}" method="get" style="position: absolute;height: 50px">
+            <input type="hidden" value="{$act}" name="act" id="act">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select"   style="width: 200px;" id="select">
+                    <if condition ="$msg.select eq 6"><option selected value="6">结账状态（1、账未结清  2、账已结清）</option><else/><option value="6">结账状态（1、账未结清  2、账已结清）</option></if>
+                    <if condition ="$msg.select eq 0"><option selected value="0">订单号</option><else/><option value="0">订单号</option></if>
+                    <if condition ="$msg.select eq 1"><option selected value="1">客户</option><else/><option value="1">客户</option></if>
+                    <if condition ="$msg.select eq 2"><option selected value="2">车型</option><else/><option value="2">车型</option></if>
+                    <if condition ="$msg.select eq 3"><option selected value="3">订单状态</option><else/><option value="3">订单状态</option></if>
+                    <if condition ="$msg.select eq 4"><option selected value="4">账号/手机</option><else/><option value="4">账号/手机</option></if>
+                    <if condition ="$msg.select eq 5"><option selected value="5">车牌号</option><else/><option value="5">车牌号</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;" id="condition_box">
+                <input class="input_normal" type="text"  style="width: 200px;display: none" value="{$msg.key}"  name="key" id="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                <select class="input_normal" name="key_check" id="key_check" style="width: 200px;display: none">
+                    <option <if condition ="$msg.key eq 0">selected</if> value="0">账未结清</option>
+                    <option <if condition ="$msg.key eq 1">selected</if> value="1">账已结清</option>
+                </select>
+                <select class="input_normal" name="key_state" id="key_state" style="width: 200px;display: none">
+                    <option <if condition ="$msg.key eq 5">selected</if> value="5">已结账</option>
+                    <option <if condition ="$msg.key eq 6">selected</if> value="6">可退押金</option>
+                    <option <if condition ="$msg.key eq 7">selected</if> value="7">正常结单</option>
+                </select>
+
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <select class="input_normal" name="select_time"  style="width: 80px;">
+                        <option <if condition ="$msg.select_time eq 0">selected</if> value="0">下单时间</option>
+                        <option <if condition ="$msg.select_time eq 1">selected</if> value="1">取车时间</option>
+                        <option <if condition ="$msg.select_time eq 2">selected</if> value="2">还车时间</option>
+                    </select>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+    </div>
+    <br>
+    <div style="float: left;margin-left: 83px">注：<label style="color:#3EAFE0">蓝色</label>记录为大客户订单</div>
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th style="width: 80px;">编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th>客户</th>
+            <th>联系方式</th>
+            <th>车型</th>
+            <th style="width: 180px">订单号</th>
+            <th style="width: 80px">车辆牌照</th>
+            <th style="">取车时间</th>
+            <th>还车时间</th>
+            <th>车辆单价</th>
+            <th>预付金额</th>
+            <th>补交金额</th>
+            <th>应收金额</th>
+            <th>实收金额</th>
+            <th>违章押金</th>
+            <th>发票成本</th>
+            <th>未结账目</th>
+            <th>下单时间</th>
+            <th>订单状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到需要处理的订单
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr <if condition ="$temp['usertype']==1">style="color: #3EAFE0"</if>>
+                <td><input type="checkbox" class="cBox" name="ids[]" value="{$temp['id']}">{$temp['id']}</td>
+                <td><a href="{:U('Member/Index')}">{$temp.username}</a></td>
+                <td><a href="{:U('Member/Index')}">{$temp.phone}</a></td>
+                <td><a href="{:U('car_model/Index')}">{$temp.carmodelname}</a></td>
+                <td>
+                    <if condition="$temp.usertype == 1">
+                        <a href="{:U('Order/max_orderInfo')}?id={$temp['id']}">{$temp.order_code}</a>
+                        <else/>
+                        <a href="{:U('Order/orderInfo')}?id={$temp['id']}">{$temp.order_code}</a>
+                    </if>
+
+                </td>
+                <td><a href="{:U('carinfo_manage/Index')}">{$temp.carno}</a></td>
+                <td>{$temp.pk_date}</td>
+                <td>{$temp.re_date}</td>
+                <td>{$temp.u_price}</td>
+                <td>{$temp.pre_price}</td>
+                <td>{$temp.price_paided}</td>
+                <td>{$temp.price_rec}</td>
+                <td>{$temp.collections_rec}</td>
+                <if condition ="$temp['get_deposit']==1">
+                    <td>已交({$temp.deposit})</td>
+                    <else/>
+                    <td>未交</td>
+                </if>
+                <td>{$temp.in_cost}</td>
+                <td style="color: red"></td>
+                <td>{$temp.order_date}</td>
+                <td>
+                    <switch name="temp.order_state">
+                        <case value="0">未支付</case>
+                        <case value="1">已支付</case>
+                        <case value="2">已派车</case>
+                        <case value="3">已取车</case>
+                        <case value="4">已还车</case>
+                        <case value="5">已结账</case>
+                        <case value="6">违章录入完成</case>
+                        <case value="7">正常结单</case>
+                        <case value="10">订单取消</case>
+                        <case value="11">退款申请</case>
+                        <case value="12">同意退款</case>
+                        <case value="13">退款完成</case>
+                        <default />未知
+                    </switch>
+                </td>
+                <td class="tools">
+                    <ul class="toolbar">
+                        <div class="charge" >
+                            <if condition="($temp['deposit'] neq 0) && ($temp['get_deposit'] eq 0)">
+                                <a  href="{:U('Finance/financecost')}?id={$temp['id']}&action=get_deposit" >
+                                    <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />收取押金</li>
+                                </a>
+                                <else/>
+                                <if condition="$temp['order_state']==0">
+                                    <a style="color: red;" href="{:U('Finance/financecost')}?id={$temp['id']}&action=charge" >
+                                        <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />收费</li>
+                                    </a>
+                                </if>
+
+
+
+                                <if condition="$temp['check_out']==2">
+                                    <if condition="$temp.usertype == 1">
+                                        <a style="color: blue;" href="{:U('Finance/financecost')}?id={$temp['id']}&action=max_return_car&big=1">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />补收余款</li>
+                                        </a>
+                                        <a style="color: blue;" href="{:U('Finance/financecost')}?id={$temp['id']}&action=max_return_car&big=1">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />账未结清</li>
+                                        </a>
+                                        <else/>
+                                        <a style="color: blue;" href="{:U('Finance/financecost')}?id={$temp['id']}&action=return_car">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />补收余款</li>
+                                        </a>
+                                        <a style="color: blue;" href="{:U('Finance/financecost')}?id={$temp['id']}&action=fill_price">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />账未结清</li>
+                                        </a>
+                                    </if>
+
+                                    <else/>
+                                    <if condition="$temp.usertype == 1">
+                                        <a href="{:U('Order/max_orderInfo')}?id={$temp['id']}">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />账已结清</li>
+                                        </a>
+                                        <else/>
+                                        <a href="{:U('Order/orderInfo')}?id={$temp['id']}">
+                                            <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />账已结清</li>
+                                        </a>
+                                    </if>
+                                </if>
+                            </if>
+                        </div>
+                        <div class="refund" >
+                            <if condition="($temp['order_state'] == 12)">
+                                <a  href="{:U('Finance/financecost')}?id={$temp['id']}&action=refund" >
+                                    <li style="width: 65px;"><img src="__PUBLIC__/images/t02.png"  />退款</li>
+                                </a>
+                            </if>
+                        </div>
+                    </ul>
+                    <input type="hidden" value="{$temp['check_out']}">
+                    <script type="text/javascript">
+                        var collections_rec = $('.order_table').find('tr:last').find('td:eq(12)').text();
+                        var price_rec = $('.order_table').find('tr:last').find('td:eq(11)').text();
+                        var check_out = $('.order_table').find('tr:last').find('td:last').find('input').val();
+                        if (check_out == 1){
+                            $('.order_table').find('tr:last').find('td:eq(15)').text('已结清');
+                            $('.order_table').find('tr:last').find('td:eq(15)').css('color','#000');
+                        }else{
+                            $('.order_table').find('tr:last').find('td:eq(15)').text(price_rec - collections_rec);
+                        }
+                    </script>
+                </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+<input type="hidden" value="{$msg.select}" id="re_select" > <!--返回的筛选条件-->
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        var select = $('#select').val();
+        condition(select);                         //根据不同的筛选条件设定初始条件
+        var act = $('#act').val();
+        switch (act){
+            case 'charge' :
+                $('.refund').css('display','none');
+                break;
+            case 'refund' :
+                $('.charge').css('display','none');
+                break;
+            default :
+                break;
+        }
+        $('#select').change(function () {
+            var select = $('#select').val();
+            change_se();                          //同步筛选条件,并初始条件的隐藏属性
+            condition(select);                    //根据不同的筛选条件设定初始条件
+        });
+
+//        根据不同的筛选条件设定初始条件
+        function condition(select) {
+            if (select == '6'){
+                $('#key_check').css('display','block');
+
+            }else if (select == 3){
+                $('#key_state').css('display','block');
+            }else{
+                $('#key').css('display','block');
+                $('#key').val('');
+            }
+        }
+//        同步筛选条件,并初始条件的隐藏属性
+        function change_se() {
+            $('#key_check').css('display','none');
+            $('#key').css('display','none');
+            $('#key_state').css('display','none');
+
+        }
+
+    });
+
+</script>

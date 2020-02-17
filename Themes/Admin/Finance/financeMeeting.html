@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会议订单管理</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <style>
+        .substep{float: right;width: 100px;height: 34px;background: lightblue;text-align: center;line-height: 34px;margin: -28px 43px 0px 100px;border-radius: 5px;font-size: 14px;  }
+        .substep:hover{background: #3eafe0;color: white;}
+        .substep:hover .substep_next{display: block}
+        .substep_next{position: absolute;top:83px;display: none}
+        .substep_next li{width: 100px;height: 25px;background: lightgrey;text-align: center;line-height: 25px;border-top: 1px solid white;color: orangered}
+        .substep_next li:hover{background: #968588;color: white}
+
+    </style>
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        会议订单管理列表
+    </h3>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1006px;height: 20px;" >
+        <form action="{:U('Finance/financemeeting')}" method="get" style="position: absolute;height: 50px">
+            <input type="hidden" value="{$act}" id="act" name="act">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select"  style="width: 200px;">
+                    <if condition ="$msg.select eq 0"><option selected value="0">订单号</option><else/><option value="0">订单号</option></if>
+                    <if condition ="$msg.select eq 1"><option selected value="1">会议名称</option><else/><option value="1">会议名称</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;" value="{$msg.key}"  name="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <select class="input_normal" name="select_time"  style="width: 80px;">
+                        <option <if condition ="$msg.select_time eq 0">selected</if> value="0">下单时间</option>
+                        <option <if condition ="$msg.select_time eq 1">selected</if> value="1">取车时间</option>
+                        <option <if condition ="$msg.select_time eq 2">selected</if> value="2">还车时间</option>
+                    </select>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+
+    </div>
+    <!--<div class="substep" >分步操作
+        <div class="substep_next">
+            <ul>
+                <a href="{:U('Order/customerBig')}?step=send&select={$msg.select}&key={$msg.key}&select_time={$msg.select_time}&start={$msg.start}&stop={$msg.stop}"><li>派遣车辆</li></a>
+                <li>指派代驾</li>
+                <li>客户取车</li>
+                <li>续租管理</li>
+                <li>客户还车</li>
+                <li>成本录入</li>
+                <li>违章录入</li>
+                <li>前期完结</li>
+            </ul>
+        </div>
+    </div>-->
+    <br>
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th >编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th >会议名称</th>
+            <th >联系人</th>
+            <th >联系方式</th>
+            <th >订单号</th>
+            <th >租车数量</th>
+            <th >取车时间</th>
+            <th >还车时间</th>
+            <th >预计还款日</th>
+            <th >外调成本</th>
+            <th >杂项成本</th>
+            <th >订单总价</th>
+            <!--<th >预计利润</th>-->
+            <th >实收金额</th>
+            <th >未结账目</th>
+            <th >下单时间</th>
+            <th>订单状态</th>
+            <th style="padding-left: 10px">进行操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到需要处理的订单
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr>
+                    <td style="padding-left: 5px"><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp['id']}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.meeting_name}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.contacts}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.phone}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.order_code}</a></td>
+                    <td>{$temp.car_num}</td>
+                    <td>{$temp.pk_date}</td>
+                    <td>{$temp.re_date}</td>
+                    <td>{$temp.expect_date}</td>
+                    <td>{$temp.out_cost}</td>
+                    <td>{$temp.mixed_cost}</td>
+                    <td>{$temp.price_rec}</td>
+                    <!--<td></td>-->
+                    <td>{$temp.collections_rec}</td>
+                    <td style="color: red"></td>
+                    <td>{$temp.order_date}</td>
+                    <td>
+                        <switch name="temp.order_state" >
+                            <case value="0">初步录单</case>
+                            <case value="1">录单完成</case>
+                            <case value="2">未结清</case>
+                            <case value="3">已结单</case>
+                            <case value="10">订单取消</case>
+                            <default />未知
+                        </switch>
+                    </td>
+                    <td class="tools">
+                        <ul class="toolbar">
+                            <switch name="temp.order_state" >
+                                <case value="1">
+                                    <li class="click" style="width: 75px">
+                                        <img src="__PUBLIC__/images/t02.png"  />
+                                        <a  href="{:U('finance/meetingCost')}?id={$temp['id']}&action=checkout">
+                                            结账
+                                        </a>
+                                    </li>
+                                </case>
+                                <case value="2">
+                                    <li class="click" style="width: 75px">
+                                        <img src="__PUBLIC__/images/t02.png"  />
+                                        <a  href="{:U('finance/meetingCost')}?id={$temp['id']}&action=fill_price">
+                                            收账
+                                        </a>
+                                    </li>
+                                </case>
+                                <case value="3">
+                                    <li class="click" style="width: 75px">
+                                        <!--<a  href="{:U('finance/meetingCost')}?id={$temp['id']}&action=fill_price">-->
+                                            <img src="__PUBLIC__/images/t02.png"  />已结单
+                                        <!--</a>-->
+                                    </li>
+                                </case>
+                                <default />未知
+                            </switch>
+                            <if condition ="$temp.order_state lt 3">
+                                <a href="{:U('Order/ordermeet_info')}?id={$temp['id']}">
+                                    <li class="click" style="width: 85px;padding-left: 10px">
+                                        未到结款日期
+                                    </li>
+                                </a>
+                            </if>
+                        </ul>
+                        <input type="hidden" value="{$time}" id="time"><!--获取当前时间-->
+                        <input type="hidden" value="{$temp.order_state}" id="order_state"><!--获取当前订单状态-->
+                    </td>
+
+                    <script>
+                        var price_rec = $('.order_table').find('tr:last').find('td:eq(11)').text(); //总价
+                        var collections_rec = $('.order_table').find('tr:last').find('td:eq(12)').text(); //实收金额
+                        var mixed_cost = $('.order_table').find('tr:last').find('td:eq(10)').text();//杂项成本
+                        var out_cost = $('.order_table').find('tr:last').find('td:eq(9)').text();//外调成本
+                        var expect_profit = price_rec - mixed_cost - out_cost;                      //预计利润
+                        var check_out = price_rec - collections_rec;
+//                        $('.order_table').find('tr:last').find('td:eq(10)').text(expect_profit);
+                        var expect_date = $('.order_table').find('tr:last').find('td:eq(8)').text();//预计还款日
+                        var time = $('.order_table').find('tr:last').find('td:last').find('input:first').val();//当前时间
+                        var order_state = $('.order_table').find('tr:last').find('td:last').find('input:last').val();//订单状态
+                        var dd = diffDate(expect_date,time,'d');
+                        if (order_state == 2){
+                            var msg = '注意收账';
+                            $('.order_table').find('tr:last').find('td:eq(13)').text(check_out);
+                        }else if(order_state == 1) {
+                            var msg = '注意结账';
+                            $('.order_table').find('tr:last').find('td:eq(13)').text(check_out);
+                        }else{
+                            $('.order_table').find('tr:last').find('td:eq(13)').text('已结单');
+                            $('.order_table').find('tr:last').find('td:eq(13)').css('color','black');
+                        }
+                        if (dd >= 0 && order_state < 3){
+                            $('.order_table').find('tr:last').find('td:last').find('li:last').text('已到预计还款日');
+                            $('.order_table').find('tr:last').find('td:last').find('li:last').css('color','red');
+                            $('.order_table').find('tr:last').find('td:last').find('li:first').find('a').text(msg);
+                            $('.order_table').find('tr:last').find('td:last').find('li:first').find('a').css('color','red');
+                        }
+                    </script>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+    <div class="digg">{$page}</div>
+</div>
+</body>
+</html>
+

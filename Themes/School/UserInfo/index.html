@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #content{
+            width: 100%;
+        }
+        #content h4{
+            width: 28%;
+            font-size: 1.5em;
+            padding-top: 5%;
+            text-align: right;
+            font-weight: bold;
+            color: #211922;
+        }
+        #content ul{
+            margin-top: 4%;
+            width: 100%;
+            height: 380px;
+            border-top: 2px solid #999;
+            min-height: 300px;
+        }
+        #content ul li{
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px dashed #6e727b;
+            line-height: 50px;
+            left:20px;
+        }
+        #bot{
+            width: 150px;
+            height: 40px;
+            margin-top: 65px;
+            margin-left: 30%;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid;
+            font-size: 2em;
+            color: #fff;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        #content ul li span{
+            margin-left: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+<section class="main">
+    <include file="Index:index"/>
+    <div id="content">
+        <h4><img src="__PUBLIC__/School/img/userinfoico.png" width="22" height="22"/>&nbsp;个人资料</h4>
+        <hr>
+        <ul>
+            <li><span id="phone">用户名:</span></li>
+            <li><span id="name">姓&nbsp;&nbsp;名:</span></li>
+            <li><span id="schoolname">所属院校:</span></li>
+            <li><span id="regdate">注册日期:</span></li>
+            <div id="bot">
+                <span style="line-height: 30px;">退出登录</span>
+            </div>
+        </ul>
+
+
+    </div>
+</section>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        var name = $.cookie('username');//获取路径上的用户名
+        var phone = $.cookie('phone');//电话;
+        var regdate = $.cookie('regdate');//注册日期;
+        var schoolname = $.cookie('schoolname');//所属学校;
+        var userId = $.cookie('userId');//用户id;
+        $("#phone").append('&nbsp;&nbsp;'+phone);
+        $("#name").append('&nbsp;&nbsp;'+name);
+        $("#regdate").append('&nbsp;&nbsp;'+regdate);
+        $("#schoolname").append('&nbsp;&nbsp;'+schoolname);
+        $("#bot").click(function () {
+
+            var url = "../Login/index";
+            window.location.href = url;
+        });
+
+        function clearCookie() {
+            $.cookie('username', '');
+            $.cookie('phone', '');
+            $.cookie('regdate', '');
+            $.cookie('schoolname', '');
+            $.cookie('userId', '');
+
+        }
+    });
+
+</script>

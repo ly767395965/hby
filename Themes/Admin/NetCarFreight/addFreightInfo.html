@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加网约车运价信息</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .box_fl{float:left;margin-left: 5%}
+        label{width: 150px !important;}
+        .sub_box {width:200px;clear:both;height: 100%;position: relative;margin: 0 auto;}
+        .box_fl1{
+            float: right;
+            margin-right: 8%;
+            width: 600px;
+        }
+
+        .box_fl1 input{
+            width: 300px;
+            float: right;
+            margin-right: 10px;
+            position: absolute;
+        }
+        .box_fl1 label{
+            float: left;
+            width: 200px !important;
+
+        }
+    </style>
+</head>
+<body style="height: 100%;">
+<div class="tit-all">
+    <h3><i></i>添加网约车运价信息</h3>
+</div>
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 135%;background: black;display: none;opacity: 0.6"></div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('NetCarFreight/addFreightInfo')}" method="post" enctype="multipart/form-data" style="height: auto">
+                <div class="box_fl">
+                    <div class="busi_input clearfix">
+                        <label>运价名称：</label>
+                        <input class="input_normal" type="text"   name="FareName"  placeholder="请输入运价名称" title="请输入运价名称" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>行政区划编号：</label>
+                        <input class="input_normal" type="text"   name="Address"  placeholder="请输入行政区划编号" title="请输入行政区划编号" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>运价有效期起：</label>
+                        <input class="input_normal" type="text"   name="FareValidOn" placeholder="运价有效期起:YYYY-MM-DD" title="运价有效期起:YYYY-MM-DD"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>运价有效期止：</label>
+                        <input class="input_normal" type="text"   name="FareValidOff" placeholder="运价有效期止:YYYY-MM-DD" title="运价有效期止:YYYY-MM-DD"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>起步价：</label>
+                        <input class="input_normal" type="text"   name="StartFare"  placeholder="请输入起步价" title="请输入起步价" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>起步里程：</label>
+                        <input class="input_normal" type="text"   name="StartMile"   placeholder="请输入起步里程" title="请输入起步里程" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>计程单价（按公里）：</label>
+                        <input class="input_normal" type="text"   name="UnitPricePerMile" placeholder="请输入计程单价（按公里）" title="请输入计程单价（按公里）" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>计程单价（按分钟）：</label>
+                        <input class="input_normal" type="text"   name="UnitPricePerMinute" placeholder="请输入计程单价（按分钟）" title="请输入计程单价（按分钟）" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>单程加价单价：</label>
+                        <input class="input_normal" type="text"   name="UpPrice" placeholder="请输入单程加价单价" title="请输入单程加价单价" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>单程加价公里：</label>
+                        <input class="input_normal" type="text"   name="UpPriceStartMile" placeholder="请输入单程加价公里" title="请输入单程加价公里" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>营运早高峰时间起：</label>
+                        <input class="input_normal" type="text"   name="MorningPeakTimeOn" placeholder="请输入营运早高峰时间起:HH:mm:ss" title="请输入营运早高峰时间起:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>营运早高峰时间止：</label>
+                        <input class="input_normal" type="text"   name="MorningPeakTimeOff" placeholder="请输入营运早高峰时间止:HH:mm:ss" title="请输入营运早高峰时间止:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>营运晚高峰时间起：</label>
+                        <input class="input_normal" type="text"   name="EveningPeakTimeOn" placeholder="请输入营运晚高峰时间起:HH:mm:ss" title="请输入营运晚高峰时间起:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>营运晚高峰时间止：</label>
+                        <input class="input_normal" type="text"   name="EveningPeakTimeOff" placeholder="请输入营运晚高峰时间止:HH:mm:ss" title="请输入营运晚高峰时间止:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+
+                </div>
+
+                <div class="box_fl1">
+                    <div class="busi_input clearfix">
+                        <label>其他加价金额：</label>
+                        <input class="input_normal" type="text"   name="OtherPrice" placeholder="请输入其他加价金额" title="请输入其他加价金额" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>其他营运高峰时间起：</label>
+                        <input class="input_normal" type="text"   name="OtherPeakTimeOn" placeholder="请输入其他营运高峰时间起:HH:mm:ss" title="请输入其他营运高峰时间起:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>其他营运高峰时间止：</label>
+                        <input class="input_normal" type="text"   name="OtherPeakTimeOff" placeholder="请输入营运晚高峰时间止:HH:mm:ss" title="请输入营运晚高峰时间止:HH:mm:ss"  onClick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'HH:mm:ss'})"/>
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>高峰时间单程加价单价：</label>
+                        <input class="input_normal" type="text"   name="PeakUnitPrice" placeholder="高峰时间单程加价单价"  title="高峰时间单程加价单价" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>高峰时间单程加价公里：</label>
+                        <input class="input_normal" type="text"   name="PeakPriceStartMile"  placeholder="请输入高峰时间单程加价公里" />
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>低速计时加价（按分钟）：</label>
+                        <input class="input_normal" type="text"   name="LowSpeedPricePerminute" placeholder="请输入低速计时加价（按分钟）"   title="请输入低速计时加价（按分钟）" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>夜间费（按公里）：</label>
+                        <input class="input_normal" type="text"   name="NightPricePerMile"  placeholder="请输入夜间费（按公里）" title="请输入夜间费（按公里）" >
+                    </div>
+
+                    <div class="busi_input clearfix">
+                        <label>夜间费（按分钟）：</label>
+                        <input class="input_normal" type="text"   name="NightPricePerMinute" placeholder="请输入夜间费（按分钟）"  title="请输入夜间费（按分钟）" >
+                    </div>
+                    <div class="busi_input clearfix">
+                        <label>运价类型说明：</label>
+                        <textarea rows="10" id="textinfo" cols="60" name="FareTypeNote" style="outline:none;resize:none;float: right;margin-right: -100px;" maxlength="100" placeholder="限制100个字符"></textarea>
+                    </div>
+                </div>
+
+                <div class="clearfix sub_box">
+                    <label class="busi_bz">&nbsp;</label>
+
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">
+                        添加
+                    </button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+</body>
+</html>

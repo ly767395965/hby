@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加交通车班次信息</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+</head>
+
+<div class="tit-all">
+    <h3><i></i>添加交通车班次信息页面</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('Train/addTrain')}"  method="post">
+                <div class="busi_input clearfix">
+                    <label>院校全称：</label>
+                    <select class="input_normal" name="schoolid" id="schoolClass">
+                        <option selected="selected" value="0">请选择学校</option>
+                        <volist name="school" id="temp">
+                            <option value="{$temp['schoolid']}">{$temp['schoolname']}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>选择车辆：</label>
+                    <select class="input_normal" name="cartid" id="cartselest">
+
+                    </select>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>行程路线：</label>
+                    <select class="input_normal" name="route" id="route">
+
+                    </select>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>发车时间：</label>
+                    <input class="input_normal" type="time" name="Setout" id="Setout">
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="submit">添加</button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        $('#schoolClass').change(function () {
+            var schoolid = $(this).val();
+            if (schoolid > 0){
+                $.ajax({
+                    url :"{:U('Train/getTrainCarts')}",
+                    type : 'post',
+                    dataType : 'json',
+                    data : {
+                        schoolid : schoolid
+                    },
+                    success:function(ret){
+                        if (ret.carts){
+                            $("#cartselest option").remove();
+                            for(var i=0;i<ret.carts.length;i++){
+                                $('#cartselest').append('<option value='+ret.carts[i]["cartid"]+'>'+ret.carts[i]['carno']+"</option>");
+                            }
+                        }
+
+                        if (ret.route){
+                            $("#route option").remove();
+                            for(var i=0;i<ret.route.length;i++){
+                                $('#route').append('<option value='+ret.route[i]["id"]+'>'+ret.route[i]['route_name']+"</option>");
+                            }
+                        }
+
+                    }
+                });
+            }
+        });
+
+        $("#submit").click(function () {
+            var schoolid = $("#schoolClass").val();
+            var cartid = $("#cartselest").val();
+            var Setout = $("#Setout").val();
+            var route = $("#route").val();
+           if (schoolid == 0){
+               alert('请选择院校!');
+               return false;
+           }
+            if (cartid == 0 || cartid == null){
+                alert('请选择车辆!');
+                return false;
+            }
+            if (Setout == '' || Setout == null){
+                alert('发车时间不能为空!');
+                return false;
+            }
+            if (route == 0 || route==null){
+                alert('请选择行程路线!');
+                return false;
+            }
+        });
+
+    })
+</script>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改密码</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/base.css" />
+    <script type="text/javascript" src="__PUBLIC__/School/js/urls.js" ></script>
+    <style type="text/css">
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #content{
+            width: 100%;
+        }
+        #content h4{
+            width: 28%;
+            font-size: 1.5em;
+            padding-top: 5%;
+            text-align: right;
+            font-weight: bold;
+            color: #211922;
+        }
+        #content ul{
+            border-top: 2px solid #999;
+            margin-top: 15px;
+            width: 100%;
+            min-height: 300px;
+        }
+        #content ul li{
+            margin-top: 15px;
+            width: 100%;
+            height: 45px;
+        }
+        #content ul li label{
+            margin-left: 33px;
+            font-size: 18px;
+        }
+        #content ul li input{
+            height: 35px;
+            width: 200px;
+            border:1px solid silver;
+            border-radius: 5px;
+        }
+        #imgyzm11{
+            position: absolute;
+
+        }
+        #bot{
+            width: 100px;
+            height: 30px;
+            margin-top: 50px;
+            margin-left: 35%;
+            text-align: center;
+            border: 1px;
+            border-radius: 5px;
+            background-color: #62c0b8;
+        }
+        #content ul li span{
+
+            font-size: 1.5em;
+        }
+        .msg{
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 99;
+        }
+        .msg-text{
+            position: relative;
+            width:200px;
+            height: 40px;
+            border: 1px solid rgba(26, 30, 4,0.1);
+            background-color:rgba(255,255,255,0.9);
+            margin: 137% auto;
+            border-radius: 7px;
+            color: red;
+            letter-spacing: 1px;
+            font-size: 1.1em;
+            text-align: center;
+            line-height: 40px;
+
+        }
+    </style>
+</head>
+<body>
+<section class="main">
+    <include file="Index:index"/>
+    <div id="content">
+        <h4><img src="__PUBLIC__/School/img/updatepass.png" width="30" height="30"/>修改密码</h4>
+        <hr>
+        <ul>
+            <br/>
+            <br/>
+            <br/>
+            <li>
+                <label>用户名:</label>
+                <input type="text" id="user"  readonly="true"/>
+            </li>
+            <li>
+                <label>新密码:</label>
+                <input type="password" id="pass"/>
+            </li>
+            <li>
+                <label>验证码:</label>
+                <input type="text" id="yzm" style="width: 100px;"/>
+                <img src="{:U('UserReg/verify')}" id="imgyzm11" onClick="this.src='{:U('UserReg/verify')}?x='+Math.random()" alt="点击刷新" title="点击刷新"  class="hQyzm" style="width: 100px;height: 35px;float: right;margin-top: 3px;margin-right: 3px;">
+            </li>
+            <li>
+                <div id="bot">
+                    <span style="line-height: 30px;">提交</span>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="msg">
+        <div class="msg-text"></div>
+    </div>
+</section>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        var phone = $.cookie('phone');//电话;
+        $("#user").val(phone);
+
+        $("#bot").click(function () {
+            var code = $("#yzm").val();
+            var pass = $("#pass").val();
+            var user = $("#user").val();
+            if (pass.length == 0){
+                msgtips("密码不能为空！");
+                return;
+            }
+            if (code.length == 0){
+                msgtips("验证码不能为空！");
+                return;
+            }
+
+            $.ajax({
+                url: urls + 'School/ModifyPass/index',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    code: code,
+                    pass: pass,
+                    phone: user
+
+
+                },
+                success: function (ret) {
+//                    console.log(ret.reset)
+                    if (ret.reset == 3){
+                        msgtips("验证码错误!");
+                        return false;
+                    } else if (ret.reset == 2){
+                        msgtips("密码修改失败!");
+                        return false;
+                    }else if (ret.reset == 1){
+                        msgtips("密码修改成功!");
+                        return false;
+                    }
+                }
+            });
+
+        });
+    });
+    function msgtips(msgs){
+        $(".msg").css("display","block");
+        $(".msg-text").html(msgs).addClass("a-shake");
+        setTimeout(function(){
+            $(".msg-text").removeClass("a-shake");
+            $(".msg").css("display","none");
+        },2000);
+
+    }
+</script>

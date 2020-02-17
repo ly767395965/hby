@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>角色添加查看</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/css/select.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/editor/kindeditor.js"></script>
+
+    <script type="text/javascript">
+        KE.show({
+            id : 'content7',
+            cssPath : './index.css'
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+            $(".select2").uedSelect({
+                width : 167
+            });
+            $(".select3").uedSelect({
+                width : 100
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="{:U('Company/index')}">首页</a></li>
+        <li><a href="#">系统设置</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+
+
+    <div id="usual1" class="usual">
+
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" >修改角色信息</a></li>
+            </ul>
+        </div>
+
+        <div id="tab1" class="tabson">
+            <form  action="__SELF__" method="post"  enctype="multipart/form-data">
+
+            <ul class="forminfo">
+                <li><label>角色名称<b></b></label><input name="title" value="{$list['title']}" type="text" class="dfinput" placeholder="请填写email"  style="width:518px;"/></li>
+
+
+                <li><label>是否禁用<b>*</b></label>
+
+                    <div class="vocation">
+                        <select class="select1" name="status">
+                            <option value="1" <eq name="list['status']" value="1">selected</eq>>正常</option>
+                            <option value="0" <eq name="list['status']" value="0">selected</eq>>禁用</option>
+                        </select>
+                    </div>
+
+
+
+                </li>
+
+                <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+            </ul>
+            </form>
+        </div>
+
+
+
+    </div>
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+    </script>
+
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+
+
+
+
+</div>
+
+
+</body>
+
+</html>

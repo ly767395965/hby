@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑驾驶员培训课题</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+
+</head>
+
+<div class="tit-all">
+    <h3><i></i>编辑驾驶员培训课题</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('TrainingTopic/editTopic')}"  method="post">
+                <div class="busi_input clearfix">
+                    <label>课题名称：</label>
+                    <input class="input_normal" type="text" value="{$list['topicname']}"   name="Topicname" id="Topicname"  placeholder="请输入课题名称" title="请输入课题名称" >
+                    <input class="input_normal" type="hidden" value="{$list['id']}"   name="TopiId"  >
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+
+</html>
+<script type="text/javascript" >
+    $(function () {
+        $('#account-submit').click(function () {
+            var content = $('#Topicname').val();
+            if (content == null || content == ''){
+                alert('课题名称不能为空!');
+                return false;
+            }
+
+
+        })
+    })
+</script>

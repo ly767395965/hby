@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网约车指派订单页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        #tab_tr tr:nth-child(odd){
+            background:#FFFFFF;}
+        #tab_tr tr:nth-child(even){
+            background: #c8c7cc;
+        }
+        .rad{
+            width: 10px;
+            height: 10px;
+            margin-top: 5px;
+            border-radius: 50%;
+            border:1px solid #0a8ddf;
+            margin-left: -5px;
+            position: relative;
+            left: 50%;
+        }
+        .nowurad{
+            background-color: limegreen;
+        }
+    </style>
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3><i></i>网约车指派订单页面</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <div style="width: 80%; height: 740px;margin: 0 auto;">
+                <span style="margin-left: 40%;font-size: 2em;padding-top: 2%;">指派订单</span>
+                <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('')}" method="post" enctype="multipart/form-data">
+                    <table  class="order_table" style="width: 100%;height: 100px;">
+                        <thead>
+                        <span class="orderInfo" orderid = "{$orderId}" orderState = "{$orderState}" uid="{$uid}">订单编号:{$orderId}</span>
+                        <tr style="align: center; font-size: 16px;">
+                            <th style="text-align: center;width: 10%">选择司机及车辆</th>
+                            <th style="text-align: center;width: 15%">编&nbsp&nbsp&nbsp&nbsp号</th>
+                            <th style="text-align: center;width: 10%">司&nbsp&nbsp&nbsp&nbsp机</th>
+                            <th style="text-align: center;width: 20%">车&nbsp&nbsp牌&nbsp&nbsp号</th>
+                            <th style="text-align: center;width: 20%">当前车辆状态</th>
+                            <th style="text-align: center;width: 23%">更换可用车辆</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div style="overflow: scroll;width: 100%;height: 500px;">
+                        <table  class="order_table" style="width: 100%;">
+                            <tbody id="tab_tr">
+                            <volist name="list" id="temp">
+                                <tr>
+                                    <td style="text-align: center;width: 10%"><span class="nurad rad" date-id="{$temp['id']}" data-state="{$temp['bizstatus']}" carid="{$temp['carid']}"></span></td>
+                                    <td style="text-align: center;width: 15%">{$temp['id']}</td>
+                                    <td style="text-align: center;width: 11%">{$temp['drivername']}</td>
+                                    <td style="text-align: center;width: 20%">{$temp['vehicleno']}</td>
+                                    <td style="text-align: center;width: 20%" class="state">
+                                        <switch name="temp.bizstatus" >
+                                            <case value="0">空闲</case>
+                                            <case value="1">载客</case>
+                                            <case value="2">接单</case>
+                                            <case value="3">空驶</case>
+                                            <case value="4">停运</case>
+                                            <default />未知状态
+                                        </switch>
+                                    </td>
+                                    <td style="text-align: center;width: 19%">
+                                        <select class="input_normal" name="car">
+                                            <option selected="selected" value="0">请选择车辆类型</option>
+                                            <volist name="car" id="cartemp">
+                                                <option value="{$cartemp['id']}">{$cartemp['vehicleno']}</option>
+                                            </volist>
+
+                                        </select>
+
+                                    </td>
+                                </tr>
+                            </volist>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width: 100%;height: 95px;border: 1px solid #c8c7cc;">
+                        <div style="font-size: 1.5em;padding-top: 15px;color: red;margin-left: 1%;">指派订单说明:</div>
+                        <span style="margin-left: 4%;color: red;">①选择当前的司机如果车辆状态处于非空闲或空驶状态，则需要更换车辆，否则不能指派；</span>
+                        <span style="margin-left: 4%;color: red;">②如果当前所选择的司机车辆处于空闲或空驶状态，车辆可换可不换。</span>
+                    </div>
+                    <div style="width: 100%;height: 40px;margin-top: 5px">
+                        <div style="width: 320px;height:40px;margin: 0 auto;">
+                            <input type="button" class="submit" value="提交" style="width: 100px;height:40px;background-color: #4cb0f9;border-color: #4cb0f9;color: #FFF;cursor: pointer;float: left;font-size: 1.5em" />
+                            <input type="reset" value="重置" style="width: 100px;height:40px;background-color: #FEAE1B;border-color: #FEAE1B;color: #FFF;cursor: pointer;float: right;font-size: 1.5em" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+
+</div>
+<script id="jq" type="text/javascript">
+    $(function () {
+        $(".submit").click(function () {
+            var driverId;
+            var carId;
+            var allow = false;
+            var date_id = $('.nowurad').attr('date-id');//数据id
+            var orderid = $('.orderInfo').attr('orderid');//订单id
+            var ordercode = $('.orderInfo').attr('orderState');//订单号
+            var uid = $('.orderInfo').attr('uid');//订单号
+            var data_state = $('.nowurad').attr('data-state');//车辆状态
+            var thiscarid = $('.nowurad').attr('carid');//车辆id
+            var option_val = $('.nowurad').parents('tr').find('select').find("option:selected").attr("value");//更改后的车辆
+
+            if (option_val > 0){
+                allow = true;
+                driverId = date_id;
+                carId = option_val;
+            }else{
+                if (data_state == 0 || data_state == 3){
+                    allow = true;
+                    driverId = date_id;
+                    carId = thiscarid;
+                }else{
+                    alert('当前车辆不可用!');
+                    return;
+                }
+            }
+
+
+
+            if (allow == true){
+                $.ajax({
+                    type:'post',
+                    url:"{:U('NetCar/appointService')}",
+                    data:{
+                        driverId:driverId,
+                        carId:carId,
+                        orderid:orderid,
+                        ordercode:ordercode,
+                        uid:uid
+                    },
+                    success:function (result) {
+                        if (result.flag == 1){
+                            window.location.href="{:U('NetCar/index')}";
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+            }
+
+        });
+
+        //选择按钮
+        $('.order_table tr').each(function () {
+
+            $(this).find('td').eq(0).on('click',function () {
+                if($(this).find('.nurad').hasClass('nowurad')){
+                    $(this).find('.nurad').removeClass('nowurad')
+                }else{
+                    $(this).find('.nurad').addClass('nowurad')
+                }
+                if($(this).parent().siblings().find('td').eq(0).find('.nurad').hasClass('nowurad')){
+                    $(this).parent().siblings().find('td').eq(0).find('.nurad').removeClass('nowurad')
+                }
+
+            });
+        })
+
+    });
+</script>
+
+</html>

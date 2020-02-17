@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>登陆_{$sys_title}</title>
+</head>
+<body>
+<include file="./Public/header.html"/>
+
+<div class="reg-bg">
+    <div class="reg-page">
+        <div class="reg-title">
+            <div class="reg-title-txt">
+                <img src="__PUBLIC__/images/login-logo.png" height="40" />
+                <span>会员登录</span>
+            </div>
+            <div id="particles" style="position:absolute;top:0;z-index: 2;width: 450px;height: 100px;"></div>
+        </div>
+        <form method="post" action="/Home/Login/checkLogin">
+        <div class="reg-content">
+                <div class="reg-box" style="z-index: 1;position: relative;">
+                    <i class="fa fa-mobile" aria-hidden="true" style="font-size: 27px;top: 10px;"></i>
+                    <input class="reg-input" name="user" type="text" placeholder="请输入手机号登陆" style="float: left;">
+                    <!--<i class="zdyTs" id="tel" style="width: 190px;z-Index:100;margin-left: 300px;margin-top: 13px;"><b></b><span id="tels"></span></i>-->
+                </div>
+                <div class="reg-box">
+                    <i class="fa fa-lock" aria-hidden="true"></i>
+                    <input class="reg-input" name="pass" type="password" placeholder="请输入密码">
+                </div>
+                <div class="reg-yzm" style="height:22px;float: none">
+                    <a style="line-height: normal" href="{:U('UserManage/BackPass')}">忘记密码？</a>
+                    <div class="clearFix"></div>
+                </div>
+                <div class="btnBox">
+                    <a href="{:U('/Home/Reg')}">注册</a>
+                    <input type="submit" value="登录" class="reg-btn" style="width: 188px"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script language="javascript">
+    $(document).ready(function() {
+        //获得焦点变化
+        $(".reg-box input").focus(function () {
+            $(this).siblings(".fa").css({color:"#00a2e1"})
+        });
+        $(".reg-box input").blur(function () {
+            $(this).siblings(".fa").css({color:"#aaaaaa"})
+        });
+        //鼠标跟随
+        $('#particles').particleground({
+            dotColor: '#fff',
+            lineColor: 'transparent',
+            density:600,
+            particleRadius:2.5
+        });
+    });
+    var captcha_img = $('#captcha-container').find('img');
+    var verifyimg = captcha_img.attr("src");
+    captcha_img.attr('title', '点击刷新');
+    captcha_img.click(function(){
+        if( verifyimg.indexOf('?')>0){
+            $(this).attr("src", verifyimg+'&random='+Math.random());
+        }else{
+            $(this).attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+        }
+    });
+
+//    验证用户是否存在
+    $(function () {
+        $(".reg-input").blur(function () {
+            var tel = $("input[name='user']").val();
+            $.ajax({
+                //处理程序url
+                url:"{:U('Login/isExist')}",
+                //传值方式
+                type:'post',
+                //数据类型
+                dataType:'json',
+                data:{
+                    usertel:tel,
+                },
+                success:function(data) {
+
+                    if (data.info ==0){
+                        $("#tel").show();
+                        $("#tels").html("登录账户不存在,请先注册!")
+                    }
+//                        console.log(data);
+                }
+            });
+        })
+    })
+</script>
+
+

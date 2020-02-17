@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的订单</title>
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/myOrder.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/js.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/myOrder.js"></script>
+		
+	</head>
+
+	<body>
+		<section class="main">
+			<ul class="screen-ul">
+				<li class="on">全部</li>
+				<li>待付款</li>
+				<li id="kjd">租用中</li>
+				<li>租车记录</li>
+				<div class="clearfix"></div>
+			</ul>
+			<div class="content">
+				<ul class="myorderUl" id="myOrder">
+
+				</ul>
+			</div>
+			<div class="fanye">
+
+				<button class="up fl">上一页</button>
+				<div class="yema fl">第<span id="num"></span>页</div>
+				<button class="down fl">下一页</button>
+			</div>
+			</div>
+			<div style="height: 60px; width: 100%;"></div>
+			<div id="payBg">
+				<div id="payMain">
+					<p>暂且支持支付宝支付<br/><span style="color: red;left: 40px;">(请在·我的订单)<br/>(查看订单记录!)</span></p>
+					
+					<button tapmode="hover" class="paybtn" id="pay">立即使用支付宝</button>
+					<div tapmode="hover" class="paybtn" id="nopay">再看看</div>
+				</div>
+			</div>
+			<div class="msg">
+				<div class="kuang">
+					<div class="msg-text"></div>
+					<div class="yn-sen">
+						<div class="yes-btn">确定</div>
+						<div class="no-btn">取消</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="msg1">
+				<div class="msg-text1"></div>
+			</div>
+			<!--底部导航栏-->
+			<footer class="index-footer">
+				<ul id="home">
+					<li class="footer-nav" >
+						<a href="{:U('./Wap/Index/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/home.png"/></span>
+							<p >首页</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Activity/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/acti.png" /></span>
+							<p>活动</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/CarRrental/index')}">
+							<span><img src="__PUBLIC__/wap/images/car.png" /> </span>
+							<p>租车</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Tourism/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/trip.png" /></span>
+							<p>旅游出行</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Myinfor/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/login-user1.png" /></span>
+							<p class="active">我的</p>
+						</a>
+					</li>
+				</ul>
+			</footer>
+		</section>
+	</body>
+
+</html>

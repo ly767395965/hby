@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="format-detection" content="telephone=no" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>租车</title>
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/CarRrental.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/CarRrental.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/js.js" ></script>
+	</head>
+	
+	<body>
+		
+		<section class="main" >
+				<div class="zu-tpis">
+					<div style="width: 75%;height: 30px;margin: 0 auto;">本公司所有车辆均免收手续费、保险费！</div>
+				</div>
+				<ul class="home-list" style="background-color: #E4E4E4;margin-top: 30px;">
+
+				</ul>
+			
+			<div class="fanye">	
+				<button class="up fl">上一页</button>
+				<div class="yema fl">第<span id="num"></span>页</div>
+				<button class="down fl">下一页</button>
+			</div>
+			<div style="height: 60px; width: 100%;"></div>
+			<div class="screen">
+    			<div class="screen-box" id="sort">
+        			<span class="shengxu1">按价格降序</span>	
+    			</div>
+    			<div class="screen-box" id="screen">
+        			<span class="shalou">筛选</span>
+    			</div>
+			</div>
+			<div style="height: 103px; width: 100%;"></div>
+
+			<!--底部导航栏-->
+			<footer class="index-footer">
+				<ul id="home">
+					<li class="footer-nav" >
+						<a href="{:U('./Wap/Index/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/home.png"/></span>
+							<p>首页</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Activity/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/acti.png" /></span>
+							<p>活动</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/CarRrental/index')}">
+							<span><img src="__PUBLIC__/wap/images/car.png" /> </span>
+							<p class="active">租车</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Tourism/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/trip.png" /></span>
+							<p>旅游出行</p>
+						</a>
+					</li>
+					<li class="footer-nav" id="s1">
+						<a href="{:U('./Wap/Myinfor/index')}">
+							<span><img src="__PUBLIC__/wap/wapimages/login-user.png" /></span>
+							<p>我的</p>
+						</a>
+					</li>
+				</ul>
+			</footer>
+			<div class="screening">
+				<div class="condition">
+					<div class="screen-info-list carBrand">
+            			<h4>品牌筛选</h4>
+            			<div id="enList" style="margin-bottom: 8px; background: #f4f5f6;height: 140px;">
+                			<i>A</i><i>B</i><i>C</i><i>D</i><i>E</i><i>F</i><i>G</i><i>H</i><i>J</i>
+                			<i>K</i><i>L</i><i>M</i><i>N</i><i>O</i><i>P</i><i>Q</i><i>R</i><i>S</i><i>T</i>
+                			<i>U</i><i>W</i><i>X</i><i>Y</i><i>Z</i>
+            			</div>
+           				<div id="brandList"></div>
+        			</div>
+        			<div class="screen-info-list carType carSel">
+            			<h4>车型</h4>
+            			<span data-id="1">商务车</span><span data-id="2">越野车</span><span data-id="4">轿车</span><span data-id="3">面包车</span>
+            			<span data-id="5">客车</span>
+        			</div>
+        			<div class="screen-info-list carBsx carSel">
+            			<h4>变速箱</h4>
+            			<span>自动</span><span>手动</span>
+        			</div>
+				</div>
+				<div class="screening-footer">
+					<button class="scr-exit">取消</button>
+					<button class="scr-suer">确定</button>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>

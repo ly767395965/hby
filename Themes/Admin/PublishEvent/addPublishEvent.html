@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加活动页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="__PUBLIC__/font-awesome/css/font-awesome.min.css">
+    <script src="__ROOT__/data/uedit/ueditor.config.js"></script>
+    <script src="__ROOT__/data/uedit/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/laydate.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <script>
+        window.UEDITOR_HOME_URL='__ROOT__/data/uedit/';
+        window.onload=function(){
+            UE.getEditor("content");
+        }
+    </script>
+
+
+</head>
+
+<div class="tit-all">
+    <h3><i></i>添加活动页面</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form"  action="{:U('PublishEvent/addPublishEvent')}"  method="post" enctype="multipart/form-data">
+                <div class="busi_input clearfix">
+                    <label>活动主题：</label>
+                    <input class="input_normal" type="text" name="theme" placeholder="请输入活动主题" title="请输入活动主题">
+                </div>
+                <div class="busi_input clearfix">
+                    <label>活动封面：</label>
+                    <input class="input_normal" type="file"   name="photo[]"  ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(600px*270px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>闪屏广告(可选)：</label>
+                    <input class="input_normal" type="file"   name="photo[]"  ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过300K(1080px*1920px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>开始时间：</label>
+                    <input class="input_normal" type="text" name="start_time" id="startEdit" placeholder="请输入活动开始时间" title="请输入活动开始时间">
+                </div>
+                <div class="busi_input clearfix">
+                    <label>结束时间：</label>
+                    <input class="input_normal" type="text" name="end_time" id="endEdit" placeholder="请输入活动结束时间" title="请输入活动结束时间">
+                </div>
+                <div class="busi_input clearfix">
+                    <label>活动内容：</label>
+                </div>
+                <div class="busi_input clearfix" >
+                    <script id="editor" name="content" type="text/plain" style="width:95%;height:400px; margin-left:35px;"></script>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>活动简介：</label>
+                    <textarea name="describetxt" cols="145"  rows="" style="margin-left: 40px;" class="textinput"></textarea>
+                </div>
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">添加</button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+<div>
+
+</html>
+<script type="text/javascript">
+    !function(){
+        laydate.skin('molv');//切换皮肤，请查看skins下面皮肤库
+    }();
+    var start = {
+        elem: '#startEdit',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        min: laydate.now(), //设定最小日期为当前日期
+        max: '2099-06-16', //最大日期
+        istoday: false,
+        isclear:false,
+        issure:false,
+        istime:true,
+        issure:true,
+        festival: true,
+        choose: function(datas){
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas; //将结束日的初始值设定为开始日
+        }
+    };
+
+    var end = {
+        elem: '#endEdit',
+        format: 'YYYY-MM-DD hh:mm:ss',
+        min: laydate.now(),
+        max: '2099-06-16',
+        istoday: false,
+        isclear:false,
+        istime:true,
+        issure:true,
+        issure:false,
+        choose: function(datas){
+            start.max = datas; //结束日选好后，充值开始日的最大日期
+        }
+    };
+    laydate(start);
+    laydate(end);
+
+</script>
+<script type="text/javascript">
+
+    //实例化编辑器
+    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+    var ue = UE.getEditor('editor');
+
+
+    function isFocus(e){
+        alert(UE.getEditor('editor').isFocus());
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function setblur(e){
+        UE.getEditor('editor').blur();
+        UE.dom.domUtils.preventDefault(e)
+    }
+    function insertHtml() {
+        var value = prompt('插入html代码', '');
+        UE.getEditor('editor').execCommand('insertHtml', value)
+    }
+    function createEditor() {
+        enableBtn();
+        UE.getEditor('editor');
+    }
+    function getAllHtml() {
+        alert(UE.getEditor('editor').getAllHtml())
+    }
+    function getContent() {
+        var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        alert(arr.join("\n"));
+    }
+    function getPlainTxt() {
+        var arr = [];
+        arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getPlainTxt());
+        alert(arr.join('\n'))
+    }
+    function setContent(isAppendTo) {
+        var arr = [];
+        arr.push("使用editor.setContent('欢迎使用ueditor')方法可以设置编辑器的内容");
+        UE.getEditor('editor').setContent('欢迎使用ueditor', isAppendTo);
+        alert(arr.join("\n"));
+    }
+    function setDisabled() {
+        UE.getEditor('editor').setDisabled('fullscreen');
+        disableBtn("enable");
+    }
+
+    function setEnabled() {
+        UE.getEditor('editor').setEnabled();
+        enableBtn();
+    }
+
+    function getText() {
+        //当你点击按钮时编辑区域已经失去了焦点，如果直接用getText将不会得到内容，所以要在选回来，然后取得内容
+        var range = UE.getEditor('editor').selection.getRange();
+        range.select();
+        var txt = UE.getEditor('editor').selection.getText();
+        alert(txt)
+    }
+
+    function getContentTxt() {
+        var arr = [];
+        arr.push("使用editor.getContentTxt()方法可以获得编辑器的纯文本内容");
+        arr.push("编辑器的纯文本内容为：");
+        arr.push(UE.getEditor('editor').getContentTxt());
+        alert(arr.join("\n"));
+    }
+    function hasContent() {
+        var arr = [];
+        arr.push("使用editor.hasContents()方法判断编辑器里是否有内容");
+        arr.push("判断结果为：");
+        arr.push(UE.getEditor('editor').hasContents());
+        alert(arr.join("\n"));
+    }
+    function setFocus() {
+        UE.getEditor('editor').focus();
+    }
+    function deleteEditor() {
+        disableBtn();
+        UE.getEditor('editor').destroy();
+    }
+    function disableBtn(str) {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            if (btn.id == str) {
+                UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+            } else {
+                btn.setAttribute("disabled", "true");
+            }
+        }
+    }
+    function enableBtn() {
+        var div = document.getElementById('btns');
+        var btns = UE.dom.domUtils.getElementsByTagName(div, "button");
+        for (var i = 0, btn; btn = btns[i++];) {
+            UE.dom.domUtils.removeAttributes(btn, ["disabled"]);
+        }
+    }
+
+    function getLocalData () {
+        alert(UE.getEditor('editor').execCommand( "getlocaldata" ));
+    }
+
+    function clearLocalData () {
+        UE.getEditor('editor').execCommand( "clearlocaldata" );
+        alert("已清空草稿箱")
+    }
+</script>

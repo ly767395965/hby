@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 网约车运价信息</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+<body marginwidth="0" marginheight="0">
+<!--遮罩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 100%;background: black;display: none;opacity: 0.6"></div>
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        网约车运价信息
+    </h3>
+    <span id="functionarea" class="add-car fr">
+            <if condition="checkAuth('NetCarFreight/addFreightInfo')">
+                <a href="{:U('NetCarFreight/addFreightInfo')}" title="添加运价信息">添加运价信息</a>
+            </if>
+        </span>
+</div>
+<div class="formbody">
+    <div class="business_info" style="margin:0 auto;">
+        <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;width: 1050px;height: 20px;" >
+            <form action="{:U('NetCarFreight/index')}" method="get" style="position: absolute;margin: 0 auto;">
+                <label style="font-weight: bold;font-size: 16px;margin-left: 150px; ">快速查询：</label><br/><br/>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 240px; top: -50px; ">
+                    <select class="input_normal" name="select"  style="width: 200px;">
+                        <option selected="selected" value="0">请选查询条件</option>
+                        <option value="1">运价有效期起</option>
+                        <option value="2">运价有效期止</option>
+                        <option value="3">状态</option>
+                    </select>
+                </div>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 240px;top: -50px;">
+                    <input class="input_normal" type="text"  style="width: 200px;display: none;" id="key"  name="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                    <select class="input_normal" id="state" name="state"  style="width: 200px;display: none;">
+                        <option value="0">有效</option>
+                        <option value="1">无效</option>
+                    </select>
+                    <input class="input_normal" type="text" id="start"   name="start" style="width: 240px;display: none;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   placeholder="请输入开始日期格式:YYYY-MM-DD" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    <input class="input_normal" type="text"  id="stop" name="stop" style="width: 240px;display: none;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   placeholder="请输入开始日期格式:YYYY-MM-DD" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    <input type="submit" value="查询" name="submit" class="btn-submit" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div style="float: left"><if condition="checkAuth('Order/delAll')"></if></div>
+
+    <table  class="order_table" style="width: 98%">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th>编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th>运价名称</th>
+            <th>运价有效期起</th>
+            <th>运价有效期止</th>
+            <th>起步价(元)</th>
+            <th>起步里程</th>
+            <th>计程单价(按公里)</th>
+            <th>计程单价(按分钟)</th>
+            <th>营运早高峰时间起</th>
+            <th>营运早高峰时间止</th>
+            <th>营运晚高峰时间起</th>
+            <th>营运晚高峰时间止</th>
+            <th>高峰时间单程加价单价</th>
+            <th>高峰时间单程加价公里</th>
+            <th>状态</th>
+            <th></th>
+
+            <th>操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的网约车运价信息
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr <if condition ="$temp['usertype']==1">style="color: #3EAFE0"</if>>
+                <td>{$temp['id']}</td>
+                <td>{$temp.farename}</td>
+                <td>{$temp.farevalidon}</td>
+                <td>{$temp.farevalidoff}</td>
+                <td>{$temp.startfare}/km</td>
+                <td>{$temp.startmile}km</td>
+                <td>{$temp.unitpricepermile}</td>
+                <td>{$temp.unitpriceperminute}</td>
+                <td>{$temp.morningpeaktimeon}</td>
+                <td>{$temp.morningpeaktimeoff}</td>
+                <td>{$temp.eveningpeaktimeon}</td>
+                <td>{$temp.eveningpeaktimeoff}</td>
+                <td>{$temp.peakunitprice}</td>
+                <td>{$temp.peakpricestartmile}</td>
+
+                <td>
+                    <switch name="temp.state" >
+                        <case value="0">有效</case>
+                        <case value="1">无效</case>
+                        <default />未知状态
+                    </switch>
+                </td>
+                <td></td>
+                <td class="tools">
+                    <ul class="toolbar">
+                        <if condition="checkAuth('NetCarFreight/editFreightInfo')">
+                            <li class="click" id="orderinfo" >
+                                <a href="{:U('NetCarFreight/editFreightInfo')}?id={$temp['id']}">
+                                    <img src="__PUBLIC__/images/t02.png"  />修改
+                                </a>
+                            </li>
+                        </if>
+                        <if condition="$temp.state == 0">
+                            <if condition="checkAuth('NetCarFreight/invalidFreightInfo')">
+                                <li class="click" >
+                                    <a href="{:U('NetCarFreight/invalidFreightInfo')}?id={$temp['id']}">
+                                        <img src="__PUBLIC__/images/t02.png"  />无效
+                                    </a>
+                                </li>
+                            </if>
+                            <else/>
+                            <if condition="checkAuth('NetCarFreight/effectiveFreightInfo')">
+                                <li class="click" >
+
+                                    <a href="{:U('NetCarFreight/effectiveFreightInfo')}?id={$temp['id']}">
+                                        <img src="__PUBLIC__/images/t02.png"  />有效
+                                    </a>
+                                </li>
+                            </if>
+
+                        </if>
+
+
+                    </ul>
+                </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+<input type="hidden" value="{$act}" id="act"> <!--获取操作方式-->
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        $('.input_normal').click(function () {
+            var selected = $('.input_normal option:selected').val();//选中的值
+            if (selected == 1 || selected == 2){
+                $("#start").css('display','block');
+                $("#stop").css('display','block');
+//                $("#key").css('display','none');
+//                $("#state").css('display','none');
+            } else {
+                $("#start").css('display','none');
+                $("#stop").css('display','none');
+//                $("#key").css('display','block');
+//                $("#state").css('display','block');
+            }
+            if (selected == 3){
+                $("#state").css('display','block');
+            }else {
+                $("#state").css('display','none');
+            }
+
+        });
+
+    })
+</script>

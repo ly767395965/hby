@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title><?php echo cookie('title') ?></title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/api.css"/>
+    <style>
+        header{ background-color: #00a2e1;}
+        header ul{margin: 0;padding: 0;}
+        header ul li { text-align: center; display: none;height:45px;line-height:45px; color: #ffffff; position: relative;font-size: 18px;  }
+        header ul li.active{ display: block;}
+        #footer{background-color: #ffffff;overflow: hidden;border-top: 1px solid #ecebeb}
+        #footer ul li{color:#999999;width: 20%;padding-top: 33px;font-size:12px;background:url() center 6px no-repeat;background-size:26px;padding-bottom:4px;text-align: center;}
+        #footer ul li.active{ color: #00a2e1; }
+        #footer .openMore{width: 20%;padding-top: 36px;padding-bottom: 4px;text-align: center;position: relative;}
+        .btnMore{font-size:12px;color:#999999;position: absolute;top: 3px;left: 50%;margin-left: -30px;}
+        .btnMore img{vertical-align: middle;display: block;padding-bottom: 4px;}
+        #footer ul li:nth-child(1){ background-image: url(./wapimages/home.png); }
+        #footer ul li:nth-child(2){ background-image: url(./wapimages/acti.png); }
+        #footer ul li:nth-child(4){ background-image: url(./wapimages/trip.png); }
+        #footer ul li:nth-child(5){ background-image: url(./wapimages/user.png); }
+        #footer ul li:nth-child(1).active{ background-image: url(./wapimages/home1.png); }
+        #footer ul li:nth-child(2).active{ background-image: url(./wapimages/acti1.png); }
+        #footer ul li:nth-child(4).active{ background-image: url(./wapimages/trip1.png);}
+        #footer ul li:nth-child(5).active{ background-image: url(./wapimages/user1.png); }
+    </style>
+</head>
+<body>
+<div id="wrap" class="flex-wrap flex-vertical">
+    <header>
+        <ul>
+            <li class="border-b active" >
+                <div class="sy">首页</div>
+                <div class="home-search">
+                    <div class="search-input" tapmode="">
+                        请输入搜索车型
+                    </div>
+                </div>
+                <div class="saomiao">
+                    <img src="__PUBLIC__/wapimages/saomiao.png" width="25" tapmode onclick="openEwm()"/>
+                </div>
+            </li>
+            <li class="border-b" >优惠活动</li>
+            <li class="border-b" >旅游出行</li>
+            <li class="border-b">我</li>
+        </ul>
+    </header>
+    <div id="main" style="overflow: hidden" class="flex-con">
+        <include file="Index/home"/>
+    </div>
+    <div id="footer" class="border-t" style="position: fixed;bottom: 0px;left: 0px;width: 100%;">
+        <ul class="flex-wrap" >
+            <li tapmode="hover" id="sy" onclick="randomSwitchBtn( this );" class="flex-con active " >首页</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >活动</li>
+            <div class="openMore" tapmode onclick="api.openWin({
+	            name: 'win_rencar',
+	            url: './html/renCar.html'
+            });">
+                <div class="btnMore">
+                    <img src="__PUBLIC__/wapimages/btn-car.png" width="60" />
+                    租车
+                </div>
+            </div>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >旅游出行</li>
+            <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con" >我的</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<!--<script type="text/javascript" src="script/api.js"></script>-->
+<!--<script type="text/javascript" src="script/jquery.js"></script>-->
+<script type="text/javascript">
+    apiready = function () {
+        $api.fixStatusBar($api.dom('header'));
+        api.setStatusBarStyle({
+            style: 'light',
+            color: 'rgba(0,0,0,0)',
+        });
+        funIniGroup();
+        exitApp();
+        $(".search-input").on("click",function (){
+            api.openWin({
+                name: 'search',
+                url: './html/search.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                bounces: false,
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false,
+            });
+        });
+    }
+    function funIniGroup(){
+        //跳转页面
+        var eHeaderLis = $api.domAll('header ul li'),
+                frames = [];
+        for (var i = 0,len = eHeaderLis.length; i < len; i++) {
+            frames.push( {
+                name: 'hb'+i,
+                url: './html/hb'+i+'.html',
+                bgColor : '#f1f1f1',
+                bounces:true,//是否支持手拖动整个页面
+                customRefreshHeader: 'UIPullRefresh',
+                vScrollBarEnabled: false,
+                hScrollBarEnabled: false,
+            } )
+        }
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: $api.dom('header').offsetHeight,
+                w: api.winWidth,
+                h: $api.dom('#main').offsetHeight
+            },
+            index: 0,
+            frames: frames
+        }, function (ret, err) {
+
+        });
+    }
+    // 随意切换按钮
+    function randomSwitchBtn( tag ) {
+        if( tag == $api.dom('#footer li.active') )return;
+        var eFootLis = $api.domAll('#footer li'),
+                eHeaderLis = $api.domAll('header li'),
+                index = 0;
+        for (var i = 0,len = eFootLis.length; i < len; i++) {
+            if( tag == eFootLis[i] ){
+                index1 = i;
+            }else{
+                $api.removeCls(eFootLis[i], 'active');
+                $api.removeCls(eHeaderLis[i], 'active');
+            }
+        }
+        $api.addCls( eFootLis[index1], 'active');
+        $api.addCls( eHeaderLis[index1], 'active');
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: index1
+        });
+    }
+    //扫描二维码
+    function  openEwm(){
+        var FNScanner = api.require('FNScanner');
+        FNScanner.openScanner({
+            autorotation: true,
+        }, function (ret, err) {
+            if (ret) {
+                if(ret.eventType=='success'){
+                    api.openWin({
+                        name: 'scanner',
+                        url: './html/scanner.html',
+                        pageParam: {
+                            ret:ret.content
+                        }
+                    });
+                }
+            } else {
+                api.toast({
+                    msg: '扫描失败！',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+        });
+    }
+    //双击退出
+    function exitApp() {
+        api.addEventListener({
+            name: 'keyback'
+        }, function (ret, err) {
+            api.toast({
+                msg: '再按一次退出' + api.appName,
+                duration: 2000,
+                location: 'bottom'
+            });
+            api.addEventListener({
+                name: 'keyback'
+            }, function (ret, err) {
+                api.closeWidget({
+                    id: 'A6924989837873', //这里改成自己的应用ID
+                    retData: {name: 'closeWidget'},
+                    silent: true
+                });
+            });
+            setTimeout(function () {
+                exitApp();
+            }, 3000)
+        });
+    }
+</script>

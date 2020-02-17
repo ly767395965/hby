@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>统计详情</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <style>
+        /*.substep{float: right;width: 100px;height: 34px;background: lightblue;text-align: center;line-height: 34px;margin: -28px 43px 0px 100px;border-radius: 5px;font-size: 14px;  }*/
+        /*.substep:hover{background: #3eafe0;color: white;}*/
+        /*.substep:hover .substep_next{display: block}*/
+        /*.substep_next{position: absolute;top:83px;display: none}*/
+        /*.substep_next li{width: 100px;height: 25px;background: lightgrey;text-align: center;line-height: 25px;border-top: 1px solid white;color: orangered}*/
+        /*.substep_next li:hover{background: #968588;color: white}*/
+        .order_table td,.order_table th{ text-align: center}
+        .order_table td {height: 39px}
+        #cost_all {background: #B1DCE4;border-top: 1px solid #CBCBCB}
+    </style>
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        统计详情
+    </h3>
+</div>
+<br/>
+<div class="formbody">
+
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1006px;height: 20px;" >
+        <form action="{:U('Finance/count_info')}" method="get" style="position: absolute;">
+            <label style="font-weight: bold;font-size: 16px; ">分类查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select"  style="width: 200px;">
+                    <if condition ="$cond.select eq 0"><option selected value="0">全部订单</option><else/><option value="0">全部订单</option></if>
+                    <if condition ="$cond.select eq 1"><option selected value="1">普通订单</option><else/><option value="1">普通订单</option></if>
+                    <if condition ="$cond.select eq 2"><option selected value="2">大客户订单</option><else/><option value="2">大客户订单</option></if>
+                    <if condition ="$cond.select eq 3"><option selected value="3">普通订单+大客户订单</option><else/><option value="3">普通订单+大客户订单</option></if>
+                    <if condition ="$cond.select eq 4"><option selected value="4">会议订单</option><else/><option value="4">会议订单</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <label style="font-weight: bold;font-size: 16px; ">时间段：</label>
+
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$cond.start neq 0'>{$cond.start}</if>"   placeholder="请输入开始日期" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$cond.stop neq 0'>{$cond.stop}</if>"   placeholder="请输入结束日期" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+                <a href="{:U('Finance/excel?act=look')}"><input type="button" value="导出Excel" name="button" class="btn-submit" /></a>
+            </div>
+        </form>
+        <input type="hidden" value="{$list}" id="list">           <!--获取对应的数据-->
+    </div>
+    <br>
+    <div style="float: left;margin-left: 50px">注：该处的订单为已还车后的订单</div>
+    <table  class="order_table">
+        <thead>
+            <tr style="align: center; font-size: 16px;width: 100%">
+                <th style="width: 10%;text-align: center">订单类型<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+                <th style="width: 10%;">订单号</th>
+                <th >车辆牌号</th>
+                <th >下单日期</th>
+                <th >用车日期</th>
+                <th >还车日期</th>
+                <th >使用天数</th>
+                <if condition ='$cond.select neq 4'>
+                    <th >租车单价</th>
+                </if>
+                <th >车辆成本</th>
+                <if condition ='$cond.select neq 4'>
+                    <th >油费</th>
+                    <th >过路费</th>
+                    <th >洗车费</th>
+                    <th >维修费</th>
+                    <th >开票成本</th>
+                </if>
+                <if condition ='$cond.select eq 0 || $cond.select eq 4'>
+                    <th >会议杂项成本</th>
+                </if>
+                <th >应收金额</th>
+                <th >实收金额</th>
+                <th >成本和</th>
+                <th >未结账目</th>
+                <th >净收入</th>
+            </tr>
+        </thead>
+        <if condition ="$list[0][id] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到相关订单
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr style="align: center; font-size: 16px;width: 100%">
+                    <td style="width: 10%;text-align: center">{$temp.type}<i class="sort"></i>&nbsp;&nbsp;&nbsp;</td>
+                    <td style="width: 10%;">{$temp.order_code}</td>
+                    <td >{$temp.carno}</td>
+                    <td >{$temp.order_date}</td>
+                    <td >{$temp.pk_date}</td>
+                    <td >{$temp.re_date}</td>
+                    <td >{$temp.duration}</td>
+                    <if condition ='$cond.select neq 4'>
+                        <td >{$temp.u_price}</td>
+                    </if>
+                    <td >{$temp.out_cost}</td>
+                    <if condition ='$cond.select neq 4'>
+                        <td >{$temp.oil_price}</td>
+                        <td >{$temp.tolls}</td>
+                        <td >{$temp.wash_price}</td>
+                        <td >{$temp.re_price}</td>
+                        <td >{$temp.in_cost}</td>
+                    </if>
+                    <if condition ='$cond.select eq 0 || $cond.select eq 4'>
+                        <td >{$temp.mixed_cost}</td>
+                    </if>
+                    <td >{$temp.price_rec}</td>
+                    <td >{$temp.collections_rec}</td>
+                    <td >{$temp.cost_all}</td>
+                    <td >{$temp.check_cost}</td>
+                    <td >{$temp.profit}</td>
+                </tr>
+            </volist>
+            <tr id="cost_all" >
+                <td><b>总计</b></td>
+                <td>{$order_all.order_num}(总订单数)</td>
+                <td>{$order_all.carno}</td>
+                <td>{$order_all.term}</td>
+                <td>{$order_all.opk_date}</td>
+                <td>{$order_all.ore_date}</td>
+                <td>{$order_all.duration}</td>
+                <if condition ='$cond.select neq 4'>
+                    <td>{$order_all.u_price}</td>
+                </if>
+                <td>{$order_all.out_cost}</td>
+                <if condition ='$cond.select neq 4'>
+                    <td>{$order_all.oil_price}</td>
+                    <td>{$order_all.tolls}</td>
+                    <td>{$order_all.wash_price}</td>
+                    <td>{$order_all.re_price}</td>
+                    <td>{$order_all.in_cost}</td>
+                </if>
+                <if condition ='$cond.select eq 0 || $cond.select eq 4'>
+                    <td>{$order_all.mixed_cost}</td>
+                </if>
+                <td>{$order_all.price_rec}</td>
+                <td>{$order_all.collections_rec}</td>
+                <td>{$order_all.cost_all}</td>
+                <td>{$order_all.check_cost}</td>
+                <td>{$order_all.profit}</td>
+            </tr>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function () {
+    var list = $('#list').val();
+})
+</script>

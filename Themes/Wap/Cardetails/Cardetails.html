@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>车辆详情</title>
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/base.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/css3.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/Cardetails.css" />
+		<link rel="stylesheet" href="__PUBLIC__/wap/css/jquery.datetimepicker.css" />
+		<script type="text/javascript" src="__PUBLIC__/wap/js/urls.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery5.js" ></script>
+		<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.datetimepicker.full.js" ></script>
+		
+
+	</head>
+
+	<body>
+		<section class="main">
+			<aside class="carPic" id="banner">
+				<div class="bd" id="slid" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+					<ul>
+
+					</ul>
+				</div>
+				<!--标题-->
+				<div class="carInfo-title">
+				</div>
+			</aside>
+			<div class="dateTime-div">
+				<div class="dateTime-box" tapmode="hover" id="start" >
+					<div class="dateTime-title" class="startDateTime1">取车时间</div>
+					<div id="datess">
+						<input class="dateShow" type="text" id="startD" value="" readonly/>
+					</div>
+					<div class="timeLine"></div>
+					<div id="timer">
+						<input class="timeShow" id="startT" type="text" value="" readonly/>
+					</div>
+					
+				</div>
+				<div class="dateTime-box" tapmode="hover" id="end">
+					<div class="dateTime-title" class="endDateTime1">还车时间</div>
+					<div id="hcar">
+						<input class="dateShow" type="text" id="endD" value="" readonly/>
+					</div>
+					
+					<div class="timeLine"></div>
+					<div id="hcar_time">
+						<input class="timeShow" type="text" id="endT" readonly/>
+					</div>
+					
+				</div>
+			</div>
+			<div class="prize-box">
+				<div class="prize-div rencar-prize">
+					租车价(<i id="daysType">短租</i>)：
+					<font color="#ff8800">￥ </font><i id="prize"></i> 元/天
+					<div id="prizes"></div>
+					<input type="hidden" value="1" id="sendDay" />
+					<input type="hidden" value="" id="allPrize" />
+				</div>
+				<div class="prize-div rencar-time">
+					租车时长：<i id="days">1天0小时</i>
+				</div>
+			</div>
+			<div class="car-info">
+				<h5>基本信息</h5>
+				<ul>
+					
+				</ul>
+				
+				
+				<div class="clear"></div>
+			</div>
+			<div style="height: 55px;"></div>
+			<!--租车按钮-->
+			<div class="rencar_div">
+				<div class="rencar_btn rencar_btn_no" tapmode="hover" onclick="javascript:history.go(-1)">重新选车</div>
+				<div class="rencar_btn rencar_btn_sure" tapmode="hover"><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.hby.hbcx">下载App</a></div>
+			</div>
+			<div class="msg">
+	    		<div class="msg-text"></div>
+	    	</div>
+		</section>
+	</body>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/TouchSlide.1.1.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/js.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/jquery.cookie.js" ></script>
+	<script type="text/javascript" src="__PUBLIC__/wap/js/Cardetails.js"></script>
+	<script>
+
+	</script>
+
+
+
+</html>

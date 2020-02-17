@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点添加页面</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<div class="tit-all">
+    <h3><i></i>节点信息</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="__SELF__" method="post" enctype="multipart/form-data">
+
+                <div class="busi_input clearfix">
+
+                    <label>优惠劵类型：</label>
+                    <select class="input_normal" name="type"  id="type">
+                        <option value="0" <eq name="list['type']" value="0">selected</eq>>现金卷</option>
+                        <option value="1" <eq name="list['type']" value="1">selected</eq>>折扣卷</option>
+                    </select>
+                </div>
+                <div id="tsBox" >
+                    <div class="busi_input clearfix" id="money">
+                        <label>优惠劵金额:</label>
+                        <input class="input_normal" type="text" value="{$list['money']}"  name="money"  placeholder="请输入优惠劵金额"  >
+                    </div>
+                    <div class="busi_input clearfix" id="discount">
+                        <label>折扣率:</label>
+                        <input class="input_normal" type="text" value="{$list['money']}"  name="discount"  placeholder="输入折扣率纯数字"  >
+                    </div>
+                    <div class="busi_input clearfix">
+                        <label>开始领取时间:</label>
+                        <input class="input_normal" type="text" value="{$list['andtime']}"  name="andtime"  placeholder="请输入优惠劵领取开始时间" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >
+                    </div>
+                    <div class="busi_input clearfix">
+                        <label>领取结束时间:</label>
+                        <input class="input_normal" type="text"  value="{$list['endtime']}" name="endtime"  placeholder="请输入优惠劵领取结束时间" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >
+                    </div>
+                    <div class="busi_input clearfix">
+                        <label>过期时间:</label>
+                        <input class="input_normal" type="text" value="{$list['pasttime']}" name="pasttime"  placeholder="请输入优惠劵过期时间" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >
+                    </div>
+                </div>
+                <!--<div id="tsEox" >-->
+                    <!--<div class="busi_input clearfix">-->
+                        <!--<label>过期时间:</label>-->
+                        <!--<input class="input_normal" type="text" value="{$list['pasttime']}" name="pasttime"  placeholder="请输入优惠劵过期时间" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  >-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="busi_input clearfix">
+                    <label>优惠劵分类：</label>
+                    <select class="input_normal" name="cid"  id="cid">
+                        <volist name="bollarclasslist" id="vo">
+                            <option value="{$vo['id']}" <eq name="vo['id']" value="$list['id']">selected</eq>>{$vo['name']}</option>
+                        </volist>
+                    </select>
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label>优惠劵数量:</label>
+                    <input class="input_normal" type="text"  value="{$list['number']}" name="number"  placeholder="请输入优惠劵数量 -1 不限数"  >
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">保存</button>
+
+                </div>
+            </form>
+        </div>
+
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+<script type="text/javascript">
+    $(function(){
+        //根据优惠类型选择相应的优惠
+        $('#type').change(function () {
+            $("#money, #discount").slideToggle();
+        });
+
+        if($("#type").val()==1){
+            $("#money").css('display','none');
+        }else if($("#type").val()==0){
+            $("#discount").css('display','none');
+        }
+    });
+
+</script>
+
+</html>

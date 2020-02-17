@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>统计报表管理</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+
+    <style>
+        .formbody {width: 100%;padding-left: 0px;}
+        .order_count{width: 100%;padding-left: 10%;}
+        .count_one,.count_two,.count_three,.count_four{ width: 100%;}
+        .count_two,.count_three,.count_four{ margin-top: 40px}
+        .font_btn {width: 50px;height: 27px;background: #919191;color:white;margin-left: 5px;border-radius: 3px}
+        .font_btn:hover {background: #CBCBCA;color: black}
+        .input_normal {border: solid 1px #CBCBCB}
+        .count_table td {text-align: center;}
+        .count_onetr {margin-left: 50px;border: 1px solid #CBCBCB}
+        .count_onetr th {width: 160px;text-align: center;font-size: 14px;height: 32px;background: #F0F5F7}
+        .count_onetr td {text-align: center;color: saddlebrown }
+        .count_twotr {border: 1px solid #CBCBCB;height: 33px}
+        .count_info {width: 70px;height: 27px;background: #919191;color:white;margin-left: 5px;border-radius: 3px}
+        .count_info:hover {background: #CBCBCA;color: black}
+    </style>
+
+</head>
+
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        统计报表管理页面
+    </h3>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 15%;height: 20px;font-size: 30px" >
+        统计信息
+    </div>
+    <br>
+    <div class="order_count">
+        <div class="count_one">
+            <div style="font-size: 22px">财务统计</div><br/>
+                <div>
+                    <label style=" ">统计时间段：</label>
+                    <form action="{:U('count')}" method="post">
+                        <input class="input_normal" type="text"  id="start" name="start" style="width: 150px;" value="<if condition ='$key.start neq 0'>{$key.start}</if>"   placeholder="请输入开始日期格式" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                        <input class="input_normal" type="text"  id="stop" name="stop" style="width: 150px;" value="<if condition ='$key.stop neq 0'>{$key.stop}</if>"   placeholder="请输入结束日期格式" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                        <input type="submit" value="统计" name="submit" class="font_btn" id="count_trade" />
+                        <input type="button" value="订单台账" class="count_info"><br/><br/>
+                    </form>
+
+                </div>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>有效交易次数</th>
+                    <th>总收入</th>
+                    <th>退款</th>
+                    <th>车辆成本</th>
+                    <th>杂项成本</th>
+                    <th>未结款账目</th>
+                    <th>利润</th>
+                </tr>
+                <tr class="count_twotr" id="count_one_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$tradeall['tradeinfo']['times']}</td>
+                    <td>{$tradeall['tradeinfo']['sum']}</td>
+                    <td>{$tradeall['tradeinfo']['expenditure']}</td>
+                    <td>{$tradeall['tradeinfo']['cost_price']}</td>
+                    <td>{$tradeall['tradeinfo']['mixed_cost']}</td>
+                    <td>{$tradeall['tradeinfo']['check_out']}</td>
+                    <td>{$tradeall['tradeinfo']['profit']}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="count_two">
+            <div style="font-size: 16px">普通订单财务统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>有效交易次数</th>
+                    <th>总收入</th>
+                    <th>退款</th>
+                    <th>车辆成本</th>
+                    <th>杂项成本</th>
+                    <th>未结款账目</th>
+                    <th>利润</th>
+                </tr>
+                <tr class="count_twotr" id="count_plain_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$tradeall['tradeplain']['times']}</td>
+                    <td>{$tradeall['tradeplain']['sum']}</td>
+                    <td>{$tradeall['tradeplain']['expenditure']}</td>
+                    <td>{$tradeall['tradeplain']['cost_price']}</td>
+                    <td>{$tradeall['tradeplain']['mixed_cost']}</td>
+                    <td>{$tradeall['tradeplain']['check_out']}</td>
+                    <td>{$tradeall['tradeplain']['profit']}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="count_two">
+            <div style="font-size: 16px">大客户订单财务统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>有效交易次数</th>
+                    <th>总收入</th>
+                    <th>退款</th>
+                    <th>车辆成本</th>
+                    <th>杂项成本</th>
+                    <th>未结款账目</th>
+                    <th>利润</th>
+                </tr>
+                <tr class="count_twotr" id="count_big_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$tradeall['tradebig']['times']}</td>
+                    <td>{$tradeall['tradebig']['sum']}</td>
+                    <td>{$tradeall['tradebig']['expenditure']}</td>
+                    <td>{$tradeall['tradebig']['cost_price']}</td>
+                    <td>{$tradeall['tradebig']['mixed_cost']}</td>
+                    <td>{$tradeall['tradebig']['check_out']}</td>
+                    <td>{$tradeall['tradebig']['profit']}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="count_two">
+            <div style="font-size: 16px">会议订单财务统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>有效交易次数</th>
+                    <th>总收入</th>
+                    <th>退款</th>
+                    <th>车辆成本</th>
+                    <th>杂项成本</th>
+                    <th>未结款账目</th>
+                    <th>利润</th>
+                </tr>
+                <tr class="count_twotr" id="count_meet_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$tradeall['trademeet']['times']}</td>
+                    <td>{$tradeall['trademeet']['sum']}</td>
+                    <td>{$tradeall['trademeet']['expenditure']}</td>
+                    <td>{$tradeall['trademeet']['cost_price']}</td>
+                    <td>{$tradeall['trademeet']['mixed_cost']}</td>
+                    <td>{$tradeall['trademeet']['check_out']}</td>
+                    <td>{$tradeall['trademeet']['profit']}</td>
+                </tr>
+            </table>
+        </div>
+        <b>注：以上费用均未涉及到违章押金</b>
+        <div class="count_two">
+            <div style="font-size: 16px">违章押金统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>有效交易次数</th>
+                    <th>押金总计</th>
+                    <!--<th>需使用押金处理的违章</th>-->
+                    <!--<th>需代驾司机处理的违章</th>-->
+                    <!--<th>需客户自己处理的违章</th>-->
+                    <th>退还押金总计</th>
+                    <!--<th>剩余押金</th>-->
+                </tr>
+                <tr class="count_twotr" id="count_des_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$orderinfo['deposit_times']}</td>
+                    <td>{$orderinfo['deposit_sum']}</td>
+                    <!--<td>{$orderinfo['deposit_use']}</td>-->
+                    <!--<td>{$orderinfo['deposit_driver']}</td>-->
+                    <!--<td>{$orderinfo['deposit_customer']}</td>-->
+                    <td>{$orderinfo['deposit_refun']}</td>
+                    <!--<td>{$orderinfo['deposit_surplus']}</td>-->
+                </tr>
+            </table>
+        </div>
+        <div class="count_two">
+            <div style="font-size: 22px">订单统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>统计时间段</th>
+                    <th>总订单数</th>
+                    <th>进行中订单数</th>
+                    <th>正常结单数</th>
+                    <th>退款订单数</th>
+                    <th>取消订单数</th>
+                </tr>
+                <tr class="count_twotr" id="count_two_tr">
+                    <td>
+                        <if condition ='$key.start neq 0'>{$key.start} 至 <else/>从始</if>
+                        <if condition ='$key.stop neq 0'>{$key.stop}<else/>至今</if>
+                    </td>
+                    <td>{$orderinfo['times']}<br/>(其中会议订单{$orderinfo['meet_times']})</td>
+                    <td>{$orderinfo['ing']}</td>
+                    <td>{$orderinfo['order_normal']}</td>
+                    <td>{$orderinfo['refund']}</td>
+                    <td>{$orderinfo['cancel']}</td>
+                </tr>
+            </table>
+            <!--<b>注：以上面订单信息未涉及到会议订单</b>-->
+        </div>
+
+        <div class="count_two">
+            <div style="font-size: 22px">车辆信息统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>现有车辆数</th>
+                    <th>自有车辆数</th>
+                    <th>外调车辆数</th>
+                    <th>优惠车辆数</th>
+                    <th>空闲车辆数</th>
+                    <th>停租车辆数</th>
+                </tr>
+                <tr class="count_twotr" id="count_three_tr">
+                    <td>{$carinfo['car_sum']}</td>
+                    <td>{$carinfo['car_our']}</td>
+                    <td>{$carinfo['car_others']}</td>
+                    <td>{$carinfo['car_discount']}</td>
+                    <td>{$carinfo['car_free']}<br/>(其中优惠车辆有{$carinfo['car_free_discount']}辆)</td>
+                    <td>{$carinfo['car_stop']}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="count_two">
+            <div style="font-size: 22px">会员信息统计</div><br/>
+            <table class="count_table">
+                <tr style="" class="count_onetr">
+                    <th>会员总数</th>
+                    <th>普通会员总数</th>
+                    <th>大客户数</th>
+                    <th>新增会员数</th>
+                    <th>苹果终端数</th>
+                    <th>安卓终端数</th>
+                    <th>未知终端数</th>
+                </tr>
+                <tr class="count_twotr" id="count_foure_tr">
+                    <td>{$memberinfo['member']}</td>
+                    <td>{$memberinfo['member_ordinary']}</td>
+                    <td>{$memberinfo['member_big']}</td>
+                    <td>{$memberinfo['member_add']}<br/>（最近一个月的统计信息）</td>
+                    <td>{$memberinfo['member_iphone']}</td>
+                    <td>{$memberinfo['member_android']}</td>
+                    <td>{$memberinfo['member_null']}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+
+        //统计详情跳转
+        $('.count_info').click(function () {
+            var key = $(this).val();
+            switch (key){
+                case '订单台账':
+                    var start = $('#start').val();
+                    var stop = $('#stop').val();
+                    var url = "count_info?start="+start+"&stop="+stop+"&key=订单台账";
+                        url = "{:U('"+url+"')}";
+                    window.location.href=url;
+                    break
+            }
+        });
+    });
+
+    function count_axjx(url,param,road) {                               //封装的axjx方法
+        $.post(url,param,function(data){
+            data = JSON.parse(data);
+            if (road == 'trade'){
+                $('#count_one_tr').find('td:eq(1)').text(data.times);
+                $('#count_one_tr').find('td:eq(2)').text(data.sum);
+                $('#count_one_tr').find('td:eq(3)').text(data.expenditure);
+                $('#count_one_tr').find('td:eq(4)').text(data.cost_price);
+                $('#count_one_tr').find('td:eq(5)').text(data.mixed_cost);
+                $('#count_one_tr').find('td:eq(6)').text(data.meeting_cost);
+                $('#count_one_tr').find('td:eq(7)').text(data.profit);
+            }else if (road == 'order'){
+                $('#count_two_tr').find('td:eq(1)').text(data.times);
+                $('#count_two_tr').find('td:eq(2)').text(data.ing);
+                $('#count_two_tr').find('td:eq(3)').text(data.order_times);
+                $('#count_two_tr').find('td:eq(4)').text(data.order_normal);
+                $('#count_two_tr').find('td:eq(5)').text(data.refund);
+            }
+        });
+    }
+    
+</script>

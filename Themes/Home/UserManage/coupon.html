@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>个人信息</title>
+
+    <style>
+
+        /*.perinfo-content {*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*font-size: 12px;*/
+        /*}*/
+
+        /*.perinfo-content td{*/
+        /*border: solid 1px #ffffff;*/
+        /*}*/
+
+        /*.perinfo-content table {*/
+        /*border-collapse:collapse;*/
+        /*}*/
+
+        /*#page {*/
+        /*float: right;*/
+        /*}*/
+        /*#tr:hover{*/
+        /*background-color: #f7e6d3;*/
+        /*}*/
+        /*.footer-nav span,.footer-nav a{display: inline-block;}*/
+        /*#pay input:hover{background: #23ace1!important;}*/
+
+        /*#sum td {line-height: 20px;padding-left: 35px;}*/
+        .info_page{
+            padding-top: 15px;
+            padding-left: 10px;
+            width:20%;
+            height: 200px;
+            background-color: #C3E2F5;
+            right: 24px;
+            display: none;
+            position: absolute;
+
+            text-align: left;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="top-img" style="background: url('__PUBLIC__/images/top-pic4.jpg') center center"></div>
+<include file="UserManage/header"/>
+<div class="perInfo-box">
+    <div class="perInfo-nav">
+        <include file="UserManage:link"/>
+    </div>
+
+    <div class="perinfo-content" style="margin-left: 10px; position: relative;">
+        <h3 style="font-size: 16px;margin-bottom: 10px;float: left">优惠券</h3>
+        <br>
+        <if condition ="$list[0]['id'] == ''">
+            <div style=" height: 348px;line-height: 348px; text-align: center;color: #ff8800; font-size: 38px;">暂无优惠券相关数据!</div>
+            <else/>
+            <table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+                <tbody>
+                <tr align="center" style="background: #e4f1f9">
+                    <td style="width: 12%;">优惠劵名称</td>
+                    <td style="width: 12%;">优惠券类型</td>
+                    <td style="width: 12%;">折扣率/优惠金额</td>
+                    <td style="width: 12%;">使用限制</td>
+                    <td style="width: 12%;">有效期</td>
+                    <td style="width: 12%;">优惠券状态</td>
+                    <td style="width: 12%;">优惠券介绍</td>
+                </tr>
+                <volist name="list" id="temp">
+                    <tr align="center" id="tr">
+                        <td class="details">{$temp['coupon_name']} </td>
+                        <td><if condition="$temp['coupon_type'] == 1">折扣券<else/>现金券</if></td>
+                        <td><if condition="$temp['coupon_type'] == 1">{$temp['discount']}折<else/>￥{$temp['money']}</if></td>
+                        <td>
+                            <switch name="temp.use_limit">
+                                <case value="0">最低消费:￥{$temp['use_condition']}</case>
+                                <case value="1">最低租车时长:{$temp['use_condition']}天</case>
+                                <case value="2">无限制</case>
+                            </switch>
+                        </td>
+                        <td>{$temp['termofvalidity']}</td>
+                        <td><if condition="($temp['termofvalidity'] lt $temp['nowtime']) && $temp['termofvalidity'] !='0000-00-00 00:00:00'">已过期<else/><if condition="$temp['use_type'] == 1">已使用<else/>未使用</if></if></td>
+                        <td class="info" data-id="{$temp['id']}" style="cursor: pointer;text-decoration: underline;color: #00a0e9;" id="{$key}">优惠券详情</td>
+                    </tr>
+
+                </volist>
+
+                </tbody>
+            </table>
+
+
+            <div class="curr-page" id="page" style="width: 500px;">
+                {$page}
+            </div>
+        </if>
+
+    </div>
+
+    <div style="clear: both;"></div>
+
+</div>
+<div class="info_page">
+
+</div>
+
+<div class="agree-bg" style="background: rgba(0,0,0,0.5)" id="order-pay">
+    <div class="agree-box" style="width: 460px;height: auto;margin-top:160px;margin-left: -200px;">
+        <div class="agree-title" id="pay-class"  >
+            <h3><b>优惠券使用规则</b></h3>
+            <span>&times;</span>
+        </div>
+        <div class="agree-list" style="width: 95%;overflow-y:scroll; ">
+            <h1 style="font-size: 14px;color: #646470;">优惠券名称:<span class="name"></span></h1>
+            <h2 style="font-size: 14px;color: #646470;margin-top: 10px;">有效时间:<span class="time"></span></h2>
+            <h3 style="font-size: 14px;color: #646470;margin-top: 10px;width: 98%;">使用规则:<span class="conetent" style="width: 100%;"></span></h3>
+            <h4 style="font-size: 14px;color: #646470;margin-top: 10px;">使用范围:<span class="fw"></span></h4>
+
+        </div>
+    </div>
+</div>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+<script>
+    $(function () {
+
+        $(document).on("click",".curr-page a",function(){
+            var pageOBJ = this;
+            var url = pageOBJ.href;
+            $.ajax({
+                type:'get',
+                url:url,
+                success:function (result) {
+                    //main是class名，即显示数据的这个div的class名
+                    $(".perinfo-content").html(result);
+//                    console.log(result);
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+//        $(".info").mouseover(function () {
+
+//        $(document).on("mouseover",".info",function () {
+//
+//            $(".info_page").css("display","none");
+//            var e = event || window.event;
+//            $(".info_page").css("left",e.x);
+//            $(".info_page").css("top",e.y);
+//            var id=$(this).attr("data-id");
+//
+//            $.ajax({
+//                type: "get",
+//                url: "{:U('UserManage/couponInfo')}",
+//                data: {
+//                    id:id
+//                },
+//                success: function(data) {
+////                    $(".info_page").html(data.data);
+//                }
+//            });
+//
+//            setTimeout(function () {
+//                $(".info_page").css("display","block");
+//            },500)
+//
+//        });
+
+//        $(document).on("mouseout",".info",function () {
+//            setTimeout(function () {
+//                $(".info_page").css("display","none");
+//            },500)
+//
+//        });
+        //优惠券使用规则
+        $(document).on("click",".info",function(){
+            var id=$(this).attr("data-id");
+            $.ajax({
+                type: "get",
+                url: "{:U('UserManage/couponInfo')}",
+                data: {
+                    id:id
+                },
+                success: function(data) {
+
+                    $(".name").html("<br/>"+data.name);
+                    $(".time").html("<br/>"+data.bgin+"至"+data.end+"<br/>时段内可正常使用，超时指定日期作废处理。");
+                    $(".conetent").html("<br/>"+data.data);
+                    $(".fw").html("<br/>仅限线上订单可使用(除优惠车辆订单以外)");
+                }
+            });
+            $("#order-pay").fadeIn();
+            return false;
+        })
+        $(document).on("click","#pay-class span",function(){
+            $("#order-pay").fadeOut();
+        });
+
+    })
+
+</script> 

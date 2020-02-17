@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>代理商订单结算页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3 ><i></i>代理商订单结算</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('Finance/agent_check')}" method="post" enctype="multipart/form-data">
+                <div id="tsBox" style="display: block;width: 1000px;margin: 70px auto 0px">
+                    <div class="busi_box">
+                        <div class="busi_input clearfix">
+                            <label>代理商名称:</label>
+                            <input class="input_normal" type="text" value="<if condition="($list.agent_name eq '')">华邦伟业<else/>{$list.agent_name}</if>" id="agent_name" name="agent_name" disabled="disabled" >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>申请人:</label>
+                            <input class="input_normal" type="text" value="{$list.user_name}" id="user_name" name="user_name" disabled="disabled" placeholder="请输入租用车辆的数量"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>申请时间:</label>
+                            <input class="input_normal" type="text" value="{$list.addtime}" id="addtime" name="addtime" disabled="disabled" placeholder="请输入租用车辆的数量"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>订单总数:</label>
+                            <input class="input_normal" type="text" value="{$list.order_num}" id="order_num" name="order_num" disabled="disabled" placeholder="请输入租用车辆的数量"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>订单id包:</label>
+                            <textarea style="width: 300px;background: #E3E3E3;border:none;color: #6D6D6D" name="pack_id" id="pack_id" readonly="readonly">{$list.pack_id}</textarea>
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>应结金额:</label>
+                            <input class="input_normal" type="text" value="{$list.price_rec}" id="price_rec" name="price_rec" disabled="disabled" placeholder="请输入租用车辆的数量"   >
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>实付金额:</label>
+                            <input class="input_normal" type="text" value="{$list.collections_rec}" id="collections_rec" name="collections_rec" placeholder="请输入实付金额"   >
+                        </div>
+                        <if condition="($list.state eq 2)">
+                            <div class="busi_input clearfix">
+                                <label>尾款结算:</label>
+                                <input class="input_normal" type="text" value="" id="price_paided" name="price_paided" placeholder="请输入租用车辆的数量"   >
+                            </div>
+                        </if>
+                        <div class="busi_input clearfix" id="checkout_state">
+                            <label>是否结清:</label>
+                            <select name='state' id="check_out" class="check_state">
+                                <option value='1' >已结清</option>
+                                <option value='2' >未结清</option>
+                            </select>
+                        </div>
+                        <div class="busi_input clearfix">
+                            <label>订单备注:</label>
+                            <textarea style="width: 300px" name="remarks">{$list.remarks}</textarea>
+                        </div>
+                        <div id="charge_msg" class="busi_input clearfix" style="color: #f00;">
+                            <label></label>
+                            <li style=""><b>注意!付款费用为实付金额：</b>￥<span></span></li>
+                        </div>
+                    </div>
+                    <div class="busi_input clearfix" style="clear: both;margin-left: 22%;width: 200px">
+                        <label class="busi_bz">&nbsp;</label>
+                        <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">结算</button>
+                        <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重置</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+    <input type="hidden" value="{$list.state}" id="state" >
+</div>
+<script id="jq" type="text/javascript">
+    $(function () {
+//        read('#pack_id');       //改变输入框为readonly只读模式
+        var state = $('#state').val();
+        if (state == 0){
+            var price_rec = $('#price_rec').val();
+            $('#collections_rec').val(price_rec);
+            charge_msg(price_rec);              //改变提示信息
+        }else if(state == 2){
+            read('#collections_rec');           //改变输入框为readonly只读模式
+            var price_paided = $('#price_rec').val() - $('#collections_rec').val();
+            $('#price_paided').val(price_paided);
+            charge_msg(price_paided,'注意!付款费用为尾款结算：'); //改变提示信息
+        }
+        //改变实付金额同时改变结账状态和提示信息
+        $('#collections_rec').change(function () {
+            check_out($(this).val());                            //改变结账状态
+            charge_msg($(this).val());                           //改变提示信息
+        });
+        //改变结算尾款的同时改变结账状态和提示信息
+        $('#price_paided').change(function () {
+            var collections_rec = parseFloat($(this).val()) + parseFloat($('#collections_rec').val());
+            check_out(collections_rec);                             //改变结账状态
+            charge_msg($(this).val(),'注意!付款费用为尾款结算：'); //改变提示信息
+        });
+    });
+    //改变付款金额时随之改变提示信息
+    function charge_msg(price,text) {
+        price = price||0;
+        text = text||'注意!付款费用为实付金额：';
+        $('#charge_msg').find('span').text(price);
+        $('#charge_msg').find('b').text(text);
+    }
+    //改变结账状态
+    function check_out(price) {
+        if (($('#price_rec').val() - price) > 0){
+            $("#check_out").val(2);
+        }else{
+            $("#check_out").val(1);
+        }
+    }
+    //改变输入框为readonly只读模式
+    function read(obj){
+        var arr = obj.split(',');
+        for(var i = 0; i<arr.length;i++) {
+            $(arr[i]).css({'background':'#E3E3E3','cursor':'not-allowed'});
+            $(arr[i]).attr('readonly','readonly');
+        }
+    }
+</script>
+
+</html>

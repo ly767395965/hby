@@ -1,0 +1,19 @@
+<h3 class="news-page-title">租车须知</h3>
+<volist name="list" id="temp">
+    <div class="news-list">
+        <a href="{:U('Notice/notice_details')}?id={$temp['id']}">
+            <div class="news-list-left">
+                {:date('Y-m-d', strtotime($temp['addtime']))}
+
+            </div>
+            <div class="news-list-txt">
+                <h3>{$temp['title']}</h3>
+                <p>{:strSub($temp['describes'],90)}...</p>
+            </div>
+        </a>
+    </div>
+</volist>
+
+<div class="curr-page">
+    {$page}
+</div>

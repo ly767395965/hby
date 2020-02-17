@@ -1,0 +1,83 @@
+<style>
+
+    /*.perinfo-content {*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*font-size: 12px;*/
+    /*}*/
+
+    /*.perinfo-content td{*/
+    /*border: solid 1px #ffffff;*/
+    /*}*/
+
+    /*.perinfo-content table {*/
+    /*border-collapse:collapse;*/
+    /*}*/
+
+    /*#page {*/
+    /*float: right;*/
+    /*}*/
+    /*#tr:hover{*/
+    /*background-color: #f7e6d3;*/
+    /*}*/
+    /*.footer-nav span,.footer-nav a{display: inline-block;}*/
+    /*#pay input:hover{background: #23ace1!important;}*/
+
+    /*#sum td {line-height: 20px;padding-left: 35px;}*/
+    .info_page{
+        padding-top: 15px;
+        padding-left: 10px;
+        width:20%;
+        height: 200px;
+        background-color: #C3E2F5;
+        right: 24px;
+        display: none;
+        position: absolute;
+        text-align: left;
+        border-radius: 10px;
+    }
+</style>
+<h3 style="font-size: 16px;margin-bottom: 10px;float: left">优惠券</h3>
+<br>
+<if condition ="$list[0]['id'] == ''">
+    <div style=" height: 348px;line-height: 348px; text-align: center;color: #ff8800; font-size: 38px;">暂无租车记录,赶快去下单吧!</div>
+    <else/>
+    <table width="100%" border="0" cellpadding="5" cellspacing="0" bgcolor="#f1f1f1" >
+        <tbody>
+        <tr align="center" style="background: #e4f1f9">
+            <td style="width: 12%;">优惠劵名称</td>
+            <td style="width: 12%;">优惠券类型</td>
+            <td style="width: 12%;">折扣率/优惠金额</td>
+            <td style="width: 12%;">最低消费</td>
+            <td style="width: 12%;">有效期</td>
+            <td style="width: 12%;">优惠券状态</td>
+            <td style="width: 12%;">优惠券介绍</td>
+        </tr>
+        <volist name="list" id="temp">
+            <tr align="center" id="tr">
+                <td class="details">{$temp['coupon_name']} </td>
+                <td><if condition="$temp['coupon_type'] == 1">折扣券<else/>现金券</if></td>
+                <td><if condition="$temp['coupon_type'] == 1">{$temp['discount']}折<else/>￥{$temp['money']}</if></td>
+                <td>￥{$temp['min_consume']}</td>
+                <td>{$temp['termofvalidity']}</td>
+                <td><if condition="($temp['termofvalidity'] lt $temp['nowtime']) && $temp['termofvalidity'] !='0000-00-00 00:00:00'">已过期<else/><if condition="$temp['use_type'] == 1">已使用<else/>未使用</if></if></td>
+                <td class="info" data-id="{$temp['id']}" style="cursor: pointer;text-decoration: underline;color: #00a0e9;" id="{$key}">优惠券详情</td>
+            </tr>
+
+        </volist>
+
+        </tbody>
+    </table>
+
+
+    <div class="curr-page" id="page" style="width: 500px;">
+        {$page}
+    </div>
+
+
+</if>
+
+
+
+
+

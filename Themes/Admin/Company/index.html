@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="__PUBLIC__/css/select.css" rel="stylesheet" type="text/css"/>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet" type="text/css"/>
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <script type="text/javascript">
+        /*KE.show({
+         id : 'content7',
+         cssPath : './index.css'
+         });*/
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">角色管理</a></li>
+        <!--<li><a href="#">首页</a></li>-->
+    </ul>
+</div>
+<div class="formbody">
+
+
+    <div id="usual1" class="usual">
+        <br>
+        <div class="itab">
+            <ul>
+                <li><a href="#tab2" class="selected">查看列表</a></li>
+                <li>
+                    <if condition="checkAuth('Company/addCompany')"><a href="#tab1"> 添加角色</a></if>
+                </li>
+            </ul>
+        </div>
+
+        <div id="tab1" class="tabson">
+            <form action="{:U('Company/addCompany')}" method="post" enctype="multipart/form-data">
+
+                <ul class="forminfo">
+                    <li><label>角色名称<b>*</b></label><input name="title" type="text" class="dfinput" placeholder="请输入角色名称"
+                                                          style="width:518px;"/></li>
+
+                    <li><label>是否禁用<b>*</b></label>
+
+                        <div class="usercity">
+
+                            <div class="cityleft">
+                                <select class="select2" name="status">
+                                    <option value="1">正常</option>
+                                    <option value="0">禁用</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </li>
+
+                    <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="添加"/></li>
+                </ul>
+            </form>
+        </div>
+
+
+        <div id="tab2" class="tabson">
+
+            <form action="{:U('Company/index')}" method="post" enctype="multipart/form-data">
+                <ul class="seachform">
+                    <li><label>综合查询</label><input name="demand" type="text" class="scinput" placeholder="角色名称或状态"/></li>
+                    <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="查询"/></li>
+                </ul>
+            </form>
+
+            <table class="tablelist">
+                <thead>
+                <tr>
+
+                    <th><input type="checkbox" name="all" class="all">序号<i class="sort"></i>&nbsp;&nbsp;&nbsp;<a
+                            href="javascript:void (0);" class="del-all-btn"><font
+                            color="red">批量删除</font></a></th>
+                    <th>角色名称</th>
+                    <th>状态</th>
+                    <th width="200px">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="list" id="vo">
+                    <tr>
+                        <td><input type="checkbox" class="cBox" name="list[]" value="{$vo['id']}">{$key+1}</td>
+                        <td>{$vo['title']}</td>
+                        <td>
+                            <switch name="vo.status">
+                                <case value="1">正常</case>
+                                <case value="0">禁用</case>
+                                <default/>
+                                异常
+                            </switch>
+                        </td>
+                        <td style="width: 400px;">
+                            <ul class="toolbar">
+                                <if condition="checkAuth('Company/edit')">
+                                    <li class="click">
+                                        <!--<input style="background: url("")" type="button" class="click" onclick='MscBox("系统信息",t[0],"您确定要修改吗？","确定跳转取消关闭","{:U('CarModel/upCarmodel')}?id={$temp.id}");' value="编辑"  />-->
+                                        <a href="{:U('Company/editCompany')}?id={$vo['id']}">
+                                            <img src="__PUBLIC__/images/t02.png"/>编辑
+                                        </a>
+                                    </li>
+                                </if>
+                                <if condition="checkAuth('Company/distribution')">
+                                    <li class="click">
+                                        <!--<input style="background: url("")" type="button" class="click" onclick='MscBox("系统信息",t[0],"您确定要修改吗？","确定跳转取消关闭","{:U('CarModel/upCarmodel')}?id={$temp.id}");' value="编辑"  />-->
+                                        <a href="{:U('Company/distribution')}?id={$vo['id']}'">
+                                            <img src="__PUBLIC__/images/t02.png"/>分配权限
+                                        </a>
+                                    </li>
+                                </if>
+                                <if condition="checkAuth('Company/delete')">
+                                    <li class="click">
+                                        <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Company/delCompany')}?id={$vo['id']}')">
+                                            <img src="__PUBLIC__/images/t03.png"/> 删除
+                                        </a>
+                                    </li>
+                                </if>
+                            </ul>
+                        </td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $("#usual1 ul").idTabs();
+            $('.tablelist tbody tr:odd').addClass('odd');
+
+            //批量删除
+            new DelAll({
+                "allClass":$('.all'),
+                "listClass":$('.cBox'),
+                "delAllBtn":$('.del-all-btn'),
+                "delUrl":"delAll",
+                "listCheckboxName":"list[]",
+                "imgUrl":"../../../Public/images"
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

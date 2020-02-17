@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>优惠劵</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        优惠劵
+    </h3>
+    <span id="functionarea" class="add-car fr">
+           <if condition="checkAuth('Coupontype/add')"> <a href="{:U('Couponbollar/add')}" title="添加车型">添加优惠劵</a></if>
+        </span>
+</div>
+<form class="register-form" name="CarModelForm" id="CarModelForm" action="__SELF__" method="post" enctype="multipart/form-data">
+    <div class="busi_input clearfix" style="margin: 20px 15px;">
+
+        <select class="input_normal" name="select" style=" width: 100px;height: 32px;line-height: 32px;border-top: solid 1px #a7b5bc;border-left: solid 1px #a7b5bc;border-right: solid 1px #ced9df;border-bottom: solid 1px #ced9df;background: url(../images/inputbg.gif) repeat-x;text-indent: 10px;"  id="select">
+            <option value="0" <eq name="msg['select']" value="0" >selected</eq>>优惠劵名称</option>
+            <option value="1" <eq name="msg['select']" value="1" >selected</eq>>优惠劵编码</option>
+            <option value="2" <eq name="msg['select']" value="2" >selected</eq>>序号</option>
+        </select>
+        <input type="text" value="{$msg['key']}" placeholder="请输入查询条件" name="key" id="key" style="width: 200px;height: 32px;line-height: 32px;border-top: solid 1px #a7b5bc;border-left: solid 1px #a7b5bc;border-right: solid 1px #ced9df;border-bottom: solid 1px #ced9df;background: url(../images/inputbg.gif) repeat-x;text-indent: 10px;float: left;margin-left: 2px">
+        <input type="submit" value="查询" style="width: 85px;height: 35px;    background: url(__PUBLIC__/images/btnbg.png) no-repeat center; margin-left:20px;font-size: 14px;font-weight: bold;color: #fff;cursor: pointer;border-radius: 3px;"/>
+    </div>
+</form>
+<div class="formbody">
+    <table  class="tablelist" width="100%">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th>序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i></th>
+            <th>优惠名称</th>
+            <th>优惠方式</th>
+            <th>使用期限</th>
+            <th>优惠领取条件</th>
+            <th>优惠金额</th>
+            <th>可领取次数</th>
+            <th>已领取数量</th>
+            <!--<th>状态</th>-->
+            <th>操作</th>
+        </tr>
+        </thead>
+        <volist name="list" id="vo">
+            <tr>
+                <td>{$vo['id']}</td>
+                <td>{$vo['coupon_name']}</td>
+                <td>
+                    <switch name="vo.type" >
+                        <case value="0">优惠劵(现金卷)</case>
+                        <case value="1">优惠劵(折扣卷)</case>
+                        <case value="2">直接减免</case>
+                    </switch>
+                </td>
+                <td>
+                    <if condition="$vo.type eq 2">
+                        下单即用
+                        <else/>
+                        <switch name="vo.time_limit" >
+                            <case value="0">{$vo['termofvalidity']}截止</case>
+                            <case value="1">有效期{$vo['termofvaliditytian']}天</case>
+                            <case value="2">无期限</case>
+                        </switch>
+                    </if>
+                </td>
+                <td>
+                    <switch name="vo.condition_limit">
+                        <case value="0">最低消费:￥{$vo['coupon_condition']}</case>
+                        <case value="1">最低租车时长:{$vo['coupon_condition']}天</case>
+                        <case value="2">无限制</case>
+                        <default />异常
+                    </switch>
+                </td>
+                <td>
+                    <switch name="vo.type" >
+                        <case value="0">优惠现金：￥{$vo['money']}</case>
+                        <case value="1">折扣优惠：{$vo['discount']}折</case>
+                        <case value="2">直接减免：￥{$vo['money']}</case>
+                        <default />异常
+                    </switch>
+                </td>
+
+                <if condition="$vo['number'] eq -1 ">
+                    <td>无限</td>
+                    <else />
+                    <td>{$vo['number']}</td>
+                </if>
+                <td>{$vo['sum']}</td>
+                <!--<td >
+                    <switch name="vo.issue_state">
+                        <case value="0">禁止发行</case>
+                        <case value="1"><span style="color: green">允许发行</span></case>
+                        <default />异常
+                    </switch>
+                </td>-->
+                <td class="tools">
+                    <ul class="toolbar">
+                        <!-- <if condition="checkAuth('Couponbollar/edit')"> <li class="click"><a href="{:U('Couponbollar/edit',array('id'=>$vo['id']))}" ><img src="__PUBLIC__/images/t02.png" />编辑</a></li></if>-->
+                        <if condition="checkAuth('Couponbollar/user')"> <li class="click"><a href="{:U('Couponbollar/user',array('id'=>$vo['id']))}" ><img style="margin-right: 3px; margin-top: -2px;" src="__PUBLIC__/images/lq.png" />查看领取人</a></li></if>
+                        <if condition="checkAuth('Couponbollar/user')">
+                            <li class="click"><a href="{:U('Couponbollar/edit',array('id'=>$vo['id']))}" ><img style="margin-right: 3px; margin-top: -2px;" src="__PUBLIC__/images/t02.png" />编辑</a></li>
+                        </if>
+                        <!--<if condition="checkAuth('Couponbollar/issue')">
+                            <if condition="$vo['issue_state'] eq 0">
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要发行吗？','发行后，用户可以按规定领取及使用该劵','{:U('Couponbollar/issue')}?id={$vo['id']}&issue=1')" >
+                                        <img src="__PUBLIC__/images/t02.png" /> 发行
+                                    </a>
+                                </li>
+                                <else/>
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要禁止发行吗？','禁发后用户无法领取该劵，但可以使用！','{:U('Couponbollar/issue')}?id={$vo['id']}&issue=0')" >
+                                        <img src="__PUBLIC__/images/t03.png" /> 禁发
+                                    </a>
+                                </li>
+                            </if>
+
+                        </if>
+                        <if condition="checkAuth('Couponbollar/state')">
+                            <if condition="$vo['state'] eq 1">
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要启用吗？','','{:U('Couponbollar/state')}?id={$vo['id']}&state=0')" >
+                                        <img src="__PUBLIC__/images/t02.png" /> 启用
+                                    </a>
+                                </li>
+                                <else/>
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要禁用吗？','禁用后，用户无法领取和使用该优惠劵！','{:U('Couponbollar/state')}?id={$vo['id']}&state=1')" >
+                                        <img src="__PUBLIC__/images/t03.png" /> 禁用
+                                    </a>
+                                </li>
+                            </if>
+
+                        </if>-->
+                        <if condition="checkAuth('Couponbollar/delete')">
+                            <li class="click">
+                                <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Couponbollar/delete',array('id'=>$vo['id']))}')" >
+                                    <img src="__PUBLIC__/images/t03.png" /> 删除
+                                </a>
+                            </li>
+                        </if>
+                    </ul>
+                </td>
+            </tr>
+
+        </volist>
+    </table>
+</div>
+<BR/>
+<br/>
+<div class="digg">{$page}</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+
+    })
+</script>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点添加页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .order_table{margin-left:210px;margin-top: 50px;width: 800px;}
+        .order_table table{width: 1000px;margin: 0 auto;}
+        .order_table label{ margin-left: 5px}
+        .order_table tr{border: 1px solid lightgrey;height: 35px;border-radius: 5px}
+        .order_table td{padding-left: 5px}
+        .order_table_ftd {width: 100px}
+        .order_table_ttd {width: 100px}
+    </style>
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3><i></i>订单基本信息修改</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <p style="text-align: center;font-size: 28px">会议订单详情</p>
+            <div class="order_table">
+                <table>
+                    <label><b>订单编号:</b>{$list.id}</label>
+                    <tr>
+                        <td class="order_table_ftd"><b>联系人：</b></td><td>{$list.contacts}</td>
+                        <td class="order_table_ttd"><b>联系方式：</b></td><td>{$list.phone}</td>
+                    </tr>
+                    <tr>
+                        <td><b>租车数量：</b></td><td>{$list.car_num}</td>
+                        <td><b>外调成本：</b></td><td>{$list.out_cost}</td>
+                    </tr>
+                    <tr>
+                        <td><b>订单号：</b></td><td>{$list.order_code}</td>
+                        <td><b>下单时间：</b></td><td>{$list.order_date}</td>
+                    </tr>
+                    <tr>
+                        <td><b>取车时间：</b></td><td id="pk_date">{$list.pk_date}</td>
+                        <td><b>还车时间：</b></td><td id="re_date">{$list.re_date}</td>
+                    </tr>
+                    <tr>
+                        <td><b>杂项成本：</b></td><td>{$list.mixed_cost}</td>
+                        <td><b>租车天数：</b></td><td id="rent_day">0</td>
+                    </tr>
+                    <if condition="($list.is_invoice eq 1)">
+                        <tr>
+                            <td><b>是否开票：</b></td><td>已开票</td>
+                        </tr>
+                        <tr>
+                            <td><b>发票号：</b></td><td>{$list.in_code}</td>
+                            <td><b>开票金额：</b></td><td>{$list.in_price}</td>
+                        </tr>
+                        <tr>
+                            <td><b>额外税收：</b></td><td>{$list.in_cost}</td>
+                            <td><b>开票单位：</b></td><td>{$list.in_dep}</td>
+                        </tr>
+                        <else />
+                        <tr>
+                            <td><b>是否开票：</b></td><td>未开票</td>
+                            <td></td><td></td>
+                        </tr>
+                    </if>
+                    <tr>
+                        <td><b>租车总价：</b></td><td>{$list.price_rec}</td>
+                        <td><b>实付金额：</b></td><td>{$list.collections_rec}</td>
+                    </tr>
+                    <tr>
+                        <td><b>订单类型：</b></td><td>会议订单</td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td><b>订单状态：</b></td>
+                        <td>
+                            <switch name="list.order_state" >
+                                <case value="0">初步录单</case>
+                                <case value="1">录单完成</case>
+                                <case value="2">未结清</case>
+                                <case value="3">已结单</case>
+                                <case value="10">订单取消</case>
+                                <default />未知
+                            </switch>
+                        </td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td><b>交易详情：</b></td>
+                        <td>{$cost[0]['charge_road']}</td>
+                        <td></td><td></td>
+                    </tr>
+                    <for start="1" end="$cost.long">
+                        <tr>
+                            <td><b> </b></td>
+                            <td>{$cost[$i]['charge_road']}</td>
+                            <td></td><td></td>
+                        </tr>
+                    </for>
+                    <tr>
+                        <td><b>备注：</b></td><td>{$list.remarks}</td>
+                        <td></td><td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="busi_input clearfix" style="clear: both;margin: 0 auto;width: 154px">
+                <label class="busi_bz">&nbsp;</label>
+                <button name="submit" class="btn-submit" onclick="javascript:window.history.back(-1);" id="account-submit" style="width: 150px">返回上一页</button>
+                <!--<button name="reset" class="btn-submit reset" onclick="javascript:window.history.back(-1);"  tabindex="15" type="reset" id="account-reset">返回</button>-->
+            </div>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+<script id="jq" type="text/javascript">
+    $(function(){
+        rent_day();
+
+        //租车天数计算
+        function rent_day() {
+            var pk_date = $('#pk_date').text();
+            var re_date = $('#re_date').text();
+            dd = diffDate(pk_date,re_date,'d');
+            var hh = diffDate(pk_date,re_date,'h');
+            hh = hh % 24;
+            if (hh>2 && hh<=6){
+                dd = dd+0.5;
+            }else if (hh>6){
+                dd = dd+1;
+            }
+            $('#rent_day').text(dd);
+
+        }
+    });
+
+</script>
+
+</html>

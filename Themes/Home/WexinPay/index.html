@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>微信扫码支付_{$sys_title}</title>
+    <load href="__PUBLIC__/Js/qrcode.js" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script language="JavaScript">
+        function Check()
+        {
+            var orderid = $("#orderid").text();
+//            alert(orderid);
+//	    	var out_trade_no = "<?php echo $out_trade_no; ?>";
+//	    	ThinkAjax.send('__URL__/orderQuery','ajax=1&out_trade_no='+out_trade_no,goto);
+            var url = "{:U('Home/WexinPay/redirection')}";
+
+//            alert(orderid);
+            $.ajax({
+                //处理程序url
+                url: url,
+                //传值方式
+                type: 'get',
+                //数据类型
+                dataType: 'json',
+                data: {
+                    orderid: orderid,
+                },
+                success:function (data) {
+//                        alert(data.jumpurl);
+                    if (data.jumpurl==1) {
+                        location.href="{:U('UserManage/carOrder')}";
+                    }
+
+                }
+            });
+        }
+        setInterval("Check()",3000);
+
+    </script>
+    <style>
+        .footer-content{background:#ffffff;}
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<if condition="$orderInfo[0]['car_id']">
+    <if condition='$url == "http://www.hbzc777.com/home/user_manage/carorder.htm"'>
+        <div class="mb-nav" style="width: 800px; margin: 20px auto;">
+            当前位置：
+            <a href="/" class="jump">
+                <i>首页</i>
+            </a> >
+            <a href="/home/Favorable" class="jump">
+                <i>特惠信息</i>
+            </a> >
+            <a href="/home/indent/carinfo?id={$ordercode[0]['car_id']}" class="jump">
+                <i>订单确认</i>
+            </a> >
+            <a href="{$url}" class="jump">
+                <i>订单记录</i>
+            </a> >
+            <i style="color: #444">微信扫码支付</i>
+        </div>
+        <else/>
+        <div class="mb-nav" style="width: 800px; margin: 20px auto;">
+            当前位置：
+            <a href="/" class="jump">
+                <i>首页</i>
+            </a> >
+            <a href="/home/Favorable" class="jump">
+                <i>特惠信息</i>
+            </a> >
+            <a href="/home/indent/carinfo?id={$orderInfo[0]['car_id']}" class="jump">
+                <i>订单确认</i>
+            </a> >
+            <a href="{$url}" class="jump">
+                <i>预定成功</i>
+            </a> >
+            <i style="color: #444">微信扫码支付</i>
+        </div>
+    </if>
+    <else/>
+    <if condition='$url == "http://www.hbzc777.com/home/user_manage/carorder.htm"'>
+        <div class="mb-navb" style="width: 800px; margin: 20px auto;">
+            当前位置：
+            <a href="/" class="jump">
+                <i>首页</i>
+            </a> >
+            <a href="/home/Rencar" class="jump">
+                <i>汽车租赁</i>
+            </a> >
+            <a href="/home/indent?id={$ordercode[0]['carmodelid']}" class="jump">
+                <i>订单确认</i>
+            </a> >
+            <a href="{$url}" class="jump">
+                <i>订单记录</i>
+            </a> >
+            <i style="color: #444">微信扫码支付</i>
+        </div>
+        <else/>
+        <div class="mb-nav" style="width: 800px; margin: 20px auto;">
+            当前位置：
+            <a href="/" class="jump">
+                <i>首页</i>
+            </a> >
+            <a href="/home/Rencar" class="jump">
+                <i>汽车租赁</i>
+            </a> >
+            <a href="/home/indent?id={$ordercode[0]['carmodelid']}" class="jump">
+                <i>订单确认</i>
+            </a> >
+            <a href="{$url}" class="jump">
+                <i>预定成功</i>
+            </a> > 
+            <i style="color: #444">微信扫码支付</i>
+        </div>
+    </if>
+</if>
+<div class="Indent-box" style="margin-top: 0">
+    <div class="Indent" style=" margin-left: 200px;">
+        <h3>微信扫码支付</h3>
+        <div class="Indent-info">
+            <div align="center" id="qrcode">
+            </div>
+            <div class="generate">
+                <div class="generate-state">
+                    <h4>微信扫码支付</h4>
+                    <div class="clearFix"></div>
+                </div>
+                <div class="generate-state-info" style=" width: 600px;">
+                    订单号：<span>{$orderInfo[0]['order_code']}</span> | 租车人：{$user} | 租期：{$data}
+                    <span id="orderid" hidden>{$order}</span>
+                </div>
+            </div>
+            <div class="clearFix"></div>
+        </div>
+        <div class="Indent-title" style="margin-top: 10px">
+            基本信息
+        </div>
+        <div class="dingdan-info">
+            <div class="dingdan-infobox dingdan-infobox1">
+                <p>取车时间：{$orderInfo[0]['pk_date']}</p>
+                <p>还车时间：{$orderInfo[0]['re_date']}</p>
+                <if condition="$orderInfo[0]['drive_state'] == 1">
+                    <p>是否代驾：是</p>
+                    <else/>
+                    <p>是否代驾：否</p>
+                </if>
+                <if condition="$orderInfo[0]['pk_way'] == 2">
+                    <p>是否送车：是</p>
+                    <else/>
+                    <p>是否送车：否</p>
+                </if>
+            </div>
+            <div class="dingdan-infobox">
+                <ul>
+                    <li>
+                        <span>品牌：{$orderInfo[0]['brand']}</span>
+                        <span>车辆类型：
+                         <if condition="$orderInfo[0]['carmodeltype'] eq 1">商务车
+                            <elseif condition="$orderInfo[0]['carmodeltype'] eq 2"/>越野车
+                            <elseif condition="$orderInfo[0]['carmodeltype'] eq 3"/>面包车
+                            <elseif condition="$orderInfo[0]['carmodeltype'] eq 4"/>轿车
+                            <elseif condition="$orderInfo[0]['carmodeltype'] eq 5"/>客车
+                            <else/>轿车
+                        </if>
+                        </span>
+                    </li>
+                    <li>
+                        <span>年代款：{$orderInfo[0]['agestyle']}</span>
+                        <span>车型：{$orderInfo[0]['carmodelname']}</span>
+                    </li>
+                    <li>
+                        <span>变速箱：{$orderInfo[0]['bearboxtype']}</span>
+                        <span>座位数：{$orderInfo[0]['sitecount']}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Indent-buttons">
+            <b style="margin-bottom: 10px;">订单总价：<span>￥{$orderInfo[0]['charge_sum']}</span></b>
+        </div>
+        <div class="Indent-wx" style="color: red;"><b style="color: #606060;">温馨提示：</b>当微信无法正常支付时，请返回订单记录重新选择支付宝支付!</div>
+    </div>
+    <div class="clearFix"></div>
+</div>
+<div class="agree-bg">
+    <div class="agree-box">
+        <div class="agree-title">
+            <h3>支付租金</h3>
+            <span>&times;</span>
+        </div>
+        <div class="agree-list" style="overflow: hidden">
+            <div class="pay-money">支付费用：<b>￥0</b>元</div>
+            <div class="pay-type">
+                <span>支付平台：</span>
+                <a href="#" style="background: url('__PUBLIC__/images/weixin.png') center no-repeat"></a>
+                <form action="__APP__/Home/Pay/doAlipay" class="alipayform" method="post" target="_blank">
+                    <input type="hidden" name="WIDout_trade_no"  value="{$ordercode[0]['order_code']}">
+                    <input type="hidden" name="WIDsubject" value="华邦租车">
+                    <input type="hidden" name="WIDtotal_fee" value="{$total}">
+                    <input type="hidden" name="WIDbody" value="">
+                    <input type="submit" value="" class="alisubmit" style="background: url('__PUBLIC__/images/zfb-pay.png') center no-repeat">
+                </form>
+            </div>
+            <div class="pay-ewm-main">
+                <div class="pay-ewm-box">
+                    <img class="weixin-img-url" src="__PUBLIC__/images/wxpay.png" alt="微信" width="258" height="258" />
+                    <link rel="import" href="./Themes/Home/WexinPay/index.html" id="tmp" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    if(<?php echo $unifiedOrderResult["code_url"] != NULL; ?>)
+    {
+        var url = "<?php echo $code_url;?>";
+//        参数1表示图像大小，取值范围1-10；参数2表示质量，取值范围'L','M','Q','H'
+        var qr = qrcode(10, 'H');
+        qr.addData(url);
+        qr.make();
+        var wording=document.createElement('p');
+        wording.innerHTML = "";
+        var code=document.createElement('DIV');
+        code.innerHTML = qr.createImgTag();
+        var element=document.getElementById("qrcode");
+        element.appendChild(wording);
+        element.appendChild(code);
+    }
+</script>
+</html>
+<script>
+    $(function () {
+        $(".alipay").click(function () {
+            $(".agree-bg").fadeIn();
+        });
+        $(".agree-title span").click(function(){
+            $(".agree-bg").fadeOut();
+        });
+        $(".pay-type a").eq(0).css({border:"1px solid #00a2e1"});
+        $(".pay-type a").click(function () {
+            $(this).css({border:"1px solid #00a2e1"}).siblings(".pay-type a").css({border:"1px solid #ccc"});
+//            $('.alipay-img-url').attr('src',"__PUBLIC__/images/code1.jpg");
+//            $('.weixin-img-url').attr('src',"http://paysdk.weixin.qq.com/example/qrcode.php?data={$url2}");
+            var payIndex=$(this).index();
+            if(payIndex==1){
+                $(".pay-ewm-box").animate({bottom: 0 + "px"});
+            }
+            else if(payIndex==2){
+                $(".pay-ewm-box").animate({bottom: 306 + "px"});
+
+            }
+        });
+    });
+
+</script>

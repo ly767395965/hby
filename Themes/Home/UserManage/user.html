@@ -1,0 +1,25 @@
+
+    <h3>我的信息</h3>
+    <form action="" method="post">
+        <table>
+
+            <tr>
+                <td><label><span><i></i>手机号：</span><input type="text" disabled="disabled" value="{$userinfo[0]['phone']}"/></label></td>
+                <td><label><span><i></i>真实姓名：</span><input type="text" disabled="disabled" value="{$userinfo[0]['username']}"/></label></td>
+            </tr>
+
+            <tr>
+                <td><label><span><i></i>性别：</span><input type="text" disabled="disabled"  value='<if condition ="$userinfo[0]['sex']==1">男<else/>女</if>'/></label></td>
+                <td><label><span>用户类型：</span><input type="text" disabled="disabled" value='<if condition ="$userinfo[0]['usertype']==0">普通用户<else/>大客户</if>'/></label></td>
+            </tr>
+
+            <tr>
+                <td><label><span>注册时间：</span><input type="text" disabled="disabled"  value="{$userinfo[0]['addtime']}"/></label></td>
+                <td><label><span>身份证：</span><input type="text" disabled="disabled" value="{$userinfo[0]['identitys']}"/></label></td>
+            </tr>
+            <tr>
+                <td><input type="submit" class="perInfo-btn" value="保存"/></td>
+            </tr>
+
+        </table>
+    </form>

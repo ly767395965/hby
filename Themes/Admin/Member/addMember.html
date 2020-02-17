@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>司机信息添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<div class="tit-all">
+    <h3><i></i>添加会员</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('Member/addMember')}" onsubmit="return check()" method="post" enctype="multipart/form-data">
+                <div class="busi_input clearfix">
+                    <label>真实姓名：</label>
+                    <input class="input_normal" type="text" name="user" id="drivername"  placeholder="真实姓名必须为2-5位中文字符" title="真实姓名必须为2-5位中文字符"  easyform="char-chinese;real-time;" message="用户名必须为2-5位中文字符" easytip="disappear:lost-focus;theme:blue;"><span class="font" id="drivernameinfo"></span>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>性别：</label>
+                    <input type="radio" value="男"  name="sex" checked="checked" /> 男 <input type="radio" value="女" name="sex" style="margin-left: 30px;"/> 女
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>用户类型：</label>
+                    <select name="usertype" class="input_normal">
+                        <option selected="selected" value="0">普通用户</option>
+                        <option value="1">大客户</option>
+                    </select>
+                </div>
+
+                <div class="busi_input clearfix" id="check_box">
+                    <label>结账周期：</label>
+                    <select name="check_cycle" class="input_normal">
+                        <option selected value="1">1个月</option>
+                        <option  value="2">2个月</option>
+                        <option  value="3">3个月</option>
+                        <option  value="4">4个月</option>
+                        <option  value="5">5个月</option>
+                        <option  value="6">6个月</option>
+                        <option  value="7">7个月</option>
+                        <option  value="8">8个月</option>
+                        <option  value="9">9个月</option>
+                        <option  value="10">10个月</option>
+                        <option  value="11">11个月</option>
+                        <option  value="12">12个月</option>
+                    </select>
+                    <!--<input class="input_normal" type="text"   name="check_cycle"  id="check_cycle" easyform="char-check;real-time;" maxlength="11" message="注意结账周期的单位为月" easytip="disappear:lost-focus;theme:blue;" placeholder="结账周期单位为月" title="请输入该客户的结账周期" ><span  class="font" id="check_cycleinfo"></span>-->
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>用户账户：</label>
+                    <input class="input_normal" type="text"   name="phone"  id="phone" easyform="char-mobile;real-time;" maxlength="11" message="请输入手机号码" easytip="disappear:lost-focus;theme:blue;" placeholder="请输11位有效电话号码" title="请输11位有效电话号码" ><span  class="font" id="phoneinfo"></span>
+                </div>
+
+                <div class="busi_input clearfix" style="position: relative">
+                    <label>身份证号：</label>
+                    <input class="input_normal" type="text"   name="cost" id="cost" placeholder="请输入有效身份证号">
+                    <span class="font" id="costinfo" style="text-align: left;padding: 0px 10px;position:absolute;top:-10px;color: rgb(255, 255, 255);
+border: 1px solid rgb(102, 153, 204);
+    border-radius: 3px;
+    font-size: 9px;
+    background-color: rgba(51, 153, 204, 0.8);height: 32px;line-height: 32px;display: none"></span>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>密 &nbsp;&nbsp;&nbsp;码:</label>
+                    <input class="input_normal" name="pass" type="password" id="psw1" placeholder="请输入密码必须为6—16位"  easyform="length:6-16;char-normal;real-time;" message="密码必须为6—16位" easytip="disappear:lost-focus;theme:blue;"/>
+                </div>
+
+                <div class="reg-box">
+
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">添加</button>
+                    <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/easyform.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#CarModelForm").easyform();
+    });
+</script>
+<script>
+    function IdentityCodeValid(code){
+        var city={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江 ",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北 ",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏 ",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外 "};
+        var tip = "";
+        var pass= true;
+
+        if (code =='' || code == null){
+            tip = "身份证号不能为空";
+            pass = false;
+        } else {
+            if(!code || !/[1-9]\d{5}(((1[9|8])\d{2})|(20[0-1]\d))((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)/.test(code)){
+                tip = "身份证号格式错误";
+                pass = false;
+            }
+
+            else if(!city[code.substr(0,2)]){
+                tip = "地址编码错误";
+                pass = false;
+            }else if(code=="" || code==null){
+                tip = "地址编码错误";
+                pass = false;
+            }
+
+            else{
+                //18位身份证需要验证最后一位校验位
+                if(code.length == 18){
+                    code = code.split('');
+                    //∑(ai×Wi)(mod 11)
+                    //加权因子
+                    var factor = [ 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 ];
+                    //校验位
+                    var parity = [ 1, 0, 'X', 9, 8, 7, 6, 5, 4, 3, 2 ];
+                    var sum = 0;
+                    var ai = 0;
+                    var wi = 0;
+                    for (var i = 0; i < 17; i++)
+                    {
+                        ai = code[i];
+                        wi = factor[i];
+                        sum += ai * wi;
+                    }
+                    var last = parity[sum % 11];
+                    if(parity[sum % 11] != code[17]){
+                        tip = "校验位错误";
+                        pass =false;
+                    }
+                }
+            }
+        }
+
+
+        if(!pass) {
+            document.getElementById("costinfo").style.display = "inline-block";
+            document.getElementById("costinfo").innerHTML = tip;
+        }else{
+            document.getElementById("costinfo").style.display = "none";
+        }
+        return pass;
+    }
+
+    $(function () {
+        $('#cost').blur(function () {
+            IdentityCodeValid($(this).val());
+        });
+        $("#cost").focus(function () {
+            $("#costinfo").hide();
+        });
+        //根据客户类型显示或隐藏结账周期框
+        check_hid($("select[name='usertype']").val());
+        $("select[name='usertype']").change(function () {
+            check_hid($(this).val());
+        });
+    });
+    //控制结账周期框显示或隐藏的方法
+    function check_hid(val) {
+        if (val == 1){
+            $('#check_box').show()
+        }else{
+            $('#check_box').hide()
+        }
+
+    }
+</script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>特惠车辆_{$sys_title}</title>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<!--图片-->
+<div class="top-img" style="background: url('__PUBLIC__/images/top-pic51.jpg') center center;background-size: cover;">
+    <b>华邦出行0</b>
+    <p>不管你信不信、反正我是信了！</p>
+</div>
+<!--特惠信息-->
+<div class="mb-nav">
+    当前位置：
+    <a href="/" class="jump">
+        <i>首页</i>
+    </a> >
+    <i>特惠信息</i>
+</div>
+<div class="fav-main">
+    <!--列表-->
+    <if condition ="$list[0]['id'] == ''">
+        <div style=" height: 448px;line-height: 348px; text-align: center;color: #ff8800; font-size: 38px;">暂无优惠车辆,请继续关注华邦租车!</div>
+        <else/>
+        <div class="favList2">
+            <ul>
+                <volist name="list" id="rs">
+                    <li>
+                        <a href="{:U('Indent/carinfo')}?id={$rs['id']}">
+                            <div class="favlist2-img">
+
+                                <if condition="$rs['frontimg'] != null">
+                                    <img src="__PUBLIC__{$rs['frontimg']}" alt="{$rs['carmodelname']}" title="{$rs['carmodelname']}" style="display: block;margin: 0 auto" width="100%"/>
+                                    <else/>
+                                    <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                                </if>
+                                <span>特惠<br/>车辆</span>
+                            </div>
+                            <h3>{$rs['brand']} <i  style="font-size: 16px;color: #989898;">{$rs['carmodelname']}</i></h3>
+                            <p>短租价:<i>{$rs['shortdayprice']}</i>元/天 特惠价:<i>{$rs['goodprice']}</i>元/天</p>
+                        </a>
+                    </li>
+                </volist>
+                <div class="clearFix"></div>
+            </ul>
+            <div class="curr-page">
+                {$page}
+            </div>
+        </div>
+    </if>
+
+
+</div>
+<style>
+    .footer-content {
+        background: #ffffff;
+    }
+</style>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        $(".nav-right li a").eq(2).addClass("current-page");
+        var liSize = $(".favList2 ul li").size()/3;
+        for (var i = 1; i <= liSize; i++) {
+            $(".favList2 ul li").eq(i * 4 - 1).css({marginRight: 0 + "px"});
+        }
+    })
+</script>
+

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>个人信息</title>
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+<!--导航-->
+		<div class="nav-main">
+	        <div class="nav-box">
+	            <a href="#" class="navbar-brand">
+	                <img src="images/logo.png" />
+	            </a>
+	            <div class="top-phone">
+	                <img src="images/nav-phone.png" />
+	                0851-83792777
+	            </div>
+	            <ul class="nav-right">
+	                <li><a href="index.html">网站首页</a></li>
+	                <li class="nav-line">|</li>
+	                <li><a href="rentCar.html">汽车租赁</a></li>
+	                <li class="nav-line">|</li>
+	                <li id="activity"><a href="Favorable.html">特惠信息</a>
+	                	<img src="images/nav-list-icon.png" />
+	                	<div id="fav-activity-box">
+		                	<div class="fav-activity"><a href="activity.html">优惠活动</a></div>
+		                	<div class="fav-activity"><a href="Favorable.html">特惠车辆</a></div>
+	                	</div>
+	                </li>
+	                <li class="nav-line">|</li>
+	                <li><a href="Notice.html">租车须知</a></li>
+	                <li class="nav-line">|</li>
+	                <li><a href="News.html">新闻中心</a></li>
+	                <li class="nav-line">|</li>
+	                <li><a href="About.html">关于我们</a></li>
+	                <li class="nav-line">|</li>
+	                <li><a href="Contanct.html">联系我们</a></li>
+	                <li class="nav-line">|</li>
+                    <li class="nav-vip"><span id="login">登陆</span> / <a href="reg.html">注册</a></li>
+	            </ul>
+	        </div>
+        </div>
+<!--图片-->
+<div class="top-img" style="background: url('images/top-pic4.jpg') center center"></div>
+
+<!--个人信息-->
+<div class="perInfo-top">
+   <div class="perInfo-top-box">
+       <div class="perInfo-header">
+             <div class="perInfo-header-img">
+             </div>
+             <div class="header-info">
+                  <div class="header-info-num">
+                      <i>183******72</i>
+                      <span>普通卡</span>
+                  </div>
+                  <div class="header-info-line">
+                        <div class="num">
+                            <i>0</i>/<span>50</span>
+                        </div>
+                        <div class="vip-cz"></div>
+                  </div>
+                  <p>我的积分：<i>0</i>，<span>+50</span>就能成为会员</p>
+             </div>
+       </div>
+       <ul>
+           <li>
+               <i>1</i>
+               <span>优惠劵<div class="zt"></div></span>
+           </li>
+           <li>
+               <i>300</i>
+               <span>可用积分</span>
+           </li>
+           <li>
+               <i>0</i>
+               <span>我的余额</span>
+           </li>
+       </ul>
+   </div>
+</div>
+<div class="perInfo-box">
+         <div class="perInfo-nav">
+             <h3>我的租车</h3>
+             <ul>
+                 <li class="nav-on"><img src="images/icn_profile.png"/> 个人信息</li>
+                 <li><img src="images/calendar.png" style="margin-right: 6px;top: 3px;"/>我的租车记录</li>
+                 <li><img src="images/icn_edit_article.png" style="margin-right: 6px;"/>修改密码</li>
+             </ul>
+         </div>
+
+         <div class="perinfo-content">
+             <h3>我的信息</h3>
+             <form action="" method="post">
+                 <table>
+                     <tbody>
+                        <tr>
+                            <td><label><span><i>*</i>用户名：</span><input type="text" disabled="disabled" value="18300874272"/></label></td>
+                            <td><label><span><i>*</i>真实姓名：</span><input type="text" value="梁坤"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span><i>*</i>性别：</span><input type="text"  value="男"/></label></td>
+                            <td><label><span>用户类型：</span><input type="text" disabled="disabled" value="会员"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span>Email：</span><input type="text" value="78397973@qq.com"/></label></td>
+                            <td><label><span>手机：</span><input type="text" value="18300874272"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span>生日：</span><input type="text"  value="1995-03-02"/></label></td>
+                            <td><label><span>身份证：</span><input type="text" value="522728199604203319"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span>驾驶档案号：</span><input type="text"  value="4161615"/></label></td>
+                            <td><label><span>联系方式：</span><input type="text"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span>开户银行：</span><input type="text" /></label></td>
+                            <td><label><span>银行账号：</span><input type="text"/></label></td>
+                        </tr>
+                        <tr>
+                            <td><label><span>备注：</span><textarea></textarea></label></td>
+                        </tr>
+                        <tr>
+                            <td><input type="submit" class="perInfo-btn" value="保存"/></td>
+                        </tr>
+                     </tbody>
+                 </table>
+             </form>
+         </div>
+        <div style="clear: both"></div>
+</div>
+
+<!--文字导航-->
+<div class="footer-content" style="background: #FFFFFF;">
+    <div class="footer-content-box">
+        <ul>
+            <li>新手指南</li>
+            <li>注册新用户</li>
+            <li>预定演示</li>
+            <li>取消或修改订单</li>
+        </ul>
+        <ul>
+            <li>预定说明</li>
+            <li>服务时间</li>
+            <li>租车资格</li>
+            <li>取车换车</li>
+        </ul>
+        <ul>
+            <li>保险理赔</li>
+            <li>基本保险</li>
+            <li>不计免赔服务</li>
+        </ul>
+        <ul>
+            <li>会员管理</li>
+            <li>我的订单</li>
+            <li>我的账号</li>
+            <li>会员积分</li>
+        </ul>
+        <ul>
+            <li>友情链接</li>
+            <li>贵阳建材市场</li>
+            <li>贵阳装修公司</li>
+        </ul>
+        <div class="code">
+            <img src="images/code1.jpg" width="100" height="100" />
+            <span>官方微信</span>
+            <img src="images/code2.jpg" width="100" height="100" />
+            <span style="margin-right:0">官方公众号</span>
+        </div>
+    </div>
+</div>
+<div class="top-line"></div>
+<!--底部版权-->
+<div class="footer">
+    <div class="footer-box">
+        <div class="footer-contanct">
+            <ul>
+                <li>
+                    <img src="images/footer-phone.png"/>
+                    <div class="footer-contanct-txt">
+                        <p>联系电话：</p>
+                        <p>0851-83792777</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="images/email.png"/>
+                    <div class="footer-contanct-txt">
+                        <p>邮箱地址：</p>
+                        <p>78397973@qq.com</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="images/address.png" />
+                    <div class="footer-contanct-txt">
+                        <p>公司地址：</p>
+                        <p>贵阳市南明区大理石路众拓鑫苑163号</p>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="footer-bq">
+            <div class="footer-nav">
+                <a href="#">公司简介</a>
+                <span>|</span>
+                <a href="#">新闻中心</a>
+                <span>|</span>
+                <a href="#">租车须知</a>
+                <span>|</span>
+                <a href="#">联系我们</a>
+            </div>
+            <p>华邦租车 版权所有</p>
+            <p>网站备案号：黔ICP备16005141号-1　　贵公安备号GYGA5201030602</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

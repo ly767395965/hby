@@ -1,0 +1,59 @@
+<script>
+    var liSize = $(".car-product ul li").size() / 4;
+    for (var i = 1; i <= liSize; i++) {
+        $(".car-product ul li").eq(i * 4 - 1).css({marginRight: 0 + "px"});
+    }
+</script>
+<if condition ="$list[0]['id'] == ''">
+    <div style=" height: 645px;line-height: 645px; text-align: center;color: #ff8800; font-size: 38px;">暂无相关车辆数据信息!</div>
+    <else/>
+    <ul>
+        <volist name="list" id="vo">
+            <li>
+                <a href="{:U('Reserve/index')}?id={$vo['id']}">
+                    <div class="car-pic">
+
+                        <if condition="$vo['frontimg'] != null">
+                            <img src="__PUBLIC__{$vo['frontimg']}" alt="{$vo['carmodelname']}"/>
+                            <else/>
+                            <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                        </if>
+                        <!--遮罩层-->
+                        <div class="car-cen">
+                            <h3>{$vo['brand']}</h3>
+                            <h4>{$vo['carmodelname']}</h4>
+                            <p style="border-top: 1px dashed #ccc;padding-top: 2px;">周租(5-20天):￥{$vo['weekdayprice']}/天</p>
+                            <p>月租(20天以上):{$vo['monthdayprice']}/天</p>
+                        </div>
+                    </div>
+                </a>
+                <div class="car-info">
+                    <div class="car-dis">
+                                        <span style="margin-right: 3px;">
+                                            <i class="bearboxtype nd"></i>
+                                            {$vo['agestyle']}
+                                        </span>
+                        <span>
+                                            <i class="bearboxtype bsx"></i>
+                                            {$vo['bearboxtype']}
+                                        </span>
+                        <span>
+                                            <i class="sitecount zws"></i>
+                                            {$vo['sitecount']}座
+                                        </span>
+                        <span>
+                                            <i class="pl"></i>
+                                            {$vo['displacement']}(ml)
+                                        </span>
+                    </div>
+                    <div class="car-prize">
+                        <h3>
+                            <span style="font-size: 12px;">短租价:</span>￥{$vo['shortdayprice']}<span style="font-size: 12px;margin-left: 2px;">/日</span>
+                        </h3>
+                        <a href="{:U('Indent/Index')}?id={$vo['id']}">立即预定</a>
+                    </div>
+                </div>
+            </li>
+        </volist>
+    </ul>
+</if>

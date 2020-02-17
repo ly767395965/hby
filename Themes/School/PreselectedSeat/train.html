@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时刻表</title>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/base.css" />
+    <style type="text/css">
+        #content{
+            width: 100%;
+        }
+        #content h1{
+            width: 45%;
+            font-size: 1.5em;
+            padding-top: 5%;
+            text-align: right;
+            font-weight: bold;
+            color: #211922;
+        }
+        #content #carul{
+            border-top: 1px solid silver;
+            margin-top: 20px;
+            width: 100%;
+            min-height: 300px;
+        }
+        #content #carul li{
+            margin: auto;
+            margin-top: 15px;
+            text-align: left;
+            width: 100%;
+            height: 45px;
+            line-height: 45px;
+            font-size: 14px;
+            text-align: center;
+            border-bottom: 1px dashed #6e727b;
+        }
+
+    </style>
+</head>
+<body>
+<section class="main">
+    <include file="Index:index"/>
+    <div id="content">
+        <h1><img src="__PUBLIC__/School/img/train.png" width="25" height="25"/>&nbsp;{$train[0]['carno']}A时刻表</h1>
+        <a href="#" onClick="javascript :history.go(-1);" style="float: right;margin-right: 10%;">返回上一页</a>
+
+        <ul id="carul">
+            <volist name="train" id="cart">
+                <if condition="$cart['operable'] == 0">
+                    <li class="">{$cart['starttime']}-----------------><span style="color: red">不可选座</span></li>
+                    <else />
+                    <li class="Choice" data-id="{$cart['cartid']}" time="{$cart['starttime']}" carno="{$cart['carno']}">{$cart['starttime']} -----------------> <span>可 选 座</span></li>
+                </if>
+
+            </volist>
+
+        </ul>
+    </div>
+
+</section>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $(".Choice").click(function () {
+            var carid = $(this).attr('data-id');
+            var time = $(this).attr('time');
+            var carno = $(this).attr('carno');
+            var url = "../PreselectedSeat/chooseSeat?car="+carid+"&time="+time+'&carno='+carno;
+            window.location.href = url;
+        });
+    });
+</script>

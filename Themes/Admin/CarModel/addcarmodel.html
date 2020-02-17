@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车型添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<div class="tit-all">
+    <h3><i></i>车型信息</h3>
+</div> 
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <form class="register-form" name="CarModelForm" id="CarModelForm" action="{:U('CarModel/addCarModel')}" method="post" enctype="multipart/form-data">
+
+                <div class="busi_input clearfix">
+                    <label>排序：</label>
+                    <input class="input_normal" type="text"   name="sort" id="sort" >
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>品牌：</label>
+                    <select class="input_normal" name="barand" id="input_normal">
+                        <option selected="selected" value="">请选择品牌</option>
+                        <volist name="brand" id="temp">
+                            <option value="{$temp['id']}">{$temp['brand']}</option>
+                        </volist>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>车型名称：</label>
+                    <input class="input_normal" type="text"   name="carmodelname" id="carmodelname"  placeholder="请输入车型名称" title="请输入车型名称" ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>车辆类型：</label>
+                    <select class="input_normal" name="carmodeltype">
+                        <option selected="selected" value="">请选择车辆类型</option>
+                        <option value="1">商务车</option>
+                        <option value="2">越野车</option>
+                        <option value="3">面包车</option>
+                        <option value="4">轿车</option>
+                        <option value="5">客车</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>年代款：</label>
+                    <select class="input_normal" name="agestyle" id="agestyle">
+                        <option selected="selected" value="">请选择年代款</option>
+                        <option value="2005">2005</option>
+                        <option value="2006">2006</option>
+                        <option value="2007">2007</option>
+                        <option value="2008">2008</option>
+                        <option value="2009">2009</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option>
+                        <option value="2012">2012</option>
+                        <option value="2013">2013</option>
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>配置款：</label>
+                    <select class="input_normal" name="configstyle" id="configstyle">
+                        <option selected="selected" value="">请选择配置款</option>
+                        <option value="基本款">基本款</option>
+                        <option value="中档款">中档款</option>
+                        <option value="高配款">高配款</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <!--<div class="busi_input clearfix">-->
+                    <!--<label>座位数：</label>-->
+                    <!--<select class="input_normal" name="sitecount" id="sitecount">-->
+                        <!--<option selected="selected" value="">请选择座位数</option>-->
+                        <!--<option value="2">2</option>-->
+                        <!--<option value="4">4</option>-->
+                        <!--<option value="5">5</option>-->
+                        <!--<option value="6">6</option>-->
+                        <!--<option value="7">7</option>-->
+                        <!--<option value="8">8</option>-->
+                        <!--<option value="9">9</option>-->
+                        <!--<option value="10">10</option>-->
+                        <!--<option value="11">11</option>-->
+                        <!--<option value="12">12</option>-->
+						<!--<option value="19-55">19-55</option>-->
+                    <!--</select>-->
+                    <!--<i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>-->
+                <!--</div>-->
+                <div class="busi_input clearfix">
+                    <label>座位数：</label>
+                    <input class="input_normal" type="text"   name="sitecount" placeholder="请输入座位数" title="请输入座位数" ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>变速箱：</label>
+                    <select class="input_normal" name="bearboxtype" id="bearboxtype">
+                        <option selected="selected" value="">请选择变速箱类型</option>
+                        <option value="自动">自动</option>
+                        <option value="手动">手动</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>排量：</label>
+                    <input class="input_normal" type="text"   name="displacement" id="displacement"  placeholder="请输入排气量" title="请输入排气量" ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>燃油标号：</label>
+                    <select class="input_normal" name="fuelstand" id="fuelstand">
+                        <option selected="selected" value="">请选择燃油标号</option>
+                        <option value="92号汽油">92号汽油</option>
+                        <option value="95号汽油">95号汽油</option>
+                        <option value="98号汽油">98号汽油</option>
+                        <option value="0号柴油">0号柴油</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>天窗：</label>
+                    <select class="input_normal" name="skylight" id="skylight">
+                        <option selected="selected" value="">请选择天窗</option>
+                        <option value="无">无</option>
+                        <option value="有">有</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>油箱容量：</label>
+                    <input class="input_normal" type="text"   name="tankcapacity" id="tankcapacity"  placeholder="请输入油箱容量" title="请输入油箱容量"><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label>座椅类型：</label>
+                    <select class="input_normal" name="chairtype" id="chairtype">
+                        <option selected="selected" value="">请选择座椅类型</option>
+                        <option value="编织">编织</option>
+                        <option value="仿皮">仿皮</option>
+                        <option value="真皮">真皮</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>是否推荐：</label>
+                    <select class="input_normal" name="isrecommend" id="isrecommend">
+                        <option selected="selected" value="">请选择是否推荐</option>
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>车型状态：</label>
+                    <select class="input_normal" name="state" id="state">
+                        <option selected="selected" value="">请选择车型状态</option>
+                        <option value="0">可租</option>
+                        <option value="1">已租满</option>
+                    </select>
+                    <i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>前面图片：</label>
+                    <input class="input_normal" type="file"   name="photo[]" /><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(230px*140px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>左前图片：</label>
+                    <input class="input_normal" type="file"   name="photo[]" /><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(230px*140px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>右前图片：</label>
+                    <input class="input_normal" type="file"   name="photo[]"/><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(230px*140px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>右侧图片：</label>
+                    <input class="input_normal" type="file"   name="photo[]"/><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(230px*140px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>后面图片：</label>
+                    <input class="input_normal" type="file"   name="photo[]" /><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">文件不能超过100K(230px*140px);支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+
+                <div class="busi_input clearfix">
+                    <label>短租日租价：</label>
+                    <input class="input_normal" type="text"   name="shortdayprice" id="shortdayprice"  placeholder="请输入短租日租价" title="请输入短租日租价"><span class="font" id="ShortDayPriceinfo"></span><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>周租日租价：</label>
+                    <input class="input_normal" type="text"   name="weekdayprice" id="weekdayprice"  placeholder="请输入周租日租价" title="请输入周租日租价"><span class="font" id="WeekDayPriceinfo"></span><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>月租日租价：</label>
+                    <input class="input_normal" type="text"   name="monthdayPrice" id="monthdayPrice"  placeholder="请输入月租日租价" title="请输入月租日租价"><span class="font" id="MonthDayPriceinfo"></span><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #de1818;">必填</i>
+                </div>
+
+
+                <div class="busi_input clearfix">
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">添加</button>
+                    <button name="reset" class="btn-submit reset"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+</div>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会议订单管理</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .substep{float: right;width: 100px;height: 34px;background: lightblue;text-align: center;line-height: 34px;margin: -28px 43px 0px 100px;border-radius: 5px;font-size: 14px;  }
+        .substep:hover{background: #3eafe0;color: white;}
+        .substep:hover .substep_next{display: block}
+        .substep_next{position: absolute;top:83px;display: none}
+        .substep_next li{width: 100px;height: 25px;background: lightgrey;text-align: center;line-height: 25px;border-top: 1px solid white;color: orangered}
+        .substep_next li:hover{background: #968588;color: white}
+
+    </style>
+
+</head>
+<body marginwidth="0" marginheight="0">
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        会议订单管理列表
+    </h3>
+    <span id="functionarea" class="add-car fr" style="margin-right: 29px">
+            <if condition="checkAuth('CarinfoManage/addCarinfoManage')">
+                <a href="{:U('Order/add_meeting')}" title="添加订单">添加会议订单</a>
+            </if>
+        </span>
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1006px;height: 20px;" >
+        <form action="{:U('Order/order_meeting')}" method="get" style="position: absolute;height: 50px">
+            <input type="hidden" value="{$act}" id="act" name="act">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select" id="select" style="width: 200px;">
+                    <if condition ="$msg.select eq 0"><option selected value="0">订单号</option><else/><option value="0">订单号</option></if>
+                    <if condition ="$msg.select eq 1"><option selected value="1">会议名称</option><else/><option value="1">会议名称</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;display: none" value="{$msg.key}"  name="key" id="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                <select class="input_normal" name="key_state" id="key_state" style="width: 200px;display: none">
+                    <option <if condition ="$msg.key eq 0">selected</if> value="0">未支付</option>
+                    <option <if condition ="$msg.key eq 1">selected</if> value="1">已支付</option>
+                    <option <if condition ="$msg.key eq 2">selected</if> value="2">已派车</option>
+                    <option <if condition ="$msg.key eq 3">selected</if> value="3">已取车</option>
+                    <option <if condition ="$msg.key eq 4">selected</if> value="4">已还车</option>
+                    <option <if condition ="$msg.key eq 5">selected</if> value="5">已结账</option>
+                    <option <if condition ="$msg.key eq 6">selected</if> value="6">同意退押</option>
+                    <option <if condition ="$msg.key eq 7">selected</if> value="7">正常结单</option>
+                    <option <if condition ="$msg.key eq 7">selected</if> value="10">取消订单</option>
+                </select>
+
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <select class="input_normal" name="select_time"  style="width: 80px;">
+                        <option <if condition ="$msg.select_time eq 0">selected</if> value="0">下单时间</option>
+                        <option <if condition ="$msg.select_time eq 1">selected</if> value="1">取车时间</option>
+                        <option <if condition ="$msg.select_time eq 2">selected</if> value="2">还车时间</option>
+                    </select>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-2592000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+
+    </div>
+    <!--<div class="substep" >分步操作
+        <div class="substep_next">
+            <ul>
+                <a href="{:U('Order/customerBig')}?step=send&select={$msg.select}&key={$msg.key}&select_time={$msg.select_time}&start={$msg.start}&stop={$msg.stop}"><li>派遣车辆</li></a>
+                <li>指派代驾</li>
+                <li>客户取车</li>
+                <li>续租管理</li>
+                <li>客户还车</li>
+                <li>成本录入</li>
+                <li>违章录入</li>
+                <li>前期完结</li>
+            </ul>
+        </div>
+    </div>-->
+    <br>
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th >编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th >订单号</th>
+            <th >会议名称</th>
+            <th >租车数量</th>
+            <th >取车时间</th>
+            <th >还车时间</th>
+            <th >预计还款日</th>
+            <th >外调成本</th>
+            <th >杂项成本</th>
+            <th >订单总价</th>
+            <th >预计利润</th>
+            <th >下单时间</th>
+            <th>订单状态</th>
+            <th style="padding-left: 10px">进行操作</th>
+        </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到需要处理的订单
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr>
+                    <td style="padding-left: 5px"><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp['id']}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.order_code}</a></td>
+                    <td><a href="{:U('Order/orderMeet_info')}?id={$temp['id']}">{$temp.meeting_name}</a></td>
+                    <td>{$temp.car_num}</td>
+                    <td>{$temp.pk_date}</td>
+                    <td>{$temp.re_date}</td>
+                    <td>{$temp.expect_date}</td>
+                    <td>{$temp.out_cost}</td>
+                    <td>{$temp.mixed_cost}</td>
+                    <td style="color: #F04902">{$temp.price_rec}</td>
+                    <td></td>
+                    <td>{$temp.order_date}</td>
+                    <td>
+                        <switch name="temp.order_state" >
+                            <case value="0">初步录单</case>
+                            <case value="1">录单完成</case>
+                            <case value="2">未结清</case>
+                            <case value="3">已结单</case>
+                            <case value="10">订单取消</case>
+                            <default />未知
+                        </switch>
+                    </td>
+                    <td class="tools">
+                        <ul class="toolbar">
+                            <li class="click" style="width: 65px">
+                                <a  href="{:U('Order/edit_meeting')}?id={$temp['id']}">
+                                    <img src="__PUBLIC__/images/t02.png"  />修改
+                                </a>
+                            </li>
+                            <li class="click" style="width: 65px">
+                                <a href="javascript:MscBox('系统信息',t[0],'提示：订单录入是否完成？','确定继续,取消关闭','{:U('Order/finish')}?id={$temp['id']}&action=finish')" style="padding-left: 10px">
+                                    完成
+                                </a>
+                            </li>
+                            <li class="click" style="width: 40px">
+                                <a href="javascript:MscBox('系统信息',t[0],'提示：是否取消订单？','确定取消,取消关闭','{:U('Order/meet_cancel')}?id={$temp['id']}')" style="padding-left: 10px">
+                                    取消
+                                </a>
+                                <!--<a  href="{:U('Order/meet_cancel')}?id={$temp['id']}&action=finish">-->
+                                    <!--<img src="__PUBLIC__/images/t02.png"  />取消-->
+                                <!--</a>-->
+                            </li>
+                        </ul>
+                    </td>
+                    <script>
+                        var price_rec = $('.order_table').find('tr:last').find('td:eq(9)').text(); //总价
+                        var mixed_cost = $('.order_table').find('tr:last').find('td:eq(8)').text();//杂项成本
+                        var out_cost = $('.order_table').find('tr:last').find('td:eq(7)').text();//外调成本
+                        var expect_profit = price_rec - mixed_cost - out_cost;
+                        $('.order_table').find('tr:last').find('td:eq(10)').text(expect_profit);
+                    </script>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+    <div class="digg">{$page}</div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+    $(function () {
+        var select = $('#select').val();
+        condition(select);                         //根据不同的筛选条件设定初始条件
+
+        $('#select').change(function () {
+            var select = $('#select').val();
+            change_se();                          //同步筛选条件,并初始条件的隐藏属性
+            condition(select);                    //根据不同的筛选条件设定初始条件
+        });
+
+//        根据不同的筛选条件设定初始条件
+        function condition(select) {
+            if (select == '6'){
+                $('#key_check').css('display','block');
+
+            }else if (select == 3){
+                $('#key_state').css('display','block');
+            }else{
+                $('#key').css('display','block');
+                $('#key').val('');
+            }
+        }
+//        同步筛选条件,并初始条件的隐藏属性
+        function change_se() {
+            $('#key_check').css('display','none');
+            $('#key').css('display','none');
+            $('#key_state').css('display','none');
+
+        }
+
+    });
+
+</script>

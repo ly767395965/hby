@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打包订单详情信息列表</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .pack {width: 78px;height: 34px;margin-right: 2%;background: #00A5EC;color:white;float: left}
+        .pack:hover{background: #0295D3}
+
+        .car_number div {position: absolute;z-index: 100;display: none;background: #3EAFE0;color: white;padding: 5px;border-radius: 5px;opacity: 1}
+    </style>
+</head>
+<body marginwidth="0" marginheight="0">
+<!--遮罩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 100%;background: black;display: none;opacity: 0.6"></div>
+
+<div id="listtitle" class="tit-all clearfix">
+    <h3 class="fl">
+        <i></i>
+        订单结账列表
+    </h3>
+    <!--<span id="functionarea" class="add-car fr">-->
+            <!--<if condition="checkAuth('Order/add')">-->
+                <!--<a href="{:U('Order/add')}" title="添加订单">添加订单</a>-->
+            <!--</if>-->
+        <!--</span>-->
+</div>
+<br/>
+<div class="formbody">
+    <div class="busi_info input-shop-w" id="form-section" style="margin: 0 auto;display: block; width: 1005px;height: 20px;" >
+        <form action="{:U('CarAgent/packInfo')}?id={$pack['id']}" method="post" style="position: absolute;height: 50px">
+            <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                <select class="input_normal" name="select" id="select"  style="width: 200px;">
+                    <if condition ="$msg.select eq 0"><option selected value="0">订单号</option><else/><option value="0">订单号</option></if>
+                    <!--<if condition ="$msg.select eq 1"><option selected value="1">客户</option><else/><option value="1">客户</option></if>-->
+                    <!--<if condition ="$msg.select eq 2"><option selected value="2">车型</option><else/><option value="2">车型</option></if>-->
+                    <if condition ="$msg.select eq 3"><option selected value="3">订单状态</option><else/><option value="3">订单状态</option></if>
+                    <!--<if condition ="$msg.select eq 4"><option selected value="4">账号/手机</option><else/><option value="4">账号/手机</option></if>-->
+                    <if condition ="$msg.select eq 5"><option selected value="5">车牌号</option><else/><option value="5">车牌号</option></if>
+                    <if condition ="$msg.select eq 6"><option selected value="6">代理商</option><else/><option value="6">代理商</option></if>
+                </select>
+            </div>
+            <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                <input class="input_normal" type="text"  style="width: 200px;display: none" value="{$msg.key}"  name="key" id="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                <select class="input_normal" name="key_state" id="key_state" style="width: 200px;display: none">
+                    <option <if condition ="$msg.key eq 0">selected</if> value="0">未支付</option>
+                    <option <if condition ="$msg.key eq 1">selected</if> value="1">已支付</option>
+                    <option <if condition ="$msg.key eq 2">selected</if> value="2">已派车</option>
+                    <option <if condition ="$msg.key eq 3">selected</if> value="3">已取车</option>
+                    <option <if condition ="$msg.key eq 4">selected</if> value="4">已还车</option>
+                    <option <if condition ="$msg.key eq 5">selected</if> value="5">已结账</option>
+                    <option <if condition ="$msg.key eq 6">selected</if> value="6">同意退押</option>
+                    <option <if condition ="$msg.key eq 7">selected</if> value="7">正常结单</option>
+                    <option <if condition ="$msg.key eq 7">selected</if> value="10">取消订单</option>
+                </select>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 0px; top: 0px; ">
+                    <select class="input_normal" name="select_time"  style="width: 80px;">
+                        <option <if condition ="$msg.select_time eq 0">selected</if> value="0">还车时间</option>
+                        <option <if condition ="$msg.select_time eq 1">selected</if> value="1">取车时间</option>
+                        <option <if condition ="$msg.select_time eq 2">selected</if> value="2">下单时间</option>
+                    </select>
+                </div>
+                <input class="input_normal" type="text"   name="start" style="width: 150px;" value="<if condition ='$msg.start neq 0'>{$msg.start}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']-5184000);?></if>"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input class="input_normal" type="text"   name="stop" style="width: 150px;" value="<if condition ='$msg.stop neq 0'>{$msg.stop}<else/><?php echo date('Y-m-d H:i:s ',$_SERVER['REQUEST_TIME']+5184000);?></if>"   placeholder="请输入结束日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+                <input type="submit" value="查询" name="submit" class="btn-submit" />
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <div style="float: left;margin-left: 24px">
+        该次申请由<label style="color: #00a0e9"><if condition ="$pack['agent_name']==''">华邦伟业<else/>{$pack['agent_name']}</if></label>的<label style="color:#00a0e9 ">{$pack['user_name']}</label>发起，共含有{$pack['order_num']}单
+    </div>
+    <!--<input type="button" value="申请结账" id="pack" style="" >-->
+    <table  class="order_table">
+        <thead>
+        <tr style="align: center; font-size: 16px;">
+            <th style="width: 70px;"><input type="checkbox"  name="all" class="all">编号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+            <th >代理商</th>
+            <th >订单号</th>
+            <th >用车数量</th>
+            <th >取车时间</th>
+            <th >还车时间</th>
+            <th >车辆成本</th>
+            <th>结账状态</th>
+            <th>订单状态</th>
+        </tr>
+        </thead>
+        <if condition ="orderinfo[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的订单
+            </div>
+            <else/>
+            <volist name="orderinfo" id="temp">
+                <tr <if condition ="$temp['usertype']==1">style="color: #3EAFE0"</if>>
+                <td><input type="checkbox" class="cBox" name="ids[]" value="{$temp['id']}"><a href="{:U('Order/orderInfo')}?id={$temp['id']}">{$temp['id']}</a></td>
+                <td>{$temp.agent_name}</td>
+                <td>{$temp.order_code}</td>
+                <td class="car_number">
+                    <if condition = "$temp.usertype eq 1">{$temp.car_number}<else/>1</if>
+                    <div>
+                        <label>使用车辆:</label>
+                        <volist name="carno_ary" id = "carno">
+                            <if condition="$carno['id'] eq $temp['id']">
+                                <li>{$carno.carno}</li>
+                            </if>
+                        </volist>
+                    </div>
+                </td>
+                <td>{$temp.pk_date}</td>
+                <td>{$temp.re_date}</td>
+                <td>{$temp.all_cost}</td>
+                <td>
+                    <switch name="temp.check_out" >
+                        <case value="0">未结账</case>
+                        <case value="1">已结清</case>
+                        <case value="2"><label style="color: red">未结清</label></case>
+                        <default />未知
+                    </switch>
+                </td>
+                <td class="tools">
+                    <switch name="temp.order_state" >
+                        <case value="0">未支付</case>
+                        <case value="1">已支付</case>
+                        <case value="2">已派车</case>
+                        <case value="3">已取车</case>
+                        <case value="4">已还车</case>
+                        <case value="5">已结账</case>
+                        <case value="6">可退押金</case>
+                        <case value="7">已结单</case>
+                        <case value="10">订单取消</case>
+                        <case value="11">退款申请</case>
+                        <case value="12">同意退款</case>
+                        <case value="13">退款完成</case>
+                        <default />未知
+                    </switch>
+                </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+</div>
+<BR/>
+<br/>
+<!--<div class="digg">{$page}</div>-->
+<div style="margin-left: 43%">
+    <if condition ="UserInfo()['agent_id'] == 0 && ($pack['state'] == 0 || $pack['state'] == 2)">
+        <a href="{:U('Finance/agent_check')}?id={$pack['id']}"><input type="button" value="进行结账" id="" class="pack" style="" ></a>
+    </if>
+    <button name="submit" class="pack"  onclick="javascript:window.history.back(-1);"  style="width: 100px">返回上一页</button>
+</div>
+</body>
+<input type="hidden" value="{$act}" id="act"> <!--获取操作方式-->
+</html>
+
+<script>
+    $(function () {
+        var select = $('#select').val();
+        condition(select);                        //根据不同的筛选条件设定初始条件
+//        根据操作方式改变提交的地址
+        var act = $('#act').val();
+        if (act == 'all'){
+            $('#form-section form').attr('action',"{:U('Order/all')}");
+        }
+
+        //鼠标悬停,查看用车情况
+        $(".car_number").hover(function(){
+            $(this).find('div').show()
+        },function(){
+            $(this).find('div').hide();
+        })
+
+    });
+
+    $('#select').change(function () {        //改变筛选限制，随之改变筛选条件
+        var select = $('#select').val();
+        change_se();                          //同步筛选条件,并初始条件的隐藏属性
+        condition(select);                    //根据不同的筛选条件设定初始条件
+    });
+    //        根据不同的筛选条件设定初始条件
+    function condition(select) {
+        if (select == 3){
+            $('#key_state').css('display','block');
+        }else{
+            $('#key').css('display','block');
+            $('#key').val('');
+        }
+    }
+    //        同步筛选条件,并初始条件的隐藏属性
+    function change_se() {
+        $('#key').css('display','none');
+        $('#key_state').css('display','none');
+    }
+
+
+
+</script>

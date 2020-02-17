@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点添加页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .body_box {width: 100%; height: 58em}
+        .route_box {width: 20%; height: 100%; float: left;}
+        .map_box {width: 63%; height: 100%; float: left; border: 1px solid grey}
+        .site_box {width: 15%; height: 100%; float: left;padding: 0 1em;}
+
+        .route_title{text-align: center}
+        .route_list li{padding-left: 0.5em; padding-top: 0.5em; margin: 0 0.5em 0.5em 0.5em;border: 1px solid #A2B4BA}
+        .route_list span {margin-right: 1em}
+        .but_s {padding: 0 3px; color: yellowgreen}
+        .but_s:hover {background-color: #A2B4BA; color: white; border-radius: 3px; cursor: pointer}
+        .co_red {color: red}
+
+        .site_title {margin-bottom: 1em; }
+        .site_title span {margin-right: 0.2em}
+        .site_operation li {float: left; margin-right: 1em}
+        .site_operation {height: 3em}
+        .site_list li {margin: 2px 0}
+        .site_none {color: lightgrey; font-size: 2em;text-align: center;padding-top: 1em;}
+        .site_none span {font-size: 0.5em;}
+
+        .edit_box{position: fixed;z-index:4; height: 40em; width:40%; border-radius: 5px; background-color: #D4E7F0; top:20%; left: 30%;padding: 0 0.5em; display: none}
+        .edit_list table {width: 100%}
+        .td_last {width: 120px}
+        .td_one {width: 50px}
+        .edit_list td {text-align: center;padding: 0 0.5em;}
+        .td_p { width: 15%}
+        .edit_title {text-align: center;margin: 1em 0}
+        .edit_list{border: 1px solid grey; padding: 1em 0.5em; height: 85%; border-radius: 5px}
+        .edit_list tr{border-bottom: 1px solid #3EAFE0;height: 2em}
+        .edit_list tr input {width: 90%}
+        .add_site_list {border: 1px dashed grey;padding: 0.1em 0 0.1em 1em; letter-spacing:1em;color: black;}
+
+        .add_route {text-align: center;color:grey;line-height: 2em;}
+        .add_route:hover {background-color: lightgrey; color: white;cursor: pointer}
+        .new_route {padding-bottom: 0.5em}
+        .new_route .route_name {left: 0}
+    </style>
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3><i></i>院校交通车路线管理</h3>
+</div>
+<div class="user-mine">
+    <div class="body_box" >
+        <div class="route_box" id="form-section" style="">
+            <div class="route_title">
+                <li>贵阳学院路线列表</li>
+                <li>
+                    <span>线路数:{$route_num}</span>
+                    <span>启用数:{$enable_num}</span>
+                </li>
+            </div>
+            <div class="route_list">
+                <ul>
+                    <volist name="route" id="temp">
+                        <li>
+                            <span <if condition="$temp.is_enable == 1">class="co_red"</if>>{$temp.route_name}</span><span class="but_s route_enable"><if condition="$temp.is_enable == 0">禁用<else/>启用</if></span><span class="but_s route_delete">删除</span><span class="but_s add_site">添加站点</span><span class="route_edit but_s">修改</span><br/>
+                            <span>长度:{$temp.route_length_q}km</span><span>站点数:{$temp.site_num_q}</span><span class="but_s check_route" route_id="{$temp.id}" route_name="{$temp.route_name}">查看详细路线</span>
+                        </li>
+                    </volist>
+                    <!--<li class="new_route">
+                        <span class="route_name">路线名称: <input type="text" value="" id="route_name"></span>
+                        <span class="but_s">添加</span><span class="but_s">取消</span>
+                    </li>-->
+                    <li class="add_route">
+                        添加新线路
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="map_box" id="container" >
+        </div>
+        <div class="site_box" >
+
+            <div class="site_none">
+                路线站点展示框<br/>
+                <span>选择路线详情后可查看具体站点信息</span>
+            </div>
+            <!-- END OF FORM SECTION -->
+        </div>
+        <!-- END OF WRAPPER DIV -->
+
+        <div class="edit_box">
+            <div class="edit_title">站点信息编辑</div>
+            <div class="edit_list">
+                <table style="border-collapse:collapse; border-spacing:0px 5px;">
+                    <thead>
+                        <td>序号</td>
+                        <td>站点名</td>
+                        <td>站点经度</td>
+                        <td>站点纬度</td>
+                        <td>是否是停靠点</td>
+                        <td>双向标识</td>
+                        <td>操作</td>
+                    </thead>
+                   <!-- <tr>
+                        <td class="td_one">3</td>
+                        <td class="td_p">站点名</td>
+                        <td class="td_p">站点经度</td>
+                        <td class="td_p">站点纬度</td>
+                        <td class="td_p">否</td>
+                        <td class="td_p">回向</td>
+                        <td class="td_last" site_id="1"><span class="but_s site_edit">修改</span><span class="but_s site_inter">插入</span><span class="but_s site_delete">删除</span></td>
+                    </tr>-->
+                    <tr class="tr_last">
+                        <td colspan="7"><span class="but_s add_site_list site_inter">添加</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=67jMQ5DmYTe1TLMBKFUTcZAR"></script>
+<script id="jq" type="text/javascript">
+    $(function(){
+        var title_height = $('.tit-all').height();
+        var body_height = document.body.scrollHeight;
+        var win_height = body_height-title_height;
+        $('.body_box').css('height',win_height+'px');
+
+        var map = new BMap.Map("container");
+
+        map.centerAndZoom(new BMap.Point(106.720385, 26.579659), 13);
+        map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
+        map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
+        map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
+        map.enableScrollWheelZoom();                  //启用滚轮放大缩小
+
+        var site_p = [];//用于储存站点在百度地图上的位置
+        var site_info = [];//用于储存线路信息
+        var old_site_info = [];//修改站点信息时,用于储存修改前的站点信息
+        var is_edit = 0;//用于储存编辑状态
+
+        $(document).on('click','.check_route',function () {
+            var route_id = $(this).attr('route_id');
+            site_info['route_name'] = $(this).attr('route_name');//路线名
+            site_info['route_id'] = route_id;//路线id
+            site_info['direction'] = 1;//行驶方向(1去向;2回向)
+            site_info['is_black'] = 1;//是否显示途径点(0:只显示站点;1显示所有点)
+            site_info['all_site'] = 0;//总点数(途经点和站点)
+            site_info['site_num'] = 0;//站点数
+            routeView(route_id);
+        });
+
+        $(document).on('click','#point_show',function () { //是否显示途径点
+            if (site_info['is_black'] == 1){
+                site_info['is_black'] = 0;
+                var text = '显示途径点';
+            }else{
+                site_info['is_black'] = 1;
+                var text = '仅显示站点';
+            }
+            $(this).text(text);
+            run();
+        });
+
+        $(document).on('click','#route_diretion',function () { //查看去向 或回向路径
+            if (site_info['direction'] == 1){
+                site_info['direction'] = 2;
+                var text = '去向轨迹';
+            }else{
+                site_info['direction'] = 1;
+                var text = '回向轨迹';
+            }
+            site_p.reverse();
+            $(this).text(text);
+            run();  //重新渲染路径
+            siteView(true);  //更改站点显示排序
+        });
+
+        //添加站点 (打开遮罩层,显示站点编辑框)
+        $(document).on('click','.add_site',function () {
+            site_info = [];
+            site_info['route_id'] = $(this).nextAll('.check_route').attr('route_id');
+            site_info['route_name'] = $(this).attr('route_name');//路线名
+//            siteView(false);
+            $('#query_l').css({'display':'block','height':(body_height+5)+'px'});
+            $('.edit_box').show();
+            $.ajax({
+                url: "{:U('Limousine/siteQuery')}",
+                data: {'route_id':site_info['route_id']},
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    site_p = [];
+                    if (data['error'] == 0){
+                        var list = data['list'];
+                        for (var key in list){
+                            if (list[key]['site_lng'] && list[key]['site_lat']){
+                                var temp = {};
+                                temp['site_name'] = list[key]['site_name'];
+                                temp['site_id'] = list[key]['id'];
+                                temp['is_site'] = list[key]['is_site'];
+                                temp['site_order'] = list[key]['site_order'];
+                                temp['direction'] = list[key]['direction'];
+                                temp['point'] = new BMap.Point(list[key]['site_lng'],list[key]['site_lat']);
+                                site_p.push(temp);
+                                if (list[key]['is_site'] == 1){
+                                    site_info['site_num']++;
+                                }
+                                site_info['all_site']++;
+                            }
+                        }
+                    }
+                    siteEditlist();
+                }
+            });
+
+        });
+
+        //点击遮罩层(恢复页面)
+        $('#query_l').on('click',function () {
+            isEdit(0);
+            $(this).hide();
+            $('.edit_box').hide();
+        });
+
+        //编辑站点(点击事件)
+        $(document).on('click','#edit_site',function () {
+            $('#query_l').css({'display':'block','height':(body_height+5)+'px'});
+            $('.edit_box').show();
+            siteEditlist();
+        });
+
+        //修改站点信息
+        $(document).on('click','.site_edit',function () {
+            if (!isEdit()){
+                return false;
+            }
+            var site_name = old_site_info['site_name'] = $(this).parent().prevAll('td:eq(4)').text();
+
+            $(this).parent().prevAll('td:eq(4)').html('<input type="text" value="'+site_name+'" id="site_name">');
+
+            var site_lng = old_site_info['site_lng'] = $(this).parent().prevAll('td:eq(3)').text();
+            $(this).parent().prevAll('td:eq(3)').html('<input type="text" value="'+site_lng+'" id="site_lng">');
+
+            var site_lat = old_site_info['site_lat'] = $(this).parent().prevAll('td:eq(2)').text();
+            $(this).parent().prevAll('td:eq(2)').html('<input type="text" value="'+site_lat+'" id="site_lat">');
+
+            var is_site = $(this).parent().prevAll('td:eq(1)').text();
+            $(this).parent().prevAll('td:eq(1)').html('<select id="is_site"><option value="1">是</option><option value="0">否</option></select>');
+            if (is_site == '是'){
+                $('#is_site').val(1);
+                old_site_info['is_site'] = 1;
+            }else{
+                $('#is_site').val(0);
+                old_site_info['is_site'] = 0;
+            }
+
+            var direction = $(this).parent().prevAll('td:eq(0)').text();
+            $(this).parent().prevAll('td:eq(0)').html('<select id="direction"><option value="0">双向</option><option value="1">去向</option><option value="2">回向</option></select>');
+            switch (direction){
+                case '双向':
+                    $('#direction').val(0);
+                    old_site_info['direction'] = 0;
+                    break;
+                case '去向':
+                    $('#direction').val(1);
+                    old_site_info['direction'] = 1;
+                    break;
+                case '回向':
+                    $('#direction').val(2);
+                    old_site_info['direction'] = 2;
+                    break;
+            }
+            $(this).parent().html('<span class="but_s site_ok">确认</span><span class="but_s site_recovery">恢复</span>');
+            isEdit(1);
+        });
+
+        //确认修改
+        $(document).on('click','.site_ok',function () {
+            var site_id = $(this).parent().attr('site_id');
+            if (!site_id){
+                alert('站点id消失!');
+                site_recovery($(this).parent());
+            }else{
+                var data = [];
+                data['site_name'] = $('#site_name').val();
+                data['site_lng'] = $('#site_lng').val();
+                data['site_lat'] = $('#site_lat').val();
+                data['is_site'] = $('#is_site').val();
+                data['direction'] = $('#direction').val();
+                data['site_id'] = site_id;
+                data['site_order'] = $(this).parent().prevAll('.td_one').text();
+                data['site_order'] = parseInt(data['site_order']);
+                if (data['site_name'] == old_site_info['site_name'] && data['site_lng'] == old_site_info['site_lng'] && data['site_lat'] == old_site_info['site_lat'] && data['is_site'] == old_site_info['is_site'] && data['direction'] == old_site_info['direction']){
+                    alert('内容未修改');
+                    site_recovery($(this).parent());
+                }else{
+                    editmysql(1,data,$(this).parents('tr'));
+                }
+            }
+        });
+
+        //恢复修改前的内容
+        $(document).on('click','.site_recovery',function () {
+            site_recovery($(this).parent());
+        });
+
+        //插入或添加新的站点信息
+        $(document).on('click','.site_inter',function () {
+           var obj = $(this).parents('tr');
+            site_inter(obj);
+        });
+
+        //确认添加
+        $(document).on('click','.site_add',function () {
+            var data = [];
+            data['site_name'] = $('#site_name').val();
+            data['site_lng'] = $('#site_lng').val();
+            data['site_lat'] = $('#site_lat').val();
+            data['is_site'] = $('#is_site').val();
+            data['direction'] = $('#direction').val();
+            data['site_id'] = 1;
+            data['site_order'] = $(this).parent().prevAll('td:eq(5)').text();
+            data['site_order'] = parseInt(data['site_order']);
+            editmysql(0,data,$(this).parents('tr'));
+        });
+
+        //取消添加
+        $(document).on('click','.site_cancel',function () {
+            var obj = $(this).parents('tr');
+            obj.nextAll().each(function () {
+                var index = $(this).find('td:eq(0)').text();
+                index = parseInt(index);
+                if (!isNaN(index)){
+                    $(this).find('td:eq(0)').text(index-1);
+                }
+            });
+            $(this).parents('tr').remove();
+            isEdit(0);
+        });
+
+        //删除站点
+        $(document).on('click','.site_delete',function () {
+            var data = [];
+            data['site_id'] = $(this).parent().attr('site_id');
+            data['site_order'] = $(this).parent().prevAll('.td_one').text();
+            editmysql(2,data,$(this).parents('tr'));
+        });
+
+        //添加新线路
+        $(document).on('click','.add_route',function () {
+            if (!($('.new_route').length>0)){
+                var html = '<li class="new_route"><span class="route_name">路线名称: <input type="text" value="" id="route_name"></span><span class="but_s add_new_route">添加</span><span class="but_s new_route_canle">取消</span></li>';
+                $(this).before(html);
+            }else{
+                alert('请先完成其他线路的编辑');
+            }
+        });
+
+        //发起添加线路请求
+        $(document).on('click','.add_new_route',function () {
+            var data = {};
+            data['type'] = 0;
+            data['route_name'] = $('#route_name').val();
+            if(data['route_name']){
+                routeajax(data);
+            }else{
+                alert('线路名不能为空');
+            }
+        });
+
+        //取消路线添加框
+        $(document).on('click','.new_route_canle',function () {
+            $('.new_route').remove();
+        });
+
+        //禁用或启用线路
+        $(document).on('click','.route_enable',function () {
+            var data = {};
+            data['type'] = 2;
+            var obj = $(this);
+            data['route_id'] = obj.nextAll('.check_route').attr('route_id');
+            routeajax(data,obj);
+        });
+
+        //删除线路
+        $(document).on('click','.route_delete',function () {
+            var data = {};
+            data['type'] = 3;
+            var obj = $(this);
+            data['route_id'] = obj.nextAll('.check_route').attr('route_id');
+            routeajax(data,obj);
+        });
+
+        var old_route_html = '';
+        //修改线路名
+        $(document).on('click','.route_edit',function () {
+            if (!($('.new_route').length>0)){
+                var obj = $(this);
+                var route_id = obj.nextAll('.check_route').attr('route_id');
+                var route_name = obj.nextAll('.check_route').attr('route_name');
+                old_route_html = obj.parents('li').html();
+                var html = '<li class="new_route"><span class="route_name">路线名称: <input type="text" value="'+route_name+'" id="route_name" route_id="'+route_id+'" old_name="'+route_name+'" site_num="" route_length_q=""></span><span class="but_s new_route_name">确定</span><span class="but_s edit_route_canle">恢复</span></li>';
+                obj.parents('li').after(html);
+                obj.parents('li').remove();
+            }else{
+                alert('请先完成其他线路的编辑');
+            }
+        });
+
+        //确定修改线路名,发起ajax请求
+        $(document).on('click','.new_route_name',function () {
+             var data = {};
+             data['type'] = 1;
+             data['route_name'] = $('#route_name').val();
+             data['route_id'] = $('#route_name').attr('route_id');
+            var old_route_name = $('#route_name').attr('old_name');
+            if (old_route_name == data['route_name']){
+                alert('名称未修改');
+            }else{
+                routeajax(data,$(this));
+            }
+        });
+
+        //取消线路修改
+        $(document).on('click','.edit_route_canle',function () {
+            $('.new_route').before('<li>'+old_route_html+'</li>');
+            $('.new_route').remove();
+        });
+
+        window.run = function (){                      //在地图上添加轨迹 及相应的点坐标
+            map.clearOverlays();                        //清除地图上所有的覆盖物
+            var driving = new BMap.DrivingRoute(map);  //创建驾车实例
+            var point_ary = directionSite();
+
+            for (var i=0; i<point_ary.length-1; i++){
+                driving.search(point_ary[i]['point'], point_ary[i+1]['point']);                 //第一个驾车搜索
+            }
+            var route_length = 0;//路线长度
+            var count = 0;
+            driving.setSearchCompleteCallback(function(){
+                var pts = driving.getResults().getPlan(0).getRoute(0).getPath();    //通过驾车实例，获得一系列点的数组
+                route_length += driving.getResults().getPlan(0).getRoute(0).cg;
+                var polyline = new BMap.Polyline(pts);
+                map.addOverlay(polyline);
+
+                var site_name = '未知';
+                var point_index = 1;//点序号
+                var site_index = 1;
+                for (var k in point_ary){
+                    if (site_info['is_black'] == 1){
+                        if (point_ary[k]['is_site'] == 1){
+                            var marker_point = new BMap.Marker(point_ary[k]['point']);
+                            if (site_index == 1){
+                                site_name = point_ary[k]['site_name']+'(起点)';
+                            }else if (site_index == site_info['site_num']){
+                                site_name = point_ary[k]['site_name']+'(终点)';
+                            }else{
+                                site_name = point_ary[k]['site_name']+'('+point_index+')';
+                            }
+                            site_index++;
+                        }else{
+                            var myIcon = new BMap.Icon("__PUBLIC__/images/ZoomBar.gif",new BMap.Size(16,40));
+                            var marker_point = new BMap.Marker(point_ary[k]['point'],{icon:myIcon});
+                            site_name = '途径点('+point_index+')';
+                        }
+                        map.addOverlay(marker_point);
+                        map.addOverlay(new BMap.Label(site_name,{position:point_ary[k]['point']}));
+                    }else{
+                        if (point_ary[k]['is_site'] == 1){
+                            map.addOverlay(new BMap.Marker(point_ary[k]['point']));
+                            if (site_index == 1){
+                                site_name = point_ary[k]['site_name']+'(起点)';
+                            }else if (site_index == site_info['site_num']){
+                                site_name = point_ary[k]['site_name']+'(终点)';
+                            }else{
+                                site_name = point_ary[k]['site_name']+'('+point_index+')';
+                            }
+                            map.addOverlay(new BMap.Label(site_name,{position:point_ary[k]['point']}));
+                            site_index++;
+                        }
+                    }
+                    point_index++;
+                }
+                count++;
+                if (count == point_ary.length-1){
+                    var data = {};
+                    data['route_id'] = site_info['route_id'];
+                    data['route_length'] = route_length;
+                    data['type'] = site_info['direction'];
+                    ajaxRouteLength(data);
+                }
+                map.setViewport([point_ary[0]['point'],point_ary[k]['point']]);          //调整到最佳视野
+            });
+
+        };
+
+        function siteView(type) {
+            var html = '';
+            if (type){
+                //组装站点展示标题信息
+                html = '<div class="site_title">'+
+                            '<li>路线途径点--'+site_info["route_name"]+'</li>'+
+                            '<li>'+
+                                '<span>总点数:'+site_info["all_site"]+'</span>'+
+                                '<span>站点数:'+site_info["site_num"]+'</span>'+
+                                '<span>途径点:'+ (site_info["all_site"]-site_info["site_num"]) +'</span>'+
+                            '</li>'+
+                        '</div>';
+                if (site_info['is_black'] == 0){
+                    var is_black = '显示途径点';
+                }else{
+                    var is_black = '仅显示站点';
+                }
+                if (site_info['direction'] == 1){
+                    var direction = '回向轨迹';
+                }else{
+                    var direction = '去向轨迹';
+                }
+                //组装站点操作面板
+                html += '<div class="site_operation">'+
+                        '<li class="but_s" id="point_show">显示途径点</li>'+
+                        '<li class="but_s" id="edit_site">编辑站点</li>'+
+                        '<li class="but_s" id="route_diretion">回向轨迹</li>'+
+                        '</div>';
+
+                html += '<div class="site_list"><ul>';
+                var site_index = 1;//站点序号
+                for (var key in site_p){
+                    point_index = parseInt(key)+1;
+                    if (site_p[key]['is_site'] == 1){
+                        if (site_index == 1){
+                            html += '<li>起始站：'+site_p[key]['site_name']+'('+point_index+')</li>';
+                        }else if (site_index == site_info['site_num']){
+                            html += '<li>终点站：'+site_p[key]['site_name']+'('+point_index+')</li>';
+                        }else{
+                            html += '<li>第'+site_index+'站：'+site_p[key]['site_name']+'('+point_index+')</li>';
+                        }
+                        site_index++;
+                    }else{
+                        if (site_p[key]['site_name']){
+                            html += '<li>途径点：'+site_p[key]['site_name']+'('+point_index+')</li>';
+                        }else{
+                            html += '<li>途径点('+point_index+')</li>';
+                        }
+                    }
+                }
+                html += '</ul></div>';
+            }else{
+                html = '<div class="site_none">'+
+                        '路线站点展示框<br/>'+
+                        '<span>选择路线详情后可查看具体站点信息</span>'+
+                        '</div>';
+
+            }
+            $('.site_box').html(html);
+        }
+
+        //恢复站点信息
+        function site_recovery(obj) {
+            obj.html('<span class="but_s site_edit">修改</span><span class="but_s site_inter">插入</span><span class="but_s site_delete">删除</span>');
+            switch (old_site_info['direction']){
+                case 0:
+                    old_site_info['direction'] = '双向';
+                    break;
+                case 1:
+                    old_site_info['direction'] = '去向';
+                    break;
+                case 2:
+                    old_site_info['direction'] = '回向';
+                    break;
+            }
+            obj.prevAll('td:eq(0)').html(old_site_info['direction']);
+            if (old_site_info['is_site'] == 1){
+                old_site_info['is_site'] = '是';
+            }else{
+                old_site_info['is_site'] = '否';
+            }
+            obj.prevAll('td:eq(1)').html(old_site_info['is_site']);
+            obj.prevAll('td:eq(2)').html(old_site_info['site_lat']);
+            obj.prevAll('td:eq(3)').html(old_site_info['site_lng']);
+            obj.prevAll('td:eq(4)').html(old_site_info['site_name']);
+            isEdit(0);
+        }
+        
+        //编辑站点位置,添加tr行
+        function site_inter(obj) {
+            if (!isEdit()){
+                return false;
+            }
+            var html = '';
+            var index = obj.index();
+            var index_var = 0;
+            if (index > 0){
+                index = obj.prev().find('td:eq(0)').text();
+                index_var = 1;
+            }else{
+                index = obj.find('td:eq(0)').text();
+                index_var = 0;
+            }
+            index = parseInt(index);
+            if (isNaN(index)){
+                index = 1;
+            }else{
+                index += index_var;
+            }
+            html = '<tr class="site_info_tr">' +
+                        '<td class="td_one">'+index+'</td>' +
+                        '<td class="td_p"><input type="text" id="site_name" value=""></td>' +
+                        '<td class="td_p"><input type="text" id="site_lng" value=""></td>' +
+                        '<td class="td_p"><input type="text" id="site_lat" value=""></td>' +
+                        '<td class="td_p"><select id="is_site"><option value="1">是</option><option value="0">否</option></select>' +
+                        '<td class="td_p"><select id="direction"><option value="0">双向</option><option value="1">去向</option><option value="2">回向</option></select>' +
+                        '<td class="td_last" site_id="1"><span class="but_s site_add">添加</span><span class="but_s site_cancel">取消</span></td>' +
+                    '</tr>';
+            obj.before(html);
+            siteOrderEdit(obj);
+            obj.nextAll().each(function () {
+                siteOrderEdit($(this));
+            });
+            isEdit(1);
+        }
+
+        //修改站点序列号
+        function siteOrderEdit(obj) {
+            var num = obj.children('td').size();
+            if (num > 1){
+                var text = obj.find('td:eq(0)').text();
+                text = parseInt(text)+1;
+                obj.find('td:eq(0)').text(text);
+            }
+        }
+        //恢复站点序列号
+        function siteOrderReduction(obj) {
+
+        }
+
+        /**
+         * 判断当前是否在编辑
+         * @param type (0或1,修改编辑状态成0或1,默认null,判断是否可开启新的编辑事项)
+         * @returns {boolean}
+         */
+        function isEdit(type) {
+            switch (type){
+                case 0:
+                    is_edit = 0;
+                    break;
+                case 1:
+                    is_edit = 1;
+                    break;
+                default:
+                    if (is_edit){
+                        alert('请先完成之前的编辑操作!');
+                        return false;
+                    }else{
+                        return true;
+                    }
+            }
+        }
+
+        /**
+         * 向后端发起请求,进行数据操作
+         * @param type (0或1,修改编辑状态成0或1,默认null,判断是否可开启新的编辑事项)
+         * @returns {boolean}
+         */
+        function editmysql(type,data,obj) {
+            var param = {};
+            if (type != 2 && data['site_id'] && data['site_name'] && data['site_lng'] && data['site_lat']){
+                param['type'] = type;
+                param['site_id'] = data['site_id'];
+                param['route_id'] = site_info['route_id'];
+                param['site_name'] = data['site_name'];
+                param['site_order'] = data['site_order'];
+                param['site_lng'] = data['site_lng'];
+                param['site_lat'] = data['site_lat'];
+                param['is_site'] = data['is_site'];
+                param['direction'] = data['direction'];
+            }else if (type == 2 && data['site_id']){
+                param['type'] = type;
+                param['site_id'] = data['site_id'];
+                param['route_id'] = site_info['route_id'];
+                param['site_order'] = data['site_order'];
+            }else{
+                alert('注意,所填项不能为空!');
+                return false;
+            }
+            $.ajax({
+                url: "{:U('Limousine/changeSite')}",
+                data: param,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data['error'] == 0){
+                        if (data['type'] == 0 || data['type'] == 1){            //将输入框改为文本显示
+                            var site_name = obj.find('td:eq(1) input').val();
+                            obj.find('td:eq(1)').html(site_name);
+                            var site_lng = obj.find('td:eq(2) input').val();
+                            obj.find('td:eq(2)').html(site_lng);
+                            var site_lat = obj.find('td:eq(3) input').val();
+                            obj.find('td:eq(3)').html(site_lat);
+
+                            var is_site = obj.find('td:eq(4) select').val();
+                            if (is_site == 0){
+                                is_site = '否';
+                            }else{
+                                is_site = '是';
+                            }
+                            obj.find('td:eq(4)').html(is_site);
+                            var direction = obj.find('td:eq(5) select').val();
+                            switch (direction){
+                                case '0':
+                                    direction = '双向';
+                                    break;
+                                case '1':
+                                    direction = '去向';
+                                    break;
+                                case '2':
+                                    direction = '回向';
+                                    break;
+                            }
+                            obj.find('td:eq(5)').html(direction);
+                            obj.find('td:eq(6)').remove();
+                            obj.find('td:eq(5)').after('<td class="td_last" site_id="'+data["list"]+'"><span class="but_s site_edit">修改</span><span class="but_s site_inter">插入</span><span class="but_s site_delete">删除</span></td>');
+                        }else{
+                            obj.nextAll().each(function () {
+                                var index = $(this).find('td:eq(0)').text();
+                                index = parseInt(index);
+                                if (!isNaN(index)){
+                                    $(this).find('td:eq(0)').text(index-1);
+                                }
+                            });
+                            obj.remove();
+                        }
+                        isEdit(0);
+//                        routeView(site_info['route_id']);
+                    }else{
+                        alert(data['msg']);
+                    }
+                }
+            });
+        }
+
+        //排序规则
+        function sortNumber(a,b) {
+            return a.site_order - b.site_order;
+        }
+
+        //轨迹渲染
+        function routeView(route_id) {
+            $.ajax({
+                url: "{:U('Limousine/siteQuery')}",
+                data: {'route_id':route_id},
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    site_p = [];
+                    if (data['error'] == 0){
+                        var list = data['list'];
+                        for (var key in list){
+                            if (list[key]['site_lng'] && list[key]['site_lat']){
+                                var temp = {};
+                                temp['site_name'] = list[key]['site_name'];
+                                temp['site_id'] = list[key]['id'];
+                                temp['is_site'] = list[key]['is_site'];
+                                temp['site_order'] = list[key]['site_order'];
+                                temp['direction'] = list[key]['direction'];
+                                temp['point'] = new BMap.Point(list[key]['site_lng'],list[key]['site_lat']);
+                                site_p.push(temp);
+                                if (list[key]['is_site'] == 1){
+                                    site_info['site_num']++;
+                                }
+                                site_info['all_site']++;
+                            }
+                        }
+                        if (site_p.length > 1){
+                            siteView(true);//渲染站点列表
+                            run();
+                        }else{
+                            siteView(true);//渲染站点列表
+                        }
+                    }else{
+                        if (data['code'] == 1){
+                            alert('参数错误,请重试!');
+                        }else{
+                            alert('未找到途径点,请添加');
+                        }
+                    }
+
+                }
+            });
+        }
+
+        //线路数据更改
+        function routeajax(data,obj) {
+            $.ajax({
+                url: "{:U('Limousine/changeRoute')}",
+                data: data,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                    if (data['error'] == 0){
+                        switch (data['type']){
+                            case '0':
+                            case '1':
+                                if (data['list']['is_enable'] == 1){
+                                    data['list']['is_enable'] = '启用';
+                                }else{
+                                    data['list']['is_enable'] = '禁用';
+                                }
+                                var html = '';
+                                html = '<li>' +
+                                        '<span>'+data["list"]["route_name"]+'</span><span class="but_s route_enable">'+data["list"]["is_enable"]+'</span><span class="but_s route_delete">删除   </span><span class="but_s add_site">添加站点</span><span class="route_edit but_s">修改</span><br/>' +
+                        '<span>长度:0km</span><span>站点数:0</span><span class="but_s check_route" route_id="'+data["list"]["id"]+'" route_name="'+data["list"]["route_name"]+'">查看详细路线</span>' +
+                                '</li>';
+                                $('.new_route').before(html);
+                                $('.new_route').remove();
+                                break;
+                            case '2':
+                                    if (data['is_enable'] == 0){
+                                        obj.text('禁用');
+                                        obj.prev().removeClass('co_red');
+                                    }else{
+                                        obj.text('启用');
+                                        obj.prev().addClass('co_red');
+                                    }
+                                break;
+                            case '3':
+                                obj.parents('li').remove();
+                                break;
+                        }
+                    }else{
+                        alert(data['msg']);
+                    }
+                }
+            });
+        }
+
+        //d动态生成站点编辑列表
+        function siteEditlist() {
+            var html = '';
+            var list = site_p;
+            list.sort(sortNumber);
+            $('.site_info_tr').remove();
+            for (var key in list){
+                var temp = list[key];
+                if (temp['is_site'] == 0){
+                    temp['is_site'] = '否';
+                }else{
+                    temp['is_site'] = '是';
+                }
+                switch (temp['direction']){
+                    case '0':
+                        temp['direction'] = '双向';
+                        break;
+                    case '1':
+                        temp['direction'] = '去向';
+                        break;
+                    case '2':
+                        temp['direction'] = '回向';
+                        break;
+                    default:
+                        temp['direction'] = '双向';
+                }
+                html = '<tr class="site_info_tr">' +
+                        '<td class="td_one">'+temp["site_order"]+'</td>' +
+                        '<td class="td_p">'+temp["site_name"]+'</td>' +
+                        '<td class="td_p">'+temp["point"]["lng"]+'</td>' +
+                        '<td class="td_p">'+temp["point"]["lat"]+'</td>' +
+                        '<td class="td_p">'+temp["is_site"]+'</td>' +
+                        '<td class="td_p">'+temp["direction"]+'</td>' +
+                        '<td class="td_last" site_id="'+temp["site_id"]+'"><span class="but_s site_edit">修改</span><span class="but_s site_inter">插入</span><span class="but_s site_delete">删除</span></td>' +
+                        '</tr>';
+                $('.edit_box .tr_last').before(html);
+            }
+        }
+
+        //筛选站点,使之和行车方向对应
+        function directionSite() {
+            var temp = [];
+            for (var key in site_p){
+                if (site_info['direction'] == 1){
+                    if (site_p[key]['direction'] != 2){
+                        temp.push(site_p[key]);
+                    }
+                }else{
+                    if (site_p[key]['direction'] != 1){
+                        temp.push(site_p[key]);
+                    }
+                }
+            }
+            return temp;
+        }
+
+        //发起更新线路长度的请求
+        function ajaxRouteLength(data) {
+            $.ajax({
+                url: "{:U('Limousine/udRouteLength')}",
+                data: data,
+                dataType: "json",
+                type: "post",
+                success: function (data) {
+                }
+            });
+        }
+    });
+
+
+
+
+</script>
+

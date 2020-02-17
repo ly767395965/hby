@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>广告信息添加页面</title>
+    <link href="../../../Public/css/user.css" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+</head>
+
+<div class="tit-all">
+    <h3><i></i>广告信息添加</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <h4 style="color: red;">提示:首页轮播广告位尺寸(1920px*400px);首页底部固定广告位尺寸(1920px*370px),支持的文件类型:'jpg,jpeg','png'.	</h4>
+            <br/>
+            <form class="register-form"  action="{:U('AdManage/addAdManage')}" onsubmit="return check()" method="post" enctype="multipart/form-data" >
+                <div class="busi_input clearfix">
+                    <label>广告标题：</label>
+                    <input class="input_normal" type="text"   name="imgtitle" id="imgtitle"  placeholder="请输入广告标题" title="请输入广告标题" >
+                </div>
+                <div class="busi_input clearfix">
+                    <label>上传图片：</label>
+                    <input class="input_normal" type="file"   name="imgurl[]"  id="imgurl"  ><i style=" width: 300px; padding-left: 5px; font-size: 12px; line-height: 34px; color: #7f7f7f;">文件不能超过300K;支持图片类型'jpg,jpeg','png'.</i>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>广告分类：</label>
+                    <select class="input_normal" name="adclass" id="adclass">
+                        <option selected="selected" value="">请选择广告分类</option>
+                        <volist name="adclass" id="temp">
+                            <option value="{$temp['id']}">{$temp['classname']}</option>
+                        </volist>
+                    </select>
+                </div>
+                <div class="busi_input clearfix">
+                    <label>PC广告地址：</label>
+                    <input class="input_normal" type="text"   name="ad_url" ><i style=" padding-left: 15px; font-size: 12px; line-height: 34px; color: #7f7f7f;">广告地址以“http://”开头。</i>
+
+                </div>
+                <div class="busi_input clearfix">
+
+                    <label class="busi_bz">&nbsp;</label>
+                    <button name="submit" class="btn-submit"  tabindex="14" type="submit" id="account-submit">添加</button>
+                    <button name="reset" class="btn-submit"   tabindex="15" type="reset" id="account-reset">重填</button>
+                </div>
+
+            </form>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+
+</html>

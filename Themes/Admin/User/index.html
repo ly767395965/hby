@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/select.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/select-ui.min.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/editor/kindeditor.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style type="text/css">
+        body {
+            font: 12px/1.5 Arial;
+        }
+
+        input {
+            float: left;
+            font-size: 12px;
+            width: 150px;
+            font-family: arial;
+            padding: 3px;
+            border: 1px solid black;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+
+        #tips {
+            padding-top: 6px;
+        }
+
+        #tips span {
+            float: left;
+            width: 50px;
+            height: 20px;
+            color: white;
+            margin-right: 2px;
+            line-height: 20px;
+            text-align: center;
+            border-radius: 3px;
+            opacity: 0.1;
+        }
+
+        #tips span:nth-child(1) {background-image:linear-gradient(to right,white,red);}
+        #tips span:nth-child(2) {background-image:linear-gradient(to right,red,orange);}
+        #tips span:nth-child(3) {background-image:linear-gradient(to right,orange,lime);}
+    </style>
+    <script type="text/javascript">
+        KE.show({
+            id : 'content7',
+            cssPath : './index.css'
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+            var aStr = ["弱", "中", "强"];
+
+            $("input[name='Password']").keyup(function() {
+                var val = $(this).val();
+                var num = checkStrong(val);
+                if(num <= 2){
+                    $("#tips span").css('opacity', '0.1').text('').eq(0).css('opacity', '1').text(aStr[0]);
+                }else if (num == 3){
+                    $("#tips span").css('opacity', '0.1').text('').eq(1).css('opacity', '1').text(aStr[1]);
+                }else{
+                    $("#tips span").css('opacity', '0.1').text('').eq(2).css('opacity', '1').text(aStr[2]);
+                }
+            })
+        });
+
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+            $(".select2").uedSelect({
+                width : 167
+            });
+            $(".select3").uedSelect({
+                width : 100
+            });
+
+            $('#user_type').change(function () {
+                if ($(this).val() == 3){
+                    $('#agent').css('display','block');
+                }else{
+                    $('#agent').css('display','none');
+                }
+            })
+        });
+
+        //密码强度计算
+        function checkStrong(val) {
+            var modes = 0;
+            if (val.length > 9) modes++;
+            if (val.length > 12) modes++;
+            if (/\d/.test(val)) modes++; //数字
+            if (/[a-z]/.test(val)) modes++; //小写
+            if (/[A-Z]/.test(val)) modes++; //大写
+            if (/\W/.test(val)) modes++; //特殊字符
+            if (val.length < 7) modes--;
+            if (val.length > 15) return 4;
+            return modes;
+        };
+
+        //根据密码强度改变强度样式
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">操作员列表</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+
+
+    <div id="usual1" class="usual">
+
+        <div class="itab">
+            <ul>
+                <li><a href="#tab1" ><if condition="checkAuth('User/add')"> 添加操作员</if></a></li>
+                <li><a href="#tab2" class="selected">查看</a></li>
+            </ul>
+        </div>
+
+        <div id="tab1" class="tabson">
+            <form  action="{:U('add')}" method="post"  enctype="multipart/form-data">
+
+                <ul class="forminfo">
+                    <li><label>用户账号<b>*</b></label><input name="username" type="text" class="dfinput" placeholder="用户登录账户"  style="width:518px;"/></li>
+                    <li><label>真实姓名<b>*</b></label><input name="name" type="text" class="dfinput" placeholder="请填写真实名字"  style="width:518px;"/></li>
+                    <li><label>登录密码<b>*</b></label><input name="Password" type="Password" class="dfinput" placeholder="密码可由数字，大小写字母及特殊字符组成"  style="width:518px;"/></li>
+                    <li><label>密码强度<b></b></label><div id="tips"><span></span><span></span><span></span></div></li>
+                    <li><label>所属角色<b>*</b></label>
+                        <div class="vocation">
+                            <select class="select1" name="departmentid">
+                                <volist name="auth" id="vo">
+                                    <option  value="{$vo['id']}">{$vo['title']}</option>
+                                </volist>
+                            </select>
+                        </div>
+
+                    </li>
+
+                    <li><label>用户类型<b>*</b></label>
+                        <div class="vocation">
+                            <select id="user_type" class="select1" name="type">
+                                <option value="2">普通员工</option>
+                                <option value="1">超级管理员</option>
+                                <option value="3">代理商</option>
+                            </select>
+                        </div>
+                    </li>
+
+                    <li id="agent" style="display: none"><label>代理商<b>*</b></label>
+                        <div class="vocation">
+                            <select class="select1" name="agent_id">
+                                <volist name="agent" id="temp">
+                                    <option value="{$temp['id']}">{$temp['name']}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </li>
+
+                    <li><label>性别<b>*</b></label>
+
+                        <div class="usercity">
+
+                            <div class="cityleft">
+                                <select class="select2" name="sex">
+                                    <option  value="2">女</option>
+                                    <option  value="1">男</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </li>
+                    <li><label>Email<b></b></label><input name="email" type="text" class="dfinput" placeholder="请填写email"  style="width:518px;"/></li>
+                    <li><label>身份证号码<b>*</b></label><input name="identity" type="text" class="dfinput" placeholder="请填写身份证号码"  style="width:518px;"/></li>
+                    <li><label>驾驶档案<b></b></label><input name="driverno" type="text" class="dfinput" placeholder="请填写驾驶档案"  style="width:518px;"/></li>
+                    <li><label>手机号码<b>*</b></label><input name="phonenumber" type="text" class="dfinput" placeholder="请填写手机号码"  style="width:518px;"/></li>
+
+
+                    <li><label>备注<b>*</b></label>
+
+
+                        <textarea class="input-wd-100 text-area" name="remark" style="width:545px;height:60px" class="form-control" rows="5"></textarea>
+
+                    </li>
+                    <li><label>&nbsp;</label><input name="" type="submit" class="btn" style="color: white;background: #00a0e9" value="添加"/></li>
+                </ul>
+            </form>
+        </div>
+
+
+        <div id="tab2" class="tabson">
+
+            <form  action="__SELF__" method="post"  enctype="multipart/form-data" style="float: left">
+                <ul class="seachform">
+                    <li><label>姓名查询</label><input name="demand" type="text" class="scinput"/></li>
+
+                    <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="查询"/></li>
+                </ul>
+            </form>
+            <form  action="__SELF__" method="post"  enctype="multipart/form-data" >
+                <ul class="seachform">
+                    <li><label>代理商查询</label><input name="agent" type="text" class="scinput"/></li>
+
+                    <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="查询"/></li>
+                </ul>
+            </form>
+            <table class="tablelist">
+                <thead>
+                <tr>
+
+                    <th>序号<i class="sort"></i></th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>用户类型</th>
+                    <th>所属代理</th>
+                    <th>联系电话</th>
+                    <th>身份证号码</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <if condition ="$list[0]['id'] == ''">
+                    <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                        未查询到相关管理员
+                    </div>
+                    <else/>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>{$key+1}</td>
+                            <td>{$vo['username']}</td>
+                            <td>{$vo['name']}</td>
+                            <td>{$sex[$vo['sex']]}</td>
+                            <td>
+                                <switch name="vo.type">
+                                    <case value="1">管理员</case>
+                                    <case value="2">普通员工</case>
+                                    <case value="3">代理商</case>
+                                    <default />异常
+                                </switch>
+                            </td>
+                            <td><if condition ="$vo['agent_name']">{$vo['agent_name']}<else/>无</if></td>
+                            <td>{$vo['phonenumber']}</td>
+                            <td>{$vo['identity']}</td>
+                            <td class="tools">
+                                <ul class="toolbar">
+                                    <if condition="checkAuth('User/clearLoginFail')">
+                                        <li class="click" >
+                                            <a class="click" href="javascript:MscBox('系统信息',t[0],'您确定要清除错误登录次数吗？','确定跳转取消关闭','{:U('User/clearLoginFail')}?id={$vo['id']}')" >
+                                                <img src="__PUBLIC__/images/t02.png" style="width:17px;height: 17px;" />清除错误登录次数
+                                            </a>
+                                        </li>
+                                    </if>
+                                    <if condition="checkAuth('User/edit')">
+                                        <li class="click" >
+                                            <a class="click" href="javascript:MscBox('系统信息',t[0],'您确定要修改吗？','确定跳转取消关闭','{:U('User/edit')}?id={$vo['id']}')" >
+                                                <img src="__PUBLIC__/images/t02.png" style="width:17px;height: 17px;" />编辑
+                                            </a>
+                                        </li>
+                                    </if>
+                                    <if condition="checkAuth('User/Password')">
+                                        <li class="click" >
+                                            <a class="click" href="javascript:MscBox('系统信息',t[0],'您确定要修改吗？','确定跳转取消关闭','{:U('User/Password')}?id={$vo['id']}')" >
+                                                <img src="__PUBLIC__/images/t02.png" style="width:17px;height: 17px;" />修改密码
+                                            </a>
+                                        </li>
+                                    </if>
+                                    <if condition="checkAuth('User/delete')">
+                                        <li class="click" >
+                                            <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('User/delete')}?id={$vo['id']}')" >
+                                                <!--<a href="{:U('delete',array('id'=>$vo['id']))}" type="button" class="btn-delete">-->
+                                                <img src="__PUBLIC__/images/t03.png" style="width:17px;height: 17px;"/> 删除
+                                            </a>
+                                        </li>
+                                    </if>
+                                </ul>
+                            </td>
+                        </tr>
+                    </volist>
+                </if>
+                </tbody>
+            </table>
+
+            <div class="digg">{$page}</div>
+
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+    </script>
+
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+
+
+
+
+
+</div>
+
+
+</body>
+
+</html>

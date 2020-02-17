@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>节点添加页面</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .order_table{margin: 50px auto 0;width: 800px;}
+        .order_table table{width: 1000px;margin: 0 auto;}
+        .order_table label{ margin-left: 5px}
+        .order_table tr{border: 1px solid lightgrey;height: 35px;border-radius: 5px}
+        .order_table td{padding-left: 5px}
+    </style>
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3><i></i>乘客评价/投诉详细信息</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <p style="text-align: center;font-size: 28px">评价/投诉详细信息</p>
+            <div class="order_table">
+                <table>
+                    <tr>
+                        <td><b>客户名：</b></td><td>{$list.username}</td>
+                        <td><b>订单号：</b></td><td>{$list.ordercode}</td>
+                    </tr>
+                    <tr>
+                        <td><b>驾驶员：</b></td><td>{$list.drivername}</td>
+                        <td><b>评价/投诉时间：</b></td><td>{$list.evaluatetime}</td>
+                    </tr>
+
+                    <tr>
+                        <td><b>信息类型：</b></td><td>
+                        <switch name="list['type']">
+                            <case value="0">评价信息</case>
+                            <case value="1">投诉信息</case>
+                        </switch>
+                    </td>
+                        <td><b>服务满意度：</b></td><td>{$list.serverfeel}</td>
+                    </tr>
+                    <tr>
+                        <td><b>是否处理：</b></td>
+                        <td id="pk_date" colspan="3">
+                            <if condition="$list['type'] == 1">
+                                <switch name="list['iscomplaint']">
+                                    <case value="0"><span style="color: red">未处理</span></case>
+                                    <case value="1">已处理</case>
+                                </switch>
+                                <else/>
+                                已处理
+                            </if>
+                        </td>
+                    </tr>
+                    <switch name="list['type']">
+                        <case value="1">
+                            <tr>
+                                <td><b>处理结果：</b></td>
+                                <td colspan="3">
+                                    {$list.result}
+                                </td>
+                            </tr>
+                        </case>
+                    </switch>
+
+                    <tr>
+                        <td>
+                            <switch name="list['type']">
+                                <case value="0"><b>评价内容：</b></case>
+                                <case value="1"><b>投诉内容：</b></case>
+                            </switch>
+                        </td>
+                        <td colspan="3">
+                            <textarea readonly="readonly" rows="4" cols="95" style="outline:none;resize:none;">{$list.remark}</textarea>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="busi_input clearfix" style="clear: both;margin: 0 auto;width: 154px">
+                <label class="busi_bz">&nbsp;</label>
+                <button name="submit" class="btn-submit" onclick="javascript:window.history.back(-1);" id="account-submit" style="width: 150px">返回上一页</button>
+
+            </div>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+</html>

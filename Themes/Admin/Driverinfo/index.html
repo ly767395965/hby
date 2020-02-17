@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车型列表</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/page.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/delAll-plugin.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body marginwidth="0" marginheight="0">
+
+    <div id="listtitle" class="tit-all clearfix">
+        <h3 class="fl">
+            <i></i>
+            司机管理列表
+        </h3>
+        <span id="functionarea" class="add-car fr">
+            <if condition="checkAuth('Driverinfo/addDriverinfo')">
+                <a href="{:U('Driverinfo/addDriverinfo')}" title="添加司机">添加司机</a>
+            </if>
+        </span>
+    </div>
+    <br/>
+    <div class="formbody">
+        <div class="busi_info input-shop-w" id="form-section" style="display: block; width: 550px;height: 20px;margin: 0 auto;" >
+            <form action="{:U('Driverinfo/index')}" method="get" style="position: absolute;">
+                <label style="font-weight: bold;font-size: 16px; ">快速查询：</label><br/><br/>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 80px; top: -50px; ">
+                    <select class="input_normal" name="select"  style="width: 200px;">
+                        <option selected="selected" value="">请选择分类查询</option>
+                        <option value="1">司机姓名</option>
+                        <option value="2">联系方式</option>
+                        <option value="3">注册地</option>
+                        <option value="4">准驾车型</option>
+                        <option value="5">移动终端</option>
+                        <option value="6">从业资格证号</option>
+                        <option value="7">状态</option>
+                        <option value="8">从业资格证有效期</option>
+                    </select>
+                </div>
+                <div class="busi_input clearfix" style="position: relative; float: left; left: 80px;top: -50px;">
+                    <input class="input_normal" type="text"  style="width: 200px;" id="key"   name="key"  placeholder="请输入查询条件" title="请输入查询条件" >
+                    <input class="input_normal" type="text" id="start"   name="start" style="width: 240px;display: none;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   placeholder="请输入开始日期格式:YYYY-MM-DD" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    <input class="input_normal" type="text"  id="stop" name="stop" style="width: 240px;display: none;" value="<?php echo date('Y-m-d',$_SERVER['REQUEST_TIME']);?>"   placeholder="请输入开始日期格式:YYYY-MM-DD" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})" >
+                    <input type="submit" value="查询" name="submit" class="btn-submit" />
+                </div>
+            </form>
+        </div>
+        <br>
+        <if condition="checkAuth('Driverinfo/delAll')"><a href="javascript:void (0);" class="del-all-btn" ><font color="red">批量删除</font></a></if>
+    <table  class="tablelist">
+        <thead>
+            <tr style="align: center; font-size: 16px;">
+                <th style="width: 130px;"><input type="checkbox"  name="all" class="all">序号<i class="sort"><img src="__PUBLIC__/images/px.gif" /></i>&nbsp;&nbsp;&nbsp;</th>
+                <th >司机姓名</th>
+                <th >联系电话</th>
+                <th >身份证号</th>
+                <th >服务费</th>
+                <th >网约车驾驶员资格证号</th>
+                <th >资格证有效起始日期</th>
+                <th >资格证有效截止日期</th>
+                <th >准驾车型</th>
+                <th >注册地行政区划代码</th>
+                <th >移动终端信息</th>
+                <th >状态</th>
+                <th >操&nbsp;作</th>
+            </tr>
+        </thead>
+        <if condition ="$list[0]['id'] == ''">
+            <div style="width: 19%;position: absolute;margin: 12% 0px 0px 40%;font-family: '微软雅黑', '宋体';font-size: 28px;color: #CCC;">
+                未查询到符合条件的司机
+            </div>
+            <else/>
+            <volist name="list" id="temp">
+                <tr>
+                    <td><input type="checkbox" class="cBox" name="ids[]" value="{$temp['id']}">{$temp['id']}</td>
+                    <td>{$temp['drivername']}</td>
+                    <td>{$temp['phone']}</td>
+                    <td>{$temp['idcard']}</td>
+                    <td>￥{$temp['cost']}</td>
+                    <td>{$temp['certificateno']}</td>
+                    <td>{$temp['networkcarproofon']}</td>
+                    <td>{$temp['networkcarproofoff']}</td>
+                    <td>{$temp['drivertype']}</td>
+                    <td>{$temp['address']}</td>
+                    <td>{$temp['appversion']}</td>
+                    <td>
+                        <if condition="$temp['state']==0">
+                            <span style="color: #aad83e">空闲</span>
+
+                            </if>
+
+                        <if condition="$temp['state']==1">
+                            <span style="color: #CC0000">代驾</span>
+                        </if>
+                        <if condition="$temp['state']==2">
+                            <span style="color: #CC0000">待审核</span>
+                            </if>
+                    </td>
+                    <td class="tools">
+                        <ul class="toolbar">
+                            <if condition="$temp['state'] == 2">
+                                <if condition="checkAuth('Driverinfo/checkDriverinfo')">
+                                    <li class="click" >
+                                        <a href="{:U('Driverinfo/checkDriverinfo')}?id={$temp['id']}" >
+                                            <img src="__PUBLIC__/images/t02.png"  />待审核
+                                        </a>
+                                    </li>
+                                </if>
+                                <else/>
+                                <if condition="checkAuth('Driverinfo/checkDriverinfo')">
+                                    <li class="click" >
+
+                                        <span style="color: #aad83e">已审核</span>
+
+                                    </li>
+                                </if>
+                                </if>
+
+                            <if condition="checkAuth('Driverinfo/editDriverinfo')">
+                                <li class="click" >
+                                    <a href="{:U('Driverinfo/editDriverinfo')}?id={$temp['id']}" >
+                                        <img src="__PUBLIC__/images/t02.png"  />编辑
+                                    </a>
+                                </li>
+                            </if>
+                            <if condition="checkAuth('Driverinfo/del')">
+                                <li class="click">
+                                    <a href="javascript:MscBox('系统信息',t[0],'您确定要删除吗？','确定删除,取消关闭','{:U('Driverinfo/del')}?id={$temp['id']}')" >
+                                        <img src="__PUBLIC__/images/t03.png" /> 删除
+                                    </a>
+                                </li>
+                            </if>
+                        </ul>
+                    </td>
+                </tr>
+            </volist>
+        </if>
+    </table>
+    </div>
+    <BR/>
+    <br/>
+    <div class="digg">{$page}</div>
+</body>
+</html>
+<script>
+    $(function () {
+        //批量删除
+        new DelAll({
+            "allClass":$('.all'),
+            "listClass":$('.cBox'),
+            "delAllBtn":$('.del-all-btn'),
+            "delUrl":"delAll",
+            "listCheckboxName":"ids[]",
+            "imgUrl":"../../../Public/images"
+        });
+
+
+
+        $('.input_normal').click(function () {
+            var selected = $('.input_normal option:selected').val();//选中的值
+            if (selected == 8){
+                $("#start").css('display','block');
+                $("#stop").css('display','block');
+                $("#key").css('display','none');
+                $("#form-section").css('margin-left','25%');
+            } else {
+                $("#start").css('display','none');
+                $("#stop").css('display','none');
+                $("#key").css('display','block');
+                $("#form-section").css('margin','0 auto');
+            }
+
+        });
+
+    });
+
+</script>

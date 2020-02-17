@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/base.css" />
+    <link rel="stylesheet" href="__PUBLIC__/School/css/hbindex.css" />
+    <script type="text/javascript" src="__PUBLIC__/School/js/jquery.js" ></script>
+    <script type="text/javascript" src="__PUBLIC__/School/js/jquery.cookie.js" ></script>
+    <style type="text/css">
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        #head{
+            width: 100%;
+            height: 100px;
+            background: url('../../../public/School/img/login-bg.png') no-repeat;
+        }
+        .Headportrait{
+            box-shadow: none!important;
+            background-size: cover;
+            overflow: hidden;
+            width: 70px;
+            height: 70px;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            -webkit-transition: transform 0.5s;
+            transition: transform 0.5s;
+            background: #ffffff;
+            text-align: center;
+            line-height: 70px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 50%;
+            float: left;
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .username{
+            float: left;
+            margin-left: 20px;
+            position: relative;
+        }
+        .username i {
+            font-style: normal;
+            text-align: left;
+            display: block;
+            height: 35px;
+            line-height: 35px;
+            font-size: 16px;
+            color: #ffffff;
+            margin-top: 10px;
+            padding-top: 10%;
+        }
+        .nav-btn-box span{
+            color: #82878c;
+            margin-top: -3%;
+        }
+    </style>
+</head>
+<body>
+<section>
+    <section class="main">
+        <div id="head">
+            <div class="Headportrait"><img src="/Public/wap/images/header.jpg"></div>
+            <div class="username">
+                <i id="login"></i>
+            </div>
+        </div>
+        <article class="nav-btn">
+            <div class="nav-btn-box" id="chengche">
+                <span>乘车记录</span>
+                <!--<div class="nav-btn-dis">新闻中心</div>-->
+                <img src="__PUBLIC__/School/img/chengche.png" width="34" height="33" />
+                <div class="nav-btn-line"></div>
+            </div>
+            <div class="nav-btn-box" id="weizhi">
+                <span>预选座位</span>
+                <img src="__PUBLIC__/School/img/weizhi.png" width="60" height="68" style="bottom: -12%;margin-left: -33px;"/>
+                <div class="nav-btn-line"></div>
+            </div>
+            <div class="nav-btn-box" id="password">
+                <span>修改密码</span>
+                <img src="__PUBLIC__/School/img/password.png" width="34" height="33" />
+                <div class="nav-btn-line"></div>
+            </div>
+            <div class="nav-btn-box" id="personal">
+                <span>个人信息</span>
+                <img src="__PUBLIC__/School/img/personal.png" width="34" height="33" />
+                <div class="nav-btn-line"></div>
+            </div>
+        </article>
+    </section>
+
+</section>
+</body>
+</html>
+<script type="text/javascript">
+
+    var name = $.cookie('username');//获取路径上的用户名
+    var phone = $.cookie('phone');//电话;
+    var userid =  $.cookie('userId');//id;
+    var schoolid =  $.cookie('schoolid');//id;
+    $(function () {
+
+        if (name == '' || name == null || name == 'undefined' ){
+            alert("非法访问!");
+            var url = "../Login/index";
+            window.location.href = url;
+
+        } else {
+            $("#login").html('欢迎您,'+name);
+        }
+
+
+
+
+        //乘车记录
+        $("#chengche").on("click", function() {
+            var url = "../RideRecord/index";
+            window.location.href = url;
+        });
+        //预选座位
+        $("#weizhi").on("click", function() {
+            var url = "../PreselectedSeat/index?schoolid="+schoolid;
+            window.location.href = url;
+        });
+        //修改密码
+        $("#password").on("click", function() {
+            var url = "../ModifyPass/index";
+            window.location.href = url;
+        });
+        //个人信息
+        $("#personal").on("click", function() {
+            var url = "../UserInfo/index";
+            window.location.href = url;
+        });
+
+    })
+</script>

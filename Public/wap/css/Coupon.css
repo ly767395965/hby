@@ -1,0 +1,192 @@
+.coupon_ul{
+	width: 90%;
+	
+	margin: 0 auto;
+	
+}
+.coupon_ul_li{
+	width: 100%;
+	margin-top: 15px;
+	font-family: "微软雅黑";
+	color: white;
+	
+}
+.screen-ul{position: relative;background: #ffffff}
+.screen-ul:after{content:"";position:absolute;bottom:0;left:0;background: #d9d9d9;width:100%; height:1px; -webkit-transform: scaleY(0.6);transform: scaleY(0.6);}
+.screen-ul li{float: left;width:25%;text-align:center;color: #666666;line-height: 40px;}
+.screen-ul li.on{border-bottom: 2px solid #007aff;color: #007aff;position: relative;z-index: 9;}
+.clearfix:after{
+	content: ' ';
+	display: block;
+	clear: both;
+	visibility:hidden;
+	line-height: 0;
+	height:0;
+}
+/*---------优惠券显示名称和使用状态*/
+.li_show{
+	
+	width: 100%;
+	height: 100px;
+	
+	box-shadow: 0px 1px 1px  #888888;
+	
+}
+
+.show_top{
+position: relative;
+top: 10%;
+	width: 100%;
+	height: 50px;
+}
+.top_left{
+	width: 75%;
+	height: 50px;
+	float: left;
+}
+.top_right{
+	width: 20%;
+	height: 50px;
+	float: right;
+	
+}
+#coup_name{
+display: block;
+	width: 50%;
+	height: 50px;
+	line-height: 50px;
+	font-size: 2em;
+	letter-spacing: 0.1em;
+	margin-left: 10%;
+	
+}
+/*----------优惠券有效日期和使用说明----------*/
+.show_bottom{
+position: relative;
+top: 10%;
+	width: 100%;
+	height: 40px;
+	
+}
+.show_bottom:after{
+	content:"";
+	position:absolute;
+	bottom:0;
+	left:0;
+	background: #d9d9d9;
+	width:100%;
+	height:1px; 
+	-webkit-transform: scaleY(0.4);
+	transform: scaleY(0.4);
+}
+.Term_validity{
+display: block;
+	width: 60%;
+	height: 40px;
+	line-height: 40px;
+	padding-left: 8%;
+	font-size: 1.2em;
+	float: left;
+
+}
+.use_explain{
+	display: block;
+	width: 22%;
+	height: 40px;
+	line-height: 47px;
+	font-size: 1.2em;
+	float: right;
+	background: url(../images/user_shmi.png) no-repeat;
+	background-size: 8px 7px;
+	background-position: 52px 22px;
+}
+/*-------------使用说明--------------*/
+.li_hidde{
+	display: none;
+	width: 100%;
+	height: auto;
+	background-color: #FFFFFF;
+	box-shadow: 0px 1px 1px  #888888;
+}
+
+.explain_name{
+	width: 92%;
+	height: 45px;
+	padding-left: 5%;
+	line-height: 45px;
+	font-size: 1.2em;
+	color: #646470;
+	letter-spacing: 0.1em;
+}
+.explain_time{
+	width: 92%;
+	height: 40px;
+	line-height: 45px;
+	padding-left:5%;
+	font-size: 1.2em;
+	color: #646470;
+}
+.explain_exp{
+	width: 92%;
+	height: 40px;
+	padding-left: 5%;
+	font-size: 1.1em;
+	line-height: 1.4em;
+	color: #93939E;
+}
+
+.use_gz{
+	width: 92%;
+	padding-left:5% ;
+	height: 40px;
+	line-height: 40px;
+	font-size: 1.2em;
+	color: #646470;
+}
+
+
+.usegz_ul{
+	width: 90%;
+	padding-left: 9%;
+	
+}
+.usegz_ul li{
+list-style:decimal;
+	width: 100%;
+	line-height: 1.4em;
+	font-size: 1.1em;
+	color: #93939E;
+}
+
+.use_fw{
+	width: 92%;
+	padding-left: 5%;
+	height: 40px;
+	line-height: 40px;
+	font-size: 1.2em;
+	color: #646470;
+}
+
+.fw_dels{
+
+	width: 92%;
+	padding-left: 5%;
+	font-size: 1.1em;
+	color: #93939E;
+}
+
+/*-----------翻页-----------*/
+.fanye{
+	width: 100%;
+	height: 30px;
+	margin-top: 15px;
+}
+.fanye button{border: 0;}
+.up,.down,.yema{
+	width: 33%;
+	height: 30PX;
+	text-align: center;
+	line-height: 30px;
+	color: #000000;
+	font-size: 1.2em;
+}

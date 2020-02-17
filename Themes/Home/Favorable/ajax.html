@@ -1,0 +1,34 @@
+<div class="favList2">
+    <ul>
+        <volist name="list" id="rs">
+            <li>
+                <a href="#">
+                    <div class="favlist2-img">
+                        <if condition="$rs['frontimg'] != null">
+                            <img src="__PUBLIC__{$rs['frontimg']}" alt="{$rs['carmodelname']}" title="{$rs['carmodelname']}" style="display: block;margin: 0 auto" width="100%"/>
+                            <else/>
+                            <img src="__PUBLIC__/Uploads/defaultimg/carmodelimg.jpg" width="100%"/>
+                        </if>
+                        <span>特惠<br/>车辆</span>
+                    </div>
+                    <h3>{$rs['brand']} <i  style="font-size: 16px;color: #989898;">{$rs['carmodelname']}</i></h3>
+                    
+                    <p>短租价:<i>{$rs['shortdayprice']}</i>元/天 特惠价:<i>{$rs['goodprice']}</i>元/天</p>
+                </a>
+            </li>
+        </volist>
+        <div class="clearFix"></div>
+    </ul>
+    <div class="curr-page">
+        {$page}
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $(".nav-right li a").eq(3).addClass("current-page");
+        var liSize = $(".favList2 ul li").size()/3;
+        for (var i = 1; i <= liSize; i++) {
+            $(".favList2 ul li").eq(i * 3 - 1).css({marginRight: 0 + "px"});
+        }
+    })
+</script>

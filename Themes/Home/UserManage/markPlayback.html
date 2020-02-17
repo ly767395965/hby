@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/css/main1119.css"/>
+    <script src="http://webapi.amap.com/maps?v=1.4.5&key=92c385c575d309ec338005523bd4834c"></script>
+
+
+    <style type="text/css">
+        #map{
+            width: 100%;
+            height: 650px!important;
+            background-color: red;
+        }
+        .mainbar {
+            padding: 8px 0 0;
+            font-size: 12px;
+            height: 30px;
+            text-align: center;
+            background: #E7ECF3;
+            border-bottom: 1px solid #ccc;
+            z-index: 10000;
+            position: relative;
+        }
+        #title{
+            width: 50%;
+            height: 38px;
+            margin:-8px auto;
+
+        }
+        #map_div{
+            width: 100%;
+            height: 611px;
+            background-color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+<include file="./Public/header.html"/>
+<div class="mb-nav">
+    当前位置：
+    <a href="/" class="jump">
+        <i>首页</i>
+    </a> >
+    <a href="/home/UserManage/cartMonitor" class="jump">
+        <i>车辆监控</i>
+    </a> >
+    <i>轨迹回放</i>
+</div>
+<div id="map">
+    <div class="mainbar">
+        <div id="title">
+            <label id="carno">{$carno}</label>
+            <label>从:</label>
+            <input class="input_normal" type="text"   id="startdate" style="margin-top: 10px;" value="{$list[0]['pk_date']}"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+            <label>到:</label>
+            <input class="input_normal" type="text"   id="stopdate" style="margin-top: 10px;" value="{$list[0]['re_date']}"   placeholder="请输入开始日期格式:YYYY-MM-DD H:m:s" onFocus="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" >
+            <input type="button" class="button" value="开始动画" id="start"/>
+            <input type="button" class="button" value="暂停动画" id="pause"/>
+            <input type="button" class="button" value="继续动画" id="resume"/>
+            <input type="button" class="button" value="停止动画" id="stop"/>
+            <input type="hidden" class="button" value="{$list[0]['id']}" id="id"/>
+            <input type="hidden" class="button" value="{$list[0]['carid']}" id="carid"/>
+        </div>
+    </div>
+
+    <div id="map_div">
+
+    </div>
+</div>
+<include file="./Public/foot.html"/>
+</body>
+</html>
+<script>
+
+    $(function () {
+        jQuery.getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+        //获取pageID
+        var orderid = $.getUrlParam('orderid');
+        var cartid = $.getUrlParam('cartid');
+
+        $("#start").click(function () {
+            var startdate = $("#startdate").val();
+            var stopdate = $("#stopdate").val();
+            var carid = $("#carid").val();
+            var id = $("#id").val();
+
+            $.ajax({
+                type: "post",
+                url: "{:U('UserManage/markPlayback')}",
+                data: {
+                    id: id,
+                    carid: carid,
+                    startdate: startdate,
+                    stopdate: stopdate
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data == 1){
+                        alert('开始时间不能大于当前时间!');
+                    } else {
+                        if (data.msg == 'OK'){
+                            if (data.data.pos.length > 0){
+                                guiji(data.data.pos);
+                            } else {
+                                alert('该时间段内没有行车轨迹!');
+                            }
+                        }
+                    }
+
+
+
+                }
+            });
+        });
+        var map = new AMap.Map("map_div", {
+            resizeEnable: true,
+            center: [106.709855,26.550415],
+            zoom: 17
+        });
+        function guiji (arrlng) {
+            var marker, lineArr = [];
+            var map = new AMap.Map("map_div", {
+                resizeEnable: true,
+                center: [arrlng[0].lng, arrlng[0].lat],
+                zoom: 17
+            });
+
+            marker = new AMap.Marker({
+                map: map,
+                position: [arrlng[0].lng, arrlng[0].lat],
+                icon: "http://webapi.amap.com/images/car.png",
+                offset: new AMap.Pixel(-26, -13),
+                autoRotation: true
+            });
+            var lngX = 116.396428, latY = 39.90923;
+            for (var i = 0;i < arrlng.length;i++){
+                lineArr.push([arrlng[i].lng, arrlng[i].lat]);
+            }
+
+
+            // 绘制轨迹
+            var polyline = new AMap.Polyline({
+                map: map,
+                path: lineArr,
+                strokeColor: "#00A",  //线颜色
+                // strokeOpacity: 1,     //线透明度
+                strokeWeight: 3,      //线宽
+                // strokeStyle: "solid"  //线样式
+            });
+            var passedPolyline = new AMap.Polyline({
+                map: map,
+                // path: lineArr,
+                strokeColor: "#F00",  //线颜色
+                // strokeOpacity: 1,     //线透明度
+                strokeWeight: 3,      //线宽
+                // strokeStyle: "solid"  //线样式
+            });
+
+
+            marker.on('moving',function(e){
+                passedPolyline.setPath(e.passedPath);
+            })
+
+            map.setFitView();
+
+            marker.moveAlong(lineArr, 500);
+
+//            AMap.event.addDomListener(document.getElementById('start'), 'click', function() {
+//                marker.moveAlong(lineArr, 500);
+//            }, false);
+            AMap.event.addDomListener(document.getElementById('pause'), 'click', function() {
+                marker.pauseMove();
+            }, false);
+            AMap.event.addDomListener(document.getElementById('resume'), 'click', function() {
+                marker.resumeMove();
+            }, false);
+            AMap.event.addDomListener(document.getElementById('stop'), 'click', function() {
+                marker.stopMove();
+            }, false);
+        }
+
+        });
+
+
+</script>

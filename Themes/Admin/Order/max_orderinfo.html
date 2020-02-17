@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>大客户订单详情</title>
+    <link href="__PUBLIC__/css/user.css" rel="stylesheet">
+    <script type="text/javascript" src="__PUBLIC__/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/jquery.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/main.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/MscBox.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/css/qdStyle.css" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <style>
+        .order_table{margin: 50px auto 0;width: 800px;}
+        .order_table table{width: 1000px;margin: 0 auto;}
+        .order_table label{ margin-left: 5px}
+        .order_table tr{border: 1px solid lightgrey;height: 35px;border-radius: 5px}
+        .order_table td{padding-left: 5px}
+        .imgss{
+            background:url("__PUBLIC__/images/cancel.png") ;
+            background-size:cover;
+            width:20px;
+            height:20px;
+            float:right;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<!--查询遮掩层-->
+<div id="query_l" style="position: absolute;z-index:3;width: 100%;height: 165%;background: black;display: none;opacity: 0.6"></div>
+
+<div class="tit-all">
+    <h3><i></i>大客户订单详情</h3>
+</div>
+<div class="user-mine">
+    <div class="business_info">
+        <div class="busi_info input-shop-w" id="form-section">
+            <p style="text-align: center;font-size: 28px">订单详情</p>
+
+            <div class="order_table">
+                <table>
+                    <label><b>订单编号:</b><label class="orderid">{$list.id}</label></label>
+                    <tr>
+                        <td><b>客户名：</b></td><td>{$list.username}</td>
+                        <td><b>联系方式：</b></td><td>{$list.phone}</td>
+                    </tr>
+                    <tr>
+                        <!--<if condition="($list.drive_state eq 1)">-->
+                        <!--<td><b>车辆性质：</b></td><td>自有</td>-->
+                        <!--<else/>-->
+                        <!--<td><b>车辆性质：</b></td><td>外调</td>-->
+                        <!--</if>-->
+                        <td><b>实收金额：</b></td><td>￥{$list.collections_rec}</td>
+                        <td><b>车辆成本：</b></td><td>￥{$list.cost_price}</td>
+                    </tr>
+                    <tr>
+                        <td><b>订单号：</b></td><td>{$list.order_code}</td>
+                        <td><b>下单时间：</b></td><td>{$list.order_date}</td>
+                    </tr>
+                    <tr>
+                        <td><b>取车时间：</b></td><td id="pk_date">{$list.pk_date}</td>
+                        <td><b>还车时间：</b></td><td id="re_date">{$list.re_date}</td>
+                    </tr>
+                    <!--<tr>-->
+                    <!--<td><b>车辆单价：</b></td><td>{$list.u_price}</td>-->
+                    <!--<td><b>租车天数：</b></td><td id="rent_day">0</td>-->
+                    <!--</tr>-->
+                    <tr>
+                        <td><b>订单金额：</b></td><td>￥{$list.price_rec}</td>
+                        <td><b>租车天数：</b></td><td>{$list.time}</td>
+                    </tr>
+                    <tr>
+                        <td><b>具体车辆：</b></td>
+                        <td colspan="3">
+                            <if condition="$list.car_number == 0 ">
+                                <span style="color: #0a8ddf;cursor: pointer;" >未派车</span>
+                                <else/>
+                                <span style="color: #0a8ddf;cursor: pointer;" class="clickcar">点击查看</span>
+                            </if>
+
+                        </td>
+                        <!--<td></b></td><td></td>-->
+                    </tr>
+                    <if condition="($list.drive_state eq 1)">
+                        <tr>
+                            <td><b>是否代驾：</b></td><td>需要代驾</td>
+                            <td></td><td></td>
+                        </tr>
+                        <tr>
+                            <if condition="$list.drive_number == 0 ">
+                                <td><b>代驾人：</b></td><td><span style="color: #0a8ddf;cursor: pointer;">未指派代驾</span></td>
+                                <else/>
+                                <td><b>代驾人：</b></td><td><span style="color: #0a8ddf;cursor: pointer;" class="clickcar">点击查看</span></td>
+                            </if>
+
+                            <td><b>代驾费：</b></td><td>￥{$list.driver_price}</td>
+                        </tr>
+                        <else />
+                        <tr>
+                            <td><b>是否代驾：</b></td><td>无需代驾</td>
+                            <td></td><td></td>
+                        </tr>
+                    </if>
+                    <if condition="($list.pk_way eq 2)">
+                        <tr>
+                            <td><b>送车地址：</b></td><td>{$list.send_location}</td>
+                            <td><b>取车方式：</b></td><td>送车上门</td>
+                        </tr>
+                        <else />
+                        <tr>
+                            <td><b>取车方式：</b></td><td>自己取车</td>
+                            <td></td><td></td>
+                        </tr>
+                    </if>
+                    <tr>
+                        <td><b>违章金额：</b></td><td>￥{$list.dp_price}</td>
+                        <td><b></b></td><td></td>
+                    </tr>
+                    <tr>
+                        <td><b>油费：</b></td><td>￥{$list.oil_price}</td>
+                        <td><b>过路费：</b></td><td>￥{$list.tolls}</td>
+                    </tr>
+                    <tr>
+                        <td><b>洗车费：</b></td><td>￥{$list.wash_price}</td>
+                        <td><b>维修费：</b></td><td>￥{$list.re_price}</td>
+                    </tr>
+                    <if condition="($list.is_invoice eq 1)">
+                        <tr>
+                            <td><b>是否开票：</b></td><td>已开票</td>
+                        </tr>
+                        <tr>
+                            <td><b>发票号：</b></td><td>{$list.in_code}</td>
+                            <td><b>开票金额：</b></td><td>￥{$list.in_price}</td>
+                        </tr>
+                        <tr>
+                            <td><b>开票单位：</b></td><td>{$list.in_dep}</td>
+                            <td><b>额外税收：</b></td><td>￥{$list.in_cost}</td>
+                        </tr>
+                        <else />
+                        <tr>
+                            <td><b>是否开票：</b></td><td>未开票</td>
+                            <td></td><td></td>
+                        </tr>
+                    </if>
+                    <span class="order_state" style="display: none;">{$list.order_state}</span>
+                    <tr>
+                        <td><b>订单状态：</b></td>
+                        <td>
+                            <switch name="list.order_state" >
+                                <case value="0">未支付</case>
+                                <case value="1">已支付</case>
+                                <case value="2">已派车</case>
+                                <case value="3">已取车</case>
+                                <case value="4">已还车</case>
+                                <case value="5">已结账</case>
+                                <case value="6">已结单</case>
+                                <case value="10">订单取消</case>
+                                <case value="11">退款申请</case>
+                                <case value="12">同意退款</case>
+                                <case value="13">退款完成</case>
+                                <default />未知
+                            </switch>
+                        </td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td><b>交易详情：</b></td>
+                        <td>{$list['charge_road'][0]}</td>
+                        <td></td><td></td>
+
+                    </tr>
+                    <for start="1" end="$arraynum">
+                        <tr>
+                            <td><b> </b></td>
+                            <td>{$list['charge_road'][$i]}</td>
+                            <td></td><td></td>
+                        </tr>
+                    </for>
+                    <tr>
+                        <td><b>备注：</b></td><td>{$list.remarks}</td>
+                        <td></td><td></td>
+                    </tr>
+                </table>
+            </div>
+            <span class="drive_state" style="display: none">{$list.drive_state}</span>
+            <div class="busi_input clearfix" style="clear: both;margin: 0 auto;width: 154px">
+                <label class="busi_bz">&nbsp;</label>
+                <button name="submit" class="btn-submit" onclick="javascript:window.history.back(-1);" id="account-submit" style="width: 150px">返回上一页</button>
+                <!--<button name="reset" class="btn-submit reset" onclick="javascript:window.history.back(-1);"  tabindex="15" type="reset" id="account-reset">返回</button>-->
+            </div>
+        </div>
+        <!-- END OF FORM SECTION -->
+    </div>
+    <!-- END OF WRAPPER DIV -->
+</div>
+
+<div class="agree-bg" style="background: rgba(0,0,0,0.5);z-index: 10;" id="order-pay">
+    <div style="position: absolute;width: 100%;height: 100%;top: 0;left: 0;z-index:10; display: none;z-index: 50;margin-top: 120px;margin-left: -40px;" id="car-divbg">
+        <div class="car_div" id="" style="width:40%;height:350px;display: none;background-color: #CCCCCC;position: relative;margin:0 auto;z-index:100;overflow: scroll;">
+            <span style="margin-left: 20px;padding-top: 20px;">选择客户租用的车辆:</span><br />
+            <b style="padding-left: 170px;margin-top: -20px;">品牌：</b>
+            <select style="height: 29px" id="brand" >
+
+            </select>
+            <input style="width: 250px;"  type="text" id="query_info" value=""   placeholder="可以输入具体车型或者车牌号进行查询"  >
+            <input style="height: 29px" type="button" class="carinfo_query" value="查询"><br/><br/>
+            <div>
+                <table  border="1" id="carinfo_tab" style="margin: 0 auto;">
+                    <tr><th>车辆编号</th><th>车辆品牌</th><th>车牌号</th><th>车辆类型</th><th>车辆成本</th><th>车辆性质</th></tr>
+                </table>
+                <div id="carinfo_msg" style="margin: 100px auto 0px;width: 308px;font-size: 28px;color: lightblue;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--指定代驾-->
+    <div class="drive_div" style="width: 40%;height: 330px;background-color: #CCCCCC;margin-left:24.5%;margin-top: 8.5%;z-index:100;position: absolute;display: none;overflow: scroll;">
+        <table  border="1" id="drive_tab" style="margin: 0 auto;margin-top: 3%;width: 80%;">
+            <span style="position: absolute;padding: 0;margin-left: 35%;margin-top: 2%;font-size:1.5em;">订单详情驾驶员分配</span>
+            <br/>
+            <tr>
+                <th style="text-align: center;width: 13%;">数据id</th>
+                <th style="text-align: center ;width: 15%;">代驾人id</th>
+                <th style="text-align: center;width: 18%;">代驾姓名</th>
+                <th style="text-align: center;width: 20%;">指派状态</th>
+                <th style="text-align: center;width: 30%;" >操&nbsp;&nbsp;作</th>
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="agree-box" style="width: 1100px;height:600px;z-index:1;">
+        <div class="agree-title" id="pay-class" style="width: 100%;height: 40px;">
+            <h3 style="padding-top: 10px;color: #fff"><b style="float: left;">车辆及代驾员信息</b><b style="width: 150px;float: left;margin-right: 50px;float: right;background-color: #e62727;border-radius: 5px;border: 1px solid #CCC;"><a href="{:U('Order/supervise')}?id={$list.id}&action=max_send&big=1" style="color: #fff;cursor: pointer;">追加车辆、代驾</a></b></h3>
+            <span style="margin-top: -8px;">&times;</span>
+        </div>
+
+        <div class="agree-list" style="margin: 0;padding: 0;width: 100%;">
+            <span style="margin-top: 1%;margin-left: 3%;font-size: 1.2em;font-weight: bold;">正在使用车辆及代驾</span>
+            <table  class="order_table" style="width: 99%;margin-top: 10px;"  >
+                <thead>
+                <tr>
+                    <th style="text-align: center; font-size: 16px;">数据id</th>
+                    <th style="text-align: center; font-size: 16px;">车辆id</th>
+                    <th style="text-align: center; font-size: 16px;">品牌</th>
+                    <th style="text-align: center; font-size: 16px;">车型名称</th>
+                    <th style="text-align: center; font-size: 16px;">车辆类型</th>
+                    <th style="text-align: center; font-size: 16px;">车牌号</th>
+                    <th style="text-align: center; font-size: 16px;">开始时间</th>
+                    <th style="text-align: center; font-size: 16px;">结束时间</th>
+                    <th style="text-align: center; font-size: 16px;">车辆性质</th>
+                    <th style="text-align: center; font-size: 16px;">代驾司机</th>
+                    <th style="text-align: center; font-size: 16px;border-left: 1px solid #ccc;">操&nbsp;&nbsp;作</th>
+                </tr>
+                </thead>
+                <tbody id="traderInfo">
+
+                </tbody>
+                <tr>
+                    <td style="text-align: center; font-size: 16px;border-right: 1px solid #CCCCCC;width: 80px;">代驾司机</td>
+                    <td colspan="4" id="daijia_data"></td>
+                </tr>
+
+
+
+            </table>
+            <span style="margin-top: 2%;margin-left: 3%;font-size: 1.2em;font-weight: bold;">历史用车记录</span>
+            <table  class="order_table" style="width: 98%;margin-top: 10px;"  >
+                <thead>
+                <tr>
+                    <th style="text-align: center; font-size: 16px;">数据id</th>
+                    <th style="text-align: center; font-size: 16px;">车辆id</th>
+                    <th style="text-align: center; font-size: 16px;">品牌</th>
+                    <th style="text-align: center; font-size: 16px;">车型名称</th>
+                    <th style="text-align: center; font-size: 16px;">车辆类型</th>
+                    <th style="text-align: center; font-size: 16px;">车牌号</th>
+                    <th style="text-align: center; font-size: 16px;">开始时间</th>
+                    <th style="text-align: center; font-size: 16px;">结束时间</th>
+                    <th style="text-align: center; font-size: 16px;">车辆性质</th>
+                    <th style="text-align: center; font-size: 16px;">代驾司机</th>
+                    <th style="text-align: center; font-size: 16px;">数据性质</th>
+                </tr>
+                </thead>
+                <tbody id="history_traderInfo">
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+        var carid;
+        var id;
+        var orderid;
+        var drive_state;
+        var cardaleid;
+        var order_state = $('.order_state').text();
+        //查看订单详情车辆
+        $(document).on("click",".clickcar",function(){
+            $('#traderInfo').empty();
+            $('#history_traderInfo').empty();
+            orderid = $(".orderid").text();
+            drive_state = $(".drive_state").text();
+            $.ajax({
+                type: "get",
+                url: "{:U('order/carinfo')}",
+                data: {
+                    id: orderid,
+                    order_state: order_state
+                },
+                dataType:"json",
+                success: function (data) {
+                    var trade = data.carinfo;
+                    var historical = data.historicaldata;
+                    var str;
+                    var  cardata;
+                    var name;
+                    for (var i=0;i<trade.length;i++){
+                        if (trade[i]['drivername'] == null){
+                            name = '未指定';
+                        }else {
+                            name = trade[i]['drivername'];
+                        }
+                        str += "'<tr class='trade_table'>" +
+                                "<td>"+trade[i]['id']+"</td>" +
+                                "<td>"+trade[i]['carid']+"</td>" +
+                                "<td>"+trade[i]['brand']+"</td>" +
+                                "<td>"+trade[i]['carmodelname']+"</td>" +
+                                "<td>"+trade[i]['carmodeltype']+"</td>" +
+                                "<td>"+trade[i]['carno']+"</td>" +
+                                "<td>"+trade[i]['begintime']+"</td>" +
+                                "<td>"+trade[i]['endtime']+"</td>" +
+                                "<td>"+trade[i]['carproperty']+"</td>" +
+                                "<td>"+name+"</td>" +
+                                "<td style='border-left: 1px solid #CCCCCC;width: 240px;'>"+"<span class='upcarid' car-id="+trade[i]['carid']+" data-id="+trade[i]['brandid']+" style='display:inline-block;float:left;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #fecc5f;border: 1px solid #ccc;width:35%;cursor: pointer;'>修改车辆</span><span class='imgss'></span><span class='assigndrive' style='margin-right: 10px;display:inline-block;float: right;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #b7d770;border: 1px solid #ccc;width:35%;cursor: pointer;'>指派代驾</span>"+"</td>" +
+                                "</tr>'";
+
+                    }
+
+                    //历史用车数据
+                    for (var i=0;i<historical.length;i++){
+                        cardata += "'<tr class='trade_table'>" +
+                                "<td>"+historical[i]['id']+"</td>" +
+                                "<td>"+historical[i]['carid']+"</td>" +
+                                "<td>"+historical[i]['brand']+"</td>" +
+                                "<td>"+historical[i]['carmodelname']+"</td>" +
+                                "<td>"+historical[i]['carmodeltype']+"</td>" +
+                                "<td>"+historical[i]['carno']+"</td>" +
+                                "<td>"+historical[i]['begintime']+"</td>" +
+                                "<td>"+historical[i]['endtime']+"</td>" +
+                                "<td>"+historical[i]['carproperty']+"</td>" +
+                                "<td>"+historical[i]['drivername']+"</td>" +
+                                "<td>"+historical[i]['is_del']+"</td>" +
+                                "</tr>'";
+
+                    }
+
+                    $('#history_traderInfo').append(cardata);
+                    $('#traderInfo').append(str);
+                    if (drive_state ==1){
+                        $('#daijia_data').html(data.drivename);
+                    } else {
+                        $('#daijia_data').html("没有代驾");
+                    }
+
+                    $(".trade_table td").css("text-align","center");
+
+
+                }
+            });
+            $("#order-pay").fadeIn();
+            return false;
+        });
+
+        $(document).on("click","#pay-class span",function(){
+
+            $("#order-pay").fadeOut();
+        });
+
+
+        //改车操作
+        $(document).on("click",'.upcarid',function(){
+            if (order_state >= 4){
+                alert("该订单已还车，此操作无效!")
+            } else  {
+                var brandid = $(this).attr('data-id');
+                carid = $(this).parents('tr').find('td').eq(1).text();
+                reductionCar();
+                $(".car_div").css("display","block");
+                $('#car-divbg').css("display","block");
+                $.ajax({
+                    type: "get",
+                    url: "{:U('order/sqlBarand')}",
+                    data: {
+
+                    },
+                    dataType:"json",
+                    success: function (data) {
+
+                        var trade = data.brand;
+                        for (var i=0;i<trade.length;i++){
+                            if (trade[i]['id'] == brandid){
+                                $("#brand").append("<option value='"+trade[i]['id']+"' selected>"+trade[i]['brand']+"</option>");
+                            } else {
+                                $("#brand").append("<option value='"+trade[i]['id']+"'>"+trade[i]['brand']+"</option>");
+                            }
+                        }
+                    }
+                });
+            }
+
+        })
+
+        $('#car-divbg').on("click",function(){
+            $(".car_div").css("display","none");
+            $(".drive_div").css("display","none");
+            $(this).css("display","none");
+
+        });
+        $('.car_div').on("click",function (event) {
+            event.stopPropagation();
+        })
+
+        //查车点击事件
+        $('.carinfo_query').on("click",function(){
+            reductionCar();
+            car_query();
+        });
+
+
+
+
+
+        //取消订单车辆
+        $(document).on("click",'.imgss',function() {
+            if (confirm("你确定要删除(取消)该条数据吗?")){
+                if (order_state >= 4){
+                    alert("该订单已还车，此操作无效!")
+                } else  {
+                    id = $(this).parents('tr').find('td').eq(0).text();
+                    $.ajax({
+                        type: "get",
+                        url: "{:U('order/carCancel')}",
+                        data: {
+                            order_state: order_state,
+                            id: id
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data) {
+                                if (data.error == 0) {
+                                    $(this).parents('tr').remove();
+                                }
+                            }
+
+                        }
+
+                    });
+
+                    setTimeout(function () {
+                        $.ajax({
+                            type: "get",
+                            url: "{:U('order/carinfo')}",
+                            data: {
+                                id: orderid,
+                                order_state: order_state
+                            },
+                            dataType:"json",
+                            success: function (data) {
+                                $('#traderInfo').empty();
+                                $('#history_traderInfo').empty();
+                                var trade = data.carinfo;
+                                var historical = data.historicaldata;
+                                var str;
+                                var  cardata;
+                                var name;
+                                for (var i=0;i<trade.length;i++){
+                                    if (trade[i]['drivername'] == null){
+                                        name = '未指定';
+                                    }else {
+                                        name = trade[i]['drivername'];
+                                    }
+                                    str += "'<tr class='trade_table'>" +
+                                            "<td>"+trade[i]['id']+"</td>" +
+                                            "<td>"+trade[i]['carid']+"</td>" +
+                                            "<td>"+trade[i]['brand']+"</td>" +
+                                            "<td>"+trade[i]['carmodelname']+"</td>" +
+                                            "<td>"+trade[i]['carmodeltype']+"</td>" +
+                                            "<td>"+trade[i]['carno']+"</td>" +
+                                            "<td>"+trade[i]['begintime']+"</td>" +
+                                            "<td>"+trade[i]['endtime']+"</td>" +
+                                            "<td>"+trade[i]['carproperty']+"</td>" +
+                                            "<td>"+name+"</td>" +
+                                            "<td style='border-left: 1px solid #CCCCCC;width: 240px;'>"+"<span class='upcarid' car-id="+trade[i]['carid']+" data-id="+trade[i]['brandid']+" style='display:inline-block;float:left;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #fecc5f;border: 1px solid #ccc;width:35%;cursor: pointer;'>修改车辆</span><span class='imgss'></span><span class='assigndrive' style='margin-right: 10px;display:inline-block;float: right;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #b7d770;border: 1px solid #ccc;width:35%;cursor: pointer;'>指派代驾</span>"+"</td>" +
+                                            "</tr>'";
+
+                                }
+
+                                //历史用车数据
+                                for (var i=0;i<historical.length;i++){
+                                    cardata += "'<tr class='trade_table'>" +
+                                            "<td>"+historical[i]['id']+"</td>" +
+                                            "<td>"+historical[i]['carid']+"</td>" +
+                                            "<td>"+historical[i]['brand']+"</td>" +
+                                            "<td>"+historical[i]['carmodelname']+"</td>" +
+                                            "<td>"+historical[i]['carmodeltype']+"</td>" +
+                                            "<td>"+historical[i]['carno']+"</td>" +
+                                            "<td>"+historical[i]['begintime']+"</td>" +
+                                            "<td>"+historical[i]['endtime']+"</td>" +
+                                            "<td>"+historical[i]['carproperty']+"</td>" +
+                                            "<td>"+historical[i]['drivername']+"</td>" +
+                                            "<td>"+historical[i]['is_del']+"</td>" +
+                                            "</tr>'";
+
+                                }
+
+                                $('#history_traderInfo').append(cardata);
+                                $('#traderInfo').append(str);
+                                if (drive_state ==1){
+                                    $('#daijia_data').html(data.drivename);
+                                } else {
+                                    $('#daijia_data').html("没有代驾");
+                                }
+
+                                $(".trade_table td").css("text-align","center");
+
+
+                            }
+                        });
+                    },500);
+
+                }
+            }
+
+        });
+
+        //订单详情分配代驾begin
+        $(document).on("click",'.assigndrive',function() {
+            cardaleid = $(this).parents('tr').find('td').eq(0).text();
+            if (order_state >= 4){
+                alert("该订单已还车，此操作无效!")
+            } else {
+                $(".drive_tab_tr").remove();
+                $('#car-divbg').css("display", "block");
+                $(".drive_div").css("display", "block");
+                $.ajax({
+                    type: "get",
+                    url: "{:U('order/orderDrive')}",
+                    data: {
+                        id: orderid
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        var trade = data.driveinfo;
+                        console.log(data);
+                        var str;
+
+                        for (var i = 0; i < trade.length; i++) {
+                            str += "'<tr class='drive_tab_tr'>" +
+                                    "<td style='text-align: center;'>" + trade[i]['id'] + "</td>" +
+                                    "<td style='text-align: center;'>" + trade[i]['driveid'] + "</td>" +
+                                    "<td style='text-align: center;'>" + trade[i]['drivername'] + "</td>" +
+                                    "<td style='text-align: center;'>" + trade[i]['distribution'] + "</td>" +
+                                    "<td style='text-align: center;'>" + "<span class='setdrive' style='float: left;margin-left: 15%;cursor: pointer;'>指派代驾</span>" +
+                                    "<span class='deldrive' style='cursor: pointer;float: right;margin-right: 15%;'>删除代驾</span>" + "</td>" +
+                                    "</tr>'";
+                        }
+                        $('#drive_tab').append(str);
+                    }
+                });
+
+            }
+        });
+        //订单详情分配代驾begin
+
+
+        //替换车辆
+        $('#carinfo_tab').on('click','tr',function () {
+            var nowcarid = $(this).find('td').eq(0).text();
+            var orderid = $(".orderid").text();
+            var re_date = $("#re_date").text();
+            var drive_state = $(".drive_state").text();
+            var id = $(".orderid").text();
+            $(".car_div").css("display","none");
+            $('#car-divbg').css("display","none");
+
+            $.ajax({
+                type: "get",
+                url: "{:U('order/modifyCar')}",
+                data: {
+                    'order_state':order_state,
+                    'nowcarid':nowcarid,
+                    'orderid':id,
+                    're_date':re_date,
+                    'oldcarid':carid
+                },
+                dataType: "json",
+                success: function (data) {
+
+                }
+            });
+            setTimeout(function () {
+                $.ajax({
+                    type: "get",
+                    url: "{:U('order/carinfo')}",
+                    data: {
+                        id: orderid,
+                        order_state: order_state
+                    },
+                    dataType:"json",
+                    success: function (data) {
+                        $('#traderInfo').empty();
+                        $('#history_traderInfo').empty();
+                        var trade = data.carinfo;
+                        var historical = data.historicaldata;
+                        var str;
+                        var  cardata;
+                        var name;
+                        for (var i=0;i<trade.length;i++){
+                            if (trade[i]['drivername'] == null){
+                                name = '未指定';
+                            }else {
+                                name = trade[i]['drivername'];
+                            }
+                            str += "'<tr class='trade_table'>" +
+                                    "<td>"+trade[i]['id']+"</td>" +
+                                    "<td>"+trade[i]['carid']+"</td>" +
+                                    "<td>"+trade[i]['brand']+"</td>" +
+                                    "<td>"+trade[i]['carmodelname']+"</td>" +
+                                    "<td>"+trade[i]['carmodeltype']+"</td>" +
+                                    "<td>"+trade[i]['carno']+"</td>" +
+                                    "<td>"+trade[i]['begintime']+"</td>" +
+                                    "<td>"+trade[i]['endtime']+"</td>" +
+                                    "<td>"+trade[i]['carproperty']+"</td>" +
+                                    "<td>"+name+"</td>" +
+                                    "<td style='border-left: 1px solid #CCCCCC;width: 240px;'>"+"<span class='upcarid' car-id="+trade[i]['carid']+" data-id="+trade[i]['brandid']+" style='display:inline-block;float:left;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #fecc5f;border: 1px solid #ccc;width:35%;cursor: pointer;'>修改车辆</span><span class='imgss'></span><span class='assigndrive' style='margin-right: 10px;display:inline-block;float: right;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #b7d770;border: 1px solid #ccc;width:35%;cursor: pointer;'>指派代驾</span>"+"</td>" +
+                                    "</tr>'";
+
+                        }
+
+                        //历史用车数据
+                        for (var i=0;i<historical.length;i++){
+                            cardata += "'<tr class='trade_table'>" +
+                                    "<td>"+historical[i]['id']+"</td>" +
+                                    "<td>"+historical[i]['carid']+"</td>" +
+                                    "<td>"+historical[i]['brand']+"</td>" +
+                                    "<td>"+historical[i]['carmodelname']+"</td>" +
+                                    "<td>"+historical[i]['carmodeltype']+"</td>" +
+                                    "<td>"+historical[i]['carno']+"</td>" +
+                                    "<td>"+historical[i]['begintime']+"</td>" +
+                                    "<td>"+historical[i]['endtime']+"</td>" +
+                                    "<td>"+historical[i]['carproperty']+"</td>" +
+                                    "<td>"+historical[i]['drivername']+"</td>" +
+                                    "<td>"+historical[i]['is_del']+"</td>" +
+                                    "</tr>'";
+
+                        }
+
+                        $('#history_traderInfo').append(cardata);
+                        $('#traderInfo').append(str);
+                        if (drive_state ==1){
+                            $('#daijia_data').html(data.drivename);
+                        } else {
+                            $('#daijia_data').html("没有代驾");
+                        }
+
+                        $(".trade_table td").css("text-align","center");
+
+
+                    }
+                });
+            },500);
+
+
+        });
+
+
+
+        //修改代驾begin
+        //指派代驾begin
+        $(document).on("click",'.setdrive',function() {
+            var drivedataid = $(this).parents('tr').find('td').eq(0).text();
+            var driveid = $(this).parents('tr').find('td').eq(1).text();
+            var state = $(this).parents('tr').find('td').eq(3).text();
+            var re_date = $("#re_date").text();
+            $(".drive_div").css("display","none");
+            $('#car-divbg').css("display","none");
+            if (state == '已指派'){
+                alert('该代驾已指派,请另选择或追加代驾');
+                return false;
+            } else {
+                $.ajax({
+                    type: "get",
+                    url: "{:U('order/setdrive')}",
+                    data: {
+                        order_state:order_state,
+                        cardaleid:cardaleid,
+                        drivedataid: drivedataid,
+                        driveid:driveid,
+                        re_date:re_date,
+                        orderid:orderid
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data){
+                            if (data.error != 0){
+                                return false;
+                            }
+                        }
+                    }
+                });
+            }
+            setTimeout(function () {
+                $.ajax({
+                    type: "get",
+                    url: "{:U('order/carinfo')}",
+                    data: {
+                        id: orderid,
+                        id: orderid
+                    },
+                    dataType:"json",
+                    success: function (data) {
+                        $('#traderInfo').empty();
+                        $('#history_traderInfo').empty();
+                        var trade = data.carinfo;
+                        var historical = data.historicaldata;
+                        var str;
+                        var  cardata;
+                        var name;
+                        for (var i=0;i<trade.length;i++){
+                            if (trade[i]['drivername'] == null){
+                                name = '未指定';
+                            }else {
+                                name = trade[i]['drivername'];
+                            }
+                            str += "'<tr class='trade_table'>" +
+                                    "<td>"+trade[i]['id']+"</td>" +
+                                    "<td>"+trade[i]['carid']+"</td>" +
+                                    "<td>"+trade[i]['brand']+"</td>" +
+                                    "<td>"+trade[i]['carmodelname']+"</td>" +
+                                    "<td>"+trade[i]['carmodeltype']+"</td>" +
+                                    "<td>"+trade[i]['carno']+"</td>" +
+                                    "<td>"+trade[i]['begintime']+"</td>" +
+                                    "<td>"+trade[i]['endtime']+"</td>" +
+                                    "<td>"+trade[i]['carproperty']+"</td>" +
+                                    "<td>"+name+"</td>" +
+                                    "<td style='border-left: 1px solid #CCCCCC;width: 240px;'>"+"<span class='upcarid' car-id="+trade[i]['carid']+" data-id="+trade[i]['brandid']+" style='display:inline-block;float:left;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #fecc5f;border: 1px solid #ccc;width:35%;cursor: pointer;'>修改车辆</span><span class='imgss'></span><span class='assigndrive' style='margin-right: 10px;display:inline-block;float: right;padding-left:5px;padding-right:5px;border-radius: 5px;background-color: #b7d770;border: 1px solid #ccc;width:35%;cursor: pointer;'>指派代驾</span>"+"</td>" +
+                                    "</tr>'";
+
+                        }
+
+                        //历史用车数据
+                        for (var i=0;i<historical.length;i++){
+                            cardata += "'<tr class='trade_table'>" +
+                                    "<td>"+historical[i]['id']+"</td>" +
+                                    "<td>"+historical[i]['carid']+"</td>" +
+                                    "<td>"+historical[i]['brand']+"</td>" +
+                                    "<td>"+historical[i]['carmodelname']+"</td>" +
+                                    "<td>"+historical[i]['carmodeltype']+"</td>" +
+                                    "<td>"+historical[i]['carno']+"</td>" +
+                                    "<td>"+historical[i]['begintime']+"</td>" +
+                                    "<td>"+historical[i]['endtime']+"</td>" +
+                                    "<td>"+historical[i]['carproperty']+"</td>" +
+                                    "<td>"+historical[i]['drivername']+"</td>" +
+                                    "<td>"+historical[i]['is_del']+"</td>" +
+                                    "</tr>'";
+
+                        }
+
+                        $('#history_traderInfo').append(cardata);
+                        $('#traderInfo').append(str);
+                        if (drive_state ==1){
+                            $('#daijia_data').html(data.drivename);
+                        } else {
+                            $('#daijia_data').html("没有代驾");
+                        }
+
+                        $(".trade_table td").css("text-align","center");
+
+
+                    }
+                });
+            },500);
+
+
+
+
+        });
+        ///指派代驾end
+
+        //删除代驾begin
+        $(document).on("click",'.deldrive',function() {
+            var drivedataid = $(this).parents('tr').find('td').eq(0).text();
+            var driveid = $(this).parents('tr').find('td').eq(1).text();
+            orderid
+            $.ajax({
+                type: "get",
+                url: "{:U('order/delOrderDrive')}",
+                data: {
+                    order_state: order_state,
+                    id: drivedataid,
+                    orderid: orderid,
+                    driveid:driveid
+                },
+                dataType: "json",
+                success: function (data) {
+                    if(data){
+                        if (data.error == 0){
+                            $(this).parents('tr').remove();
+                        }
+                        if (data.error == 2){
+                           alert('该代驾正在工作，不能删除!');
+                        }
+                    }
+                }
+            });
+            $.ajax({
+                type: "get",
+                url: "{:U('order/orderDrive')}",
+                data: {
+                    id: orderid
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#drive_tab .drive_tab_tr').empty();
+                    var trade = data.driveinfo;
+                    console.log(data);
+                    var str;
+
+                    for (var i = 0; i < trade.length; i++) {
+                        str += "'<tr class='drive_tab_tr'>" +
+                                "<td style='text-align: center;'>" + trade[i]['id'] + "</td>" +
+                                "<td style='text-align: center;'>" + trade[i]['driveid'] + "</td>" +
+                                "<td style='text-align: center;'>" + trade[i]['drivername'] + "</td>" +
+                                "<td style='text-align: center;'>" + trade[i]['distribution'] + "</td>" +
+                                "<td style='text-align: center;'>" + "<span class='setdrive' style='float: left;margin-left: 15%;cursor: pointer;'>指派代驾</span>" +
+                                "<span class='deldrive' style='cursor: pointer;float: right;margin-right: 15%;'>删除代驾</span>" + "</td>" +
+                                "</tr>'";
+                    }
+                    $('#drive_tab').append(str);
+                }
+            });
+        })
+        //删除代驾end
+        //修改代驾end
+
+    });
+
+    //车辆查询axjx方法
+    function car_query() {
+        var brand = $('#brand').val();
+        var query_info = $('#query_info').val();
+        var pk_date = $('#pk_date').text();
+        var re_date = $('#re_date').text();
+        var url = "{:U('car_query')}";
+        var param = {'brand':brand,'query_info':query_info,'pk_date':pk_date,'re_date':re_date};
+        $.get(url,param,function(data){
+            data = JSON.parse(data);
+            if(data['code'] == 1){
+                for(var i = 0; i<data['carinfo'].length;i++) {
+                    if (data['carinfo'][i]['carproperty'] == 1){
+                        data['carinfo'][i]['carproperty'] ='自有';
+                    }else{
+                        data['carinfo'][i]['carproperty'] ='外调';
+                    }
+                    $('#carinfo_tab').append("'<tr class='car_chood'><td class='first'>"+data['carinfo'][i]['id']+"</td><td class='second'>"+data['carinfo'][i]['brand']+"</td><td class='third'>"+data['carinfo'][i]['carno']+"</td><td class='fourth'>"+data['carinfo'][i]['carmodelname']+"</td><td class='fifth'>"+data['carinfo'][i]['costprice']+"</td><td class='sixth'>"+data['carinfo'][i]['carproperty']+"</td></tr>'");
+
+                }
+                $(".car_chood").css("cursor"," pointer");
+
+                $(".car_chood").mouseover(function () {
+                    $(this).css("background-color","#fff");
+                })
+                $(".car_chood").mouseout(function () {
+                    $(this).css("background-color","rgb(204, 204, 204)");
+                })
+                $('#carinfo_msg').text('');
+                $('.car_chood').on("click",function () {
+                    var car_id = $(this).find('.first').text();
+                    var carmodelname = $(this).find('.fourth').text();
+                    var carno = $(this).find('.third').text();
+                    var index = $(this).index()-1;
+                    var carmodelid = data['carinfo'][index]['carmodelid'];
+                    shortdayprice = data['carinfo'][index]['shortdayprice'];
+                    weekdayprice = data['carinfo'][index]['weekdayprice'];
+                    monthdayPrice = data['carinfo'][index]['monthdayprice'];
+                    $('#carmodelid').val(carmodelid);
+                    $('#car_id').val(car_id);
+                    $('#car_model').val(carmodelname);
+                    $('.car_id').val(carno);
+                    $('#query_car').css('display','none');
+                    $('#query_l').css('display','none');
+
+                });
+            }else{
+                $('#carinfo_tab').text('');
+                $('#carinfo_msg').text('该车型暂无空闲车辆！')
+            }
+        })
+    }
+
+    //车辆查询，初始数据
+    function reductionCar() {
+        $('#carinfo_tab').html("<tr><th>车辆编号</th><th>车辆品牌</th><th>车牌号</th><th>车辆类型</th><th>车辆成本</th><th>车辆性质</th></tr>");
+    }
+
+</script>
+
+</html>
